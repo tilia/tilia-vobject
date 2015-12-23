@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+# Expected to be called "bundle exec bin/vobject"
+require './lib/tilia_vobject'
+
+cli = Tilia::VObject::Cli.new
+exit(cli.main(ARGV))
