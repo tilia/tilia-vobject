@@ -42,14 +42,14 @@ and `.max_date`.
   Sabre\VObject\Property\ICalendar\DateTime#setDateTimes(array $dt, $isFloating = false)
 ```
 
-
-is replaced by
+are replaced by
 
 ```ruby
   Tilia::VObject::Property::ICalendar#date_time=(Time)
   Tilia::VObject::Property::ICalendar#date_times=(Array<Time>)
   Tilia::VObject::Property::ICalendar#floating=(Boolean)
 ```
+
 
 Contributing
 ------------
