@@ -9,21 +9,21 @@ module Tilia
       #
       # If REPAIR is set, the validator will attempt to repair any broken data
       # (if possible).
-      REPAIR ||= 1
+      REPAIR = 1
 
       # If this option is set, the validator will operate on the vcards on the
       # assumption that the vcards need to be valid for CardDAV.
       #
       # This means for example that the UID is required, whereas it is not for
       # regular vcards.
-      PROFILE_CARDDAV ||= 2
+      PROFILE_CARDDAV = 2
 
       # If this option is set, the validator will operate on iCalendar objects
       # on the assumption that the vcards need to be valid for CalDAV.
       #
       # This means for example that calendars can only contain objects with
       # identical component types and UIDs.
-      PROFILE_CALDAV ||= 4
+      PROFILE_CALDAV = 4
 
       # Reference to the parent object, if this is not the top object.
       #
@@ -55,6 +55,17 @@ module Tilia
       #
       # @return void
       def xml_serialize(_writer)
+      end
+
+      # Call this method on a document if you're done using it.
+      #
+      # It's intended to remove all circular references, so PHP can easily clean
+      # it up.
+      #
+      # @return void
+      def destroy
+        @parent = nil
+        @root = nil
       end
 
       # Validates the node for correctness.

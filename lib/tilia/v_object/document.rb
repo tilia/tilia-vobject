@@ -10,22 +10,22 @@ module Tilia
     # This class also provides a registry for document types.
     class Document < Component
       # Unknown document type.
-      UNKNOWN ||= 1
+      UNKNOWN = 1
 
       # vCalendar 1.0.
-      VCALENDAR10 ||= 2
+      VCALENDAR10 = 2
 
       # iCalendar 2.0.
-      ICALENDAR20 ||= 3
+      ICALENDAR20 = 3
 
       # vCard 2.1.
-      VCARD21 ||= 4
+      VCARD21 = 4
 
       # vCard 3.0.
-      VCARD30 ||= 5
+      VCARD30 = 5
 
       # vCard 4.0.
-      VCARD40 ||= 6
+      VCARD40 = 6
 
       # The default name for this component.
       #

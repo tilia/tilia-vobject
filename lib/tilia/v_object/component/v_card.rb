@@ -153,7 +153,7 @@ module Tilia
         # VCards with version 2.1, 3.0 and 4.0 are found.
         #
         # If the VCARD doesn't know its version, 2.1 is assumed.
-        DEFAULT_VERSION ||= VCARD21
+        DEFAULT_VERSION = VCARD21
 
         # Validates the node for correctness.
         #

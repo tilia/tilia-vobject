@@ -10,11 +10,11 @@ module Tilia
         # In the case of the MimeDir parser, this means that the parser will
         # accept slashes and underscores in property names, and it will also
         # attempt to fix Microsoft vCard 2.1's broken line folding.
-        OPTION_FORGIVING ||= 1
+        OPTION_FORGIVING = 1
 
         # If this option is turned on, any lines we cannot parse will be ignored
         # by the reader.
-        OPTION_IGNORE_INVALID_LINES ||= 2
+        OPTION_IGNORE_INVALID_LINES = 2
 
         # Bitmask of parser options.
         #

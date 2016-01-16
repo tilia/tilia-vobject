@@ -7,8 +7,8 @@ module Tilia
       class Xml < Parser
         require 'tilia/v_object/parser/xml/element'
 
-        XCAL_NAMESPACE ||= 'urn:ietf:params:xml:ns:icalendar-2.0'
-        XCARD_NAMESPACE ||= 'urn:ietf:params:xml:ns:vcard-4.0'
+        XCAL_NAMESPACE = 'urn:ietf:params:xml:ns:icalendar-2.0'
+        XCARD_NAMESPACE = 'urn:ietf:params:xml:ns:vcard-4.0'
 
         # The input data.
         #

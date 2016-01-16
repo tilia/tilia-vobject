@@ -460,7 +460,7 @@ module Tilia
       # Specifically, this will ensure all child elements are also cloned.
       #
       # @return void
-      def initialize_copy(_other)
+      def initialize_copy(_original)
         new_children = {}
         @children.each do |child_name, child_group|
           new_children[child_name] = []
@@ -580,6 +580,24 @@ module Tilia
         end
 
         messages
+      end
+
+      # Call this method on a document if you're done using it.
+      #
+      # It's intended to remove all circular references, so PHP can easily clean
+      # it up.
+      #
+      # @return void
+      def destroy
+        super
+
+        @children.each do |child_name, child_group|
+          child_group.each do |child|
+            child.destroy
+          end
+        end
+
+        @children = {}
       end
 
       # TODO: document

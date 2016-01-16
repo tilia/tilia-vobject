@@ -62,9 +62,9 @@ module Tilia
         event.add(prop)
         assert_equal(event, prop.parent)
 
-        # TODO: destroy object?!
-        # vcal.destroy
-        # assert_nil(prop.parent)
+        vcal.destroy
+
+        assert_nil(prop.parent)
       end
     end
   end
