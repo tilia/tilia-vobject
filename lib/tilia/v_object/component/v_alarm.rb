@@ -70,13 +70,15 @@ module Tilia
 
           if key?('DURATION')
             duration = DateTimeParser.parse_duration(self['DURATION'])
-            repeat = self['repeat']
-            repeat = 1 if repeat.blank?
+            repeat = self['REPEAT'].to_s.to_i
+            repeat = 1 if repeat == 0
 
             occurrence = effective_trigger
-            repeat.to_s.to_i.times do |_i|
-              return true if start <= occurrence && ending > occurrence
+            return true if start <= occurrence && ending > occurrence
+
+            repeat.times do |_i|
               occurrence += duration
+              return true if start <= occurrence && ending > occurrence
             end
             return false
           else
