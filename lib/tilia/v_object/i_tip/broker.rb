@@ -192,7 +192,7 @@ module Tilia
 
               # Increasing the sequence, but only if the organizer deleted
               # the event.
-              event_info['sequence'] += 1
+              event_info['sequence'] = event_info['sequence'].to_i + 1
             else
               # This is an attendee deleting the event.
               event_info['attendees'].each do |key, attendee|
