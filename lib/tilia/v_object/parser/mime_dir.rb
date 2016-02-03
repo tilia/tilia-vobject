@@ -56,7 +56,7 @@ module Tilia
             stream.write(input)
             stream.rewind
             @input = stream
-          elsif input.respond_to?(:readlines)
+          elsif input.respond_to?(:read)
             @input = input
           else
             fail ArgumentError, 'This parser can only read from strings or streams.'

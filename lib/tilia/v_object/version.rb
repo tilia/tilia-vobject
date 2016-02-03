@@ -3,7 +3,7 @@ module Tilia
     # This class contains the version number for the VObject package.
     class Version
       # Full version number.
-      VERSION = '4.0.0-alpha4'
+      VERSION = '4.0.0-alpha5'
     end
   end
 end

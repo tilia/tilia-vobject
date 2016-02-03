@@ -138,8 +138,8 @@ module Tilia
         #
         # @return void
         def input=(input)
-          input = input.readlines.join('') if input.respond_to?(:readlines)
-          input = JSON.parse(input) if input.is_a?(String)
+          input = input.read unless input.is_a?(String)
+          input = JSON.parse(input)
 
           @input = input
         end

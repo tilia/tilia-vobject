@@ -13,7 +13,7 @@ module Tilia
       # CALSCALE will automatically get removed if it's set to GREGORIAN.
       def assert_v_obj_equals(expected, actual, message = '')
         get_obj = lambda do |input|
-          input = input.readlines.join("\n") if input.respond_to?(:readlines)
+          input = input.read if input.respond_to?(:read)
 
           input = Tilia::VObject::Reader.read(input) if input.is_a?(String)
 

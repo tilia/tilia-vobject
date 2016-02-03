@@ -292,7 +292,7 @@ module Tilia
         #
         # @return void
         def input=(input)
-          input = input.readlines.join('') if input.respond_to?(:readlines)
+          input = input.read unless input.is_a?(String)
 
           if input.is_a?(String)
             reader = Tilia::Xml::Reader.new

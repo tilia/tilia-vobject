@@ -91,7 +91,7 @@ ICS
         version = Tilia::VObject::Version::VERSION
         assert_equal(
           '["vcard",[["version",{},"text","4.0"],["prodid",{},"text","-//Tilia//Tilia VObject ' + version + '//EN"],["fn",{},"text","Cowboy Henk"]]]',
-          @cli.stdout.readlines.join('')
+          @cli.stdout.read
         )
       end
 
@@ -121,7 +121,7 @@ ICS
       "version",
 JCARD
 
-        assert_equal(expected, @cli.stdout.readlines.join('')[0..39])
+        assert_equal(expected, @cli.stdout.read[0..39])
       end
 
       def test_convert_j_cal_fail
@@ -191,7 +191,7 @@ FN:Cowboy Henk
 END:VCARD
 VCF
 
-        assert_equal(expected, @cli.stdout.readlines.join('').gsub("\r\n", "\n"))
+        assert_equal(expected, @cli.stdout.read.gsub("\r\n", "\n"))
       end
 
       def test_convert_default_formats
@@ -239,7 +239,7 @@ FN:Cowboy Henk
 END:VCARD
 VCF
 
-        assert_equal(expected, @cli.stdout.readlines.join('').gsub("\r\n", "\n"))
+        assert_equal(expected, @cli.stdout.read.gsub("\r\n", "\n"))
       end
 
       def test_v_card4030
@@ -270,7 +270,7 @@ FN:Cowboy Henk
 END:VCARD
 VCF
 
-        assert_equal(expected, @cli.stdout.readlines.join('').gsub("\r\n", "\n"))
+        assert_equal(expected, @cli.stdout.read.gsub("\r\n", "\n"))
       end
 
       def test_v_card4021
@@ -357,7 +357,7 @@ VCF
         assert_equal(2, @cli.main(['repair', '-']))
 
         @cli.stdout.rewind
-        assert(@cli.stdout.readlines.join('') =~ /BEGIN:VCARD\r\nVERSION:2.1\r\nUID:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\r\nEND:VCARD\r\n$/)
+        assert(@cli.stdout.read =~ /BEGIN:VCARD\r\nVERSION:2.1\r\nUID:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\r\nEND:VCARD\r\n$/)
       end
 
       def test_repair_nothing
@@ -382,7 +382,7 @@ VCF
         result = @cli.main(['repair', '-'])
 
         @cli.stderr.rewind
-        error = @cli.stderr.readlines.join('')
+        error = @cli.stderr.read
 
         assert_equal(0, result, "This should have been error free. stderr output:\n#{error}")
       end
@@ -419,7 +419,7 @@ VCF
         result = @cli.main(['color', '-'])
 
         @cli.stderr.rewind
-        error = @cli.stderr.readlines.join('')
+        error = @cli.stderr.read
 
         assert_equal(0, result, "This should have been error free. stderr output:\n#{error}")
       end
@@ -451,7 +451,7 @@ VCF
         result = @cli.main(['color', '-'])
 
         @cli.stderr.rewind
-        error = @cli.stderr.readlines.join('')
+        error = @cli.stderr.read
 
         assert_equal(0, result, "This should have been error free. stderr output:\n#{error}")
       end
