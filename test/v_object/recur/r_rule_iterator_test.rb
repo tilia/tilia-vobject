@@ -496,7 +496,7 @@ module Tilia
       # this means we increase the current day (or week, month) by 0, this also
       # results in an infinite loop.
       def test_zero_interval
-        assert_raises(ArgumentError) do
+        assert_raises(InvalidDataException) do
           parse(
             'FREQ=YEARLY;INTERVAL=0',
             '2012-08-24 14:57:00',
@@ -507,7 +507,7 @@ module Tilia
       end
 
       def test_invalid_freq
-        assert_raises(ArgumentError) do
+        assert_raises(InvalidDataException) do
           parse(
             'FREQ=SMONTHLY;INTERVAL=3;UNTIL=20111025T000000Z',
             '2011-10-07',
@@ -517,7 +517,7 @@ module Tilia
       end
 
       def test_by_day_bad_offset
-        assert_raises(ArgumentError) do
+        assert_raises(InvalidDataException) do
           parse(
             'FREQ=WEEKLY;INTERVAL=1;COUNT=4;BYDAY=0MO;WKST=SA',
             '2014-08-01 00:00:00',
@@ -581,7 +581,7 @@ module Tilia
       end
 
       def test_unsupported_part
-        assert_raises(ArgumentError) do
+        assert_raises(InvalidDataException) do
           parse(
             'FREQ=DAILY;BYWODAN=1',
             '2014-08-02 00:15:00',

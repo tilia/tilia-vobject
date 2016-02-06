@@ -25,7 +25,7 @@ ICS
         vcal = Tilia::VObject::Reader.read(ics)
         assert_kind_of(Tilia::VObject::Component::VCalendar, vcal)
 
-        vcal.expand(Time.zone.parse('2015-01-01'), Time.zone.parse('2016-01-01'))
+        vcal = vcal.expand(Time.zone.parse('2015-01-01'), Time.zone.parse('2016-01-01'))
 
         dates = []
         vcal['VEVENT'].each do |event|

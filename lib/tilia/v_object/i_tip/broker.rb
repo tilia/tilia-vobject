@@ -478,6 +478,12 @@ module Tilia
               end
 
               event.add(calendar['VEVENT']['DTSTART'].clone)
+              if calendar['VEVENT'].key?('DTEND')
+                event.add(calendar['VEVENT']['DTEND'].clone)
+              elsif calendar['VEVENT'].key?('DURATION')
+                event.add(calendar['VEVENT']['DURATION'].clone)
+              end
+
               org = event.add('ORGANIZER', event_info['organizer'])
               if event_info['organizer_name']
                 org['CN'] = event_info['organizer_name']
@@ -672,6 +678,12 @@ module Tilia
               instance_obj = event_info['instances'][instance['id']]
 
               event.add(instance_obj['DTSTART'].clone)
+              if instance_obj.key?('DTEND')
+                event.add(instance_obj['DTEND'].clone)
+              elsif instance_obj.key?('DURATION')
+                event.add(instance_obj['DURATION'].clone)
+              end
+
               if instance_obj.key?('SUMMARY')
                 event.add('SUMMARY', instance_obj['SUMMARY'].value)
               elsif !summary.blank?

@@ -2,7 +2,7 @@ require 'test_helper'
 
 module Tilia
   module VObject
-    class VCalendarTest < Minitest::Test
+    class VCalendarTest < TestCase
       def assert_validate(ics, options, expected_level, expected_message = nil)
         vcal = Tilia::VObject::Reader.read(ics)
         result = vcal.validate(options)
@@ -93,6 +93,40 @@ DTSTART:20111203T120102Z
 END:VEVENT
 END:VCALENDAR
 '
+
+        tests << [input, output]
+
+        # Removing timezone info from sub-components. See Issue #278
+        $input = 'BEGIN:VCALENDAR
+CALSCALE:GREGORIAN
+VERSION:2.0
+BEGIN:VTIMEZONE
+TZID:Europe/Paris
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:bla4
+SUMMARY:RemoveTZ info
+DTSTART;TZID=Europe/Paris:20111203T130102
+BEGIN:VALARM
+TRIGGER;VALUE=DATE-TIME;TZID=America/New_York:20151209T133200
+END:VALARM
+END:VEVENT
+END:VCALENDAR
+';
+
+        $output = 'BEGIN:VCALENDAR
+CALSCALE:GREGORIAN
+VERSION:2.0
+BEGIN:VEVENT
+UID:bla4
+SUMMARY:RemoveTZ info
+DTSTART:20111203T120102Z
+BEGIN:VALARM
+TRIGGER;VALUE=DATE-TIME:20151209T183200Z
+END:VALARM
+END:VEVENT
+END:VCALENDAR
+';
 
         tests << [input, output]
 
@@ -297,7 +331,7 @@ END:VCALENDAR
           vcal = Tilia::VObject::Reader.read(input)
           time_zone = ActiveSupport::TimeZone.new(time_zone)
 
-          vcal.expand(
+          vcal = vcal.expand(
             Time.zone.parse(start),
             Time.zone.parse(ending),
             time_zone
@@ -306,7 +340,7 @@ END:VCALENDAR
           # This will normalize the output
           output = Tilia::VObject::Reader.read(output).serialize
 
-          assert_equal(output, vcal.serialize)
+          assert_v_obj_equals(output, vcal.serialize)
         end
       end
 
@@ -322,7 +356,9 @@ END:VCALENDAR
 '
         vcal = Tilia::VObject::Reader.read(input)
 
-        assert_raises(RuntimeError) { vcal.expand(Time.zone.parse('2011-12-01'), Time.zone.parse('2011-12-31')) }
+        assert_raises(InvalidDataException) do
+          vcal.expand(Time.zone.parse('2011-12-01'), Time.zone.parse('2011-12-31'))
+        end
       end
 
       def test_get_document_type

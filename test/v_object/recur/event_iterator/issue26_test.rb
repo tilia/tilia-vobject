@@ -18,7 +18,9 @@ ICS
         vcal = Tilia::VObject::Reader.read(input)
         assert_kind_of(Tilia::VObject::Component::VCalendar, vcal)
 
-        assert_raises(ArgumentError) { Tilia::VObject::Recur::EventIterator.new(vcal, 'bae5d57a98') }
+        assert_raises(InvalidDataException) do
+          Tilia::VObject::Recur::EventIterator.new(vcal, 'bae5d57a98')
+        end
       end
     end
   end

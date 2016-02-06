@@ -267,7 +267,9 @@ module Tilia
       end
 
       def test_parse_i_calendar_duration_fail
-        assert_raises(RuntimeError) { Tilia::VObject::DateTimeParser.parse_duration('P1X', true) }
+        assert_raises(InvalidDataException) do
+          Tilia::VObject::DateTimeParser.parse_duration('P1X', true)
+        end
       end
 
       def test_parse_i_calendar_date_time
@@ -279,7 +281,9 @@ module Tilia
       end
 
       def test_parse_i_calendar_date_time_bad_format
-        assert_raises(RuntimeError) { Tilia::VObject::DateTimeParser.parse_date_time('20100316T141405 ') }
+        assert_raises(InvalidDataException) do
+          Tilia::VObject::DateTimeParser.parse_date_time('20100316T141405 ')
+        end
       end
 
       def test_parse_i_calendar_date_time_utc
@@ -338,7 +342,9 @@ module Tilia
       end
 
       def test_parse_i_calendar_date_bad_format
-        assert_raises(RuntimeError) { Tilia::VObject::DateTimeParser.parse_date('20100316T141405') }
+        assert_raises(InvalidDataException) do
+          Tilia::VObject::DateTimeParser.parse_date('20100316T141405')
+        end
       end
 
       def test_v_card_date
@@ -349,11 +355,15 @@ module Tilia
       end
 
       def test_bad_v_card_date
-        assert_raises(ArgumentError) { Tilia::VObject::DateTimeParser.parse_v_card_date_time('1985---01') }
+        assert_raises(InvalidDataException) do
+          Tilia::VObject::DateTimeParser.parse_v_card_date_time('1985---01')
+        end
       end
 
       def test_bad_v_card_time
-        assert_raises(ArgumentError) { Tilia::VObject::DateTimeParser.parse_v_card_time('23:12:166') }
+        assert_raises(InvalidDataException) do
+          Tilia::VObject::DateTimeParser.parse_v_card_time('23:12:166')
+        end
       end
 
       def test_date_and_or_time_date_with_year_month_day

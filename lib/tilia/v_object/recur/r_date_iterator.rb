@@ -60,7 +60,8 @@ module Tilia
           return nil unless valid
 
           @current_date = DateTimeParser.parse(
-            @dates[@counter - 1]
+            @dates[@counter - 1],
+            @start_date.time_zone
           )
         end
 
@@ -81,26 +82,6 @@ module Tilia
           self.next while valid && @current_date < dt
         end
 
-        # The reference start date/time for the rrule.
-        #
-        # All calculations are based on this initial date.
-        #
-        # @var DateTimeInterface
-        # RUBY: attr_accessor :start_date
-
-        # The date of the current iteration. You can get this by calling
-        # .current.
-        #
-        # @var DateTimeInterface
-        # RUBY: attr_accessor :protected current_date
-
-        # The current item in the list.
-        #
-        # You can get this number with the key method.
-        #
-        # @var int
-        # RUBY: attr_accessor :counter
-
         protected
 
         # This method receives a string from an RRULE property, and populates this
@@ -115,17 +96,10 @@ module Tilia
           @dates = rdate
         end
 
-        # TODO
-        #
-        # TODO
-        #
-        # @var TODO
-        # RUBY: attr_accessor :dates
-
         def each
-          m = [@start_date]
+          m = [@start_date.clone]
           n = @dates.map do |d|
-            DateTimeParser.parse(d)
+            DateTimeParser.parse(d, @start_date.time_zone)
           end
           m.concat n
           m.each do |d|

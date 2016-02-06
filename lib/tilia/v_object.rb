@@ -24,6 +24,7 @@ module Tilia
     require 'tilia/v_object/uuid_util'
     require 'tilia/v_object/component'
     require 'tilia/v_object/document'
+    require 'tilia/v_object/invalid_data_exception'
     require 'tilia/v_object/parse_exception'
     require 'tilia/v_object/eof_exception'
     require 'tilia/v_object/reader'

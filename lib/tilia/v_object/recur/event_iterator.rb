@@ -245,6 +245,11 @@ module Tilia
         #
         # @return bool
         def valid
+          if @counter > Settings.max_recurrences &&
+              Settings.max_recurrences != -1
+            fail MaxInstancesExceededException, "Recurring events are only allowed to generate #{Settings::max_recurrences}"
+          end
+
           !!@current_date
         end
 

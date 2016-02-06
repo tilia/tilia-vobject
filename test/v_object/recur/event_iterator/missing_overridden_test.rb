@@ -2,7 +2,7 @@ require 'test_helper'
 
 module Tilia
   module VObject
-    class MissingOverriddenTest < Minitest::Test
+    class MissingOverriddenTest < TestCase
       def test_expand
         input = <<ICS
 BEGIN:VCALENDAR
@@ -26,9 +26,7 @@ ICS
         vcal = Tilia::VObject::Reader.read(input)
         assert_kind_of(Tilia::VObject::Component::VCalendar, vcal)
 
-        vcal.expand(Time.zone.parse('2011-01-01'), Time.zone.parse('2015-01-01'))
-
-        result = vcal.serialize
+        vcal = vcal.expand(Time.zone.parse('2011-01-01'), Time.zone.parse('2015-01-01'))
 
         output = <<ICS
 BEGIN:VCALENDAR
@@ -48,7 +46,7 @@ SUMMARY:B
 END:VEVENT
 END:VCALENDAR
 ICS
-        assert_equal(output, result.delete("\r"))
+        assert_v_obj_equals(output, vcal)
       end
     end
   end

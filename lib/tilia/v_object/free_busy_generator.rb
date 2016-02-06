@@ -327,7 +327,7 @@ module Tilia
 
                   iterator.fast_forward(@start) if @start
 
-                  max_recurrences = 200
+                  max_recurrences = Settings.max_recurrences
 
                   while iterator.valid && max_recurrences > 0
                     max_recurrences -= 1

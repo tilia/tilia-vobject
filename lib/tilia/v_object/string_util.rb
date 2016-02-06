@@ -24,15 +24,27 @@ module Tilia
       #
       # @return string
       def self.convert_to_utf8(str)
+        str = str.encode('UTF-8', guess_encoding(str))
+
+        # Removing any control characters
+        str.gsub(/(?:[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F])/, '')
+      end
+
+      # Detects the encoding of a string
+      #
+      # Currently only supports 'UTF-8', 'ISO-5991-1' and 'Windows-1252'.
+      #
+      # @param [String] str
+      # @return [String] 'UTF-8', 'ISO-5991-1' or 'Windows-1252'
+      def self.guess_encoding(str)
         cd = CharDet.detect(str)
 
         # Best solution I could find ...
         if cd['confidence'] > 0.4 && cd['encoding'] =~ /(?:windows|iso)/i
-          str = str.encode('UTF-8', cd['encoding'])
+          cd['encoding']
+        else
+          'UTF-8'
         end
-
-        # Removing any control characters
-        str.gsub(/(?:[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F])/, '')
       end
 
       # TODO: document

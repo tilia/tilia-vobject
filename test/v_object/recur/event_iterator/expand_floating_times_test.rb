@@ -2,7 +2,7 @@ require 'test_helper'
 
 module Tilia
   module VObject
-    class ExpandFloatingTimesTest < Minitest::Test
+    class ExpandFloatingTimesTest < TestCase
       def test_expand
         input = <<ICS
 BEGIN:VCALENDAR
@@ -19,9 +19,7 @@ ICS
         vcal = Tilia::VObject::Reader.read(input)
         assert_kind_of(Tilia::VObject::Component::VCalendar, vcal)
 
-        vcal.expand(Time.zone.parse('2015-01-01'), Time.zone.parse('2015-01-31'))
-
-        result = vcal.serialize
+        vcal = vcal.expand(Time.zone.parse('2015-01-01'), Time.zone.parse('2015-01-31'))
 
         output = <<ICS
 BEGIN:VCALENDAR
@@ -51,7 +49,7 @@ RECURRENCE-ID:20150130T090000Z
 END:VEVENT
 END:VCALENDAR
 ICS
-        assert_equal(output, result.delete("\r"))
+        assert_v_obj_equals(output, vcal)
       end
 
       def test_expand_with_reference_timezone
@@ -70,9 +68,11 @@ ICS
         vcal = Tilia::VObject::Reader.read(input)
         assert_kind_of(Tilia::VObject::Component::VCalendar, vcal)
 
-        vcal.expand(Time.zone.parse('2015-01-01'), Time.zone.parse('2015-01-31'), ActiveSupport::TimeZone.new('Europe/Berlin'))
-
-        result = vcal.serialize
+        vcal = vcal.expand(
+          Time.zone.parse('2015-01-01'),
+          Time.zone.parse('2015-01-31'),
+          ActiveSupport::TimeZone.new('Europe/Berlin')
+        )
 
         output = <<ICS
 BEGIN:VCALENDAR
@@ -102,7 +102,7 @@ RECURRENCE-ID:20150130T080000Z
 END:VEVENT
 END:VCALENDAR
 ICS
-        assert_equal(output, result.delete("\r"))
+        assert_v_obj_equals(output, vcal)
       end
     end
   end

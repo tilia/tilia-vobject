@@ -65,7 +65,9 @@ module Tilia
         ev['RRULE'] = 'FREQ=YEARLY;INTERVAL=0'
         @vcal.add(ev)
 
-        assert_raises(ArgumentError) { Tilia::VObject::Recur::EventIterator.new(@vcal, 'uuid') }
+        assert_raises(InvalidDataException) do
+          Tilia::VObject::Recur::EventIterator.new(@vcal, 'uuid')
+        end
         # it.fast_forward(ActiveSupport::TimeZone.new('UTC').parse('2013-01-01 23:00:00'))
 
         # if we got this far.. it means we are no longer infinitely looping

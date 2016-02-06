@@ -295,9 +295,11 @@ module Tilia
       def test_serialize_children
         comp = Tilia::VObject::Component::VCalendar.new({}, false)
         event = comp.add(comp.create_component('VEVENT'))
-        event.delete 'DTSTAMP'
-        event.delete 'UID'
-        comp.add(comp.create_component('VTODO'))
+        event.delete('DTSTAMP')
+        event.delete('UID')
+        todo = comp.add(comp.create_component('VTODO'))
+        todo.delete('DTSTAMP')
+        todo.delete('UID')
 
         str = comp.serialize
 

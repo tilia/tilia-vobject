@@ -141,6 +141,18 @@ module Tilia
 
           result
         end
+
+        protected
+
+        # This method should return a list of default property values.
+        #
+        # @return array
+        def defaults
+          {
+            'UID'     => "tilia-vobject-#{UuidUtil.uuid}",
+            'DTSTAMP' => Time.zone.now.strftime('%Y%m%dT%H%M%SZ')
+          }
+        end
       end
     end
   end

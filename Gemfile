@@ -1,13 +1,6 @@
 source 'https://rubygems.org'
 
-# Internal dependencies
-gem 'tilia-xml', '~> 1.1'
-
-# External dependencies
-gem 'activesupport', '~> 4.2'
-gem 'mail', '~> 2.6'
-gem 'tzinfo', '~> 1.2'
-gem 'rchardet', '~>1.6'
+gemspec
 
 # Testing
 gem 'rake'

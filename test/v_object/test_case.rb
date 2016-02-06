@@ -11,6 +11,8 @@ module Tilia
       # just get in the way.
       #
       # CALSCALE will automatically get removed if it's set to GREGORIAN.
+      #
+      # Any property that has the value **ANY** will be treated as a wildcard.
       def assert_v_obj_equals(expected, actual, message = '')
         get_obj = lambda do |input|
           input = input.read if input.respond_to?(:read)
@@ -28,12 +30,20 @@ module Tilia
           input
         end
 
-        expected = get_obj.call(expected)
-        actual = get_obj.call(actual)
+        expected = get_obj.call(expected).serialize
+        actual = get_obj.call(actual).serialize
+
+        # Finding wildcards in expected.
+        expected.scan(/^([A-Z]+):\*\*ANY\*\*\r$/) do |match|
+          actual = actual.gsub(
+            /^#{Regexp.quote(match[0])}:(.*)\r$/,
+            "#{match[0]}:**ANY**\r"
+          )
+        end
 
         assert_equal(
-          expected.serialize,
-          actual.serialize,
+          expected,
+          actual,
           message
         )
       end

@@ -18,7 +18,7 @@ module Tilia
               if key == 'message'
                 assert_v_obj_equals(val, message.message.serialize)
               else
-                actual = message.send(key)
+                actual = message.send(key.underscore)
                 assert_equal(val, val.is_a?(String) ? actual.to_s : actual)
               end
             end

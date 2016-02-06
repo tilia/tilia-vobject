@@ -224,7 +224,9 @@ module Tilia
 
       def test_get_date_time_date_invalid
         elem = @vcal.create_property('DTSTART', 'bla')
-        assert_raises(RuntimeError) { elem.date_time }
+        assert_raises(InvalidDataException) do
+          elem.date_time
+        end
       end
 
       def test_get_date_time_weird_tz

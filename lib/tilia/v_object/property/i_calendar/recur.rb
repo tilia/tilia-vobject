@@ -33,6 +33,7 @@ module Tilia
 
                   # The value had multiple sub-values
                   v = v.split(',') if v.index(',')
+                  v = v.gsub(/[:\-]/, '') if k == 'until'
                 else
                   v = v.map { |val| val.is_a?(String) ? val.upcase : val }
                 end
@@ -68,7 +69,6 @@ module Tilia
           # Sets a multi-valued property.
           #
           # @param array parts
-          #
           # @return void
           def parts=(parts)
             self.value = parts
@@ -90,7 +90,6 @@ module Tilia
           # not yet done, but parameters are not included.
           #
           # @param string val
-          #
           # @return void
           def raw_mime_dir_value=(val)
             self.value = val
@@ -132,7 +131,6 @@ module Tilia
           # create xCard or xCal documents.
           #
           # @param Xml\Writer writer  XML writer.
-          #
           # @return void
           def xml_serialize_value(writer)
             value_type = self.value_type.downcase
@@ -147,7 +145,6 @@ module Tilia
           # Parses an RRULE value string, and turns it into a struct-ish array.
           #
           # @param string value
-          #
           # @return array
           def self.string_to_array(value)
             value = value.upcase

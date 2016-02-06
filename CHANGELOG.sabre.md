@@ -1,7 +1,57 @@
 ChangeLog
 =========
 
-4.0.0-alpha2 (2015-09-04)
+4.0.2 (2016-01-11)
+------------------
+
+* #288: Only decode `CHARSET` if we're reading vCard 2.1. If it appears
+  in any other document, we must ignore it.
+
+
+4.0.1 (2016-01-04)
+------------------
+
+* #284: When generating `CANCEL` iTip messages, we now include `DTEND`.
+  (@kewisch)
+
+
+4.0.0 (2015-12-11)
+------------------
+
+* #274: When creating new vCards, the default vCard version is now 4.0.
+* #275: `VEVENT`, `VTODO` and `VCARD` now automatically get a `UID` and
+  `DTSTAMP` property if this was not already specified.
+* `ParseException` now extends `\Exception`.
+* `Sabre\VObject\Reader::read` now has a `$charset` argument.
+* #272: `Sabre\VObject\Recur\EventIterator::$maxInstances` is now
+  `Sabre\VObject\Settings::$maxRecurrences` and is also honored by the
+  FreeBusyGenerator.
+* #278: `expand()` did not work correctly on events with sub-components.
+
+
+4.0.0-beta1 (2015-12-02)
+------------------------
+
+* #258: Support for expanding events that use `RDATE`. (@jabdoa2)
+* #258: Correctly support TZID for events that use `RDATE`. (@jabdoa2)
+* #240: `Component\VCalendar::expand()` now returns a new expanded `VCalendar`
+  object, instead of editing the existing `VCalendar` in-place. This is a BC
+  break.
+* #265: Using the new `InvalidDataException` in place of
+  `InvalidArgumentException` and `LogicException` in all places where we fail
+  because there was something wrong with input data.
+* #227: Always add `VALUE=URI` to `PHOTO` properties.
+* #235: Always add `VALUE=URI` to `URL` properties.
+* It's now possible to override which class is used instead of
+  `Component\VCalendar` or `Component\VCard` during parsing.
+* #263: Lots of small cleanups. (@jakobsack)
+* #220: Automatically stop recurring after 3500 recurrences.
+* #41: Allow user to set different encoding than UTF-8 when decoding vCards.
+* #41: Support the `ENCODING` parameter from vCard 2.1.
+  Both ISO-8859-1 and Windows-1252 are currently supported.
+* #185: Fix encoding/decoding of `TIME` values in jCal/jCard.
+
+ 4.0.0-alpha2 (2015-09-04)
 -------------------------
 
 * Updated windows timezone file to support new mexican timezone.
@@ -50,7 +100,14 @@ ChangeLog
   and `IntegerValue` to allow PHP 7 compatibility.
 
 
-3.4.7 (2015-09-04)
+3.4.8 (2016-01-04)
+------------------
+
+* #284: When generating `CANCEL` iTip messages, we now include `DTEND`.
+  (@kewisch).
+
+
+3.4.7 (2015-09-05)
 ------------------
 
 * #253: Handle `isInTimeRange` for recurring events that have 0 valid

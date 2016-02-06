@@ -92,7 +92,7 @@ module Tilia
           # Skip if we can't parse the BDAY value.
           begin
             date_parts = DateTimeParser.parse_v_card_date_time(object['BDAY'].value)
-          rescue ArgumentError
+          rescue InvalidDataException
             next
           end
 
@@ -100,7 +100,7 @@ module Tilia
           unknown_year = false
 
           unless date_parts['year']
-            object['BDAY'] = "#{self.class::DEFAULT_YEAR}-#{date_parts['month']}-#{date_parts['date']}"
+            object['BDAY'] = "#{DEFAULT_YEAR}-#{date_parts['month']}-#{date_parts['date']}"
             unknown_year = true
           end
 
@@ -123,7 +123,7 @@ module Tilia
               'BDAY',
               'X-SABRE-VCARD-UID' => object['UID'].value,
               'X-SABRE-VCARD-FN'  => object['FN'].value,
-              'X-SABRE-OMIT-YEAR' => self.class::DEFAULT_YEAR
+              'X-SABRE-OMIT-YEAR' => DEFAULT_YEAR
             )
           else
             event.add(

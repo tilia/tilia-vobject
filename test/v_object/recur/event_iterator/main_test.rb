@@ -31,17 +31,23 @@ module Tilia
         ev.add(dt_start)
         vcal.add(ev)
 
-        assert_raises(ArgumentError) { Tilia::VObject::Recur::EventIterator.new(vcal, ev['UID'].to_s) }
+        assert_raises(InvalidDataException) do
+          Tilia::VObject::Recur::EventIterator.new(vcal, ev['UID'].to_s)
+        end
       end
 
       def test_v_calendar_no_uid
         vcal = Tilia::VObject::Component::VCalendar.new
-        assert_raises(ArgumentError) { Tilia::VObject::Recur::EventIterator.new(vcal) }
+        assert_raises(ArgumentError) do
+          Tilia::VObject::Recur::EventIterator.new(vcal)
+        end
       end
 
       def test_v_calendar_invalid_uid
         vcal = Tilia::VObject::Component::VCalendar.new
-        assert_raises(ArgumentError) { Tilia::VObject::Recur::EventIterator.new(vcal, 'foo') }
+        assert_raises(ArgumentError) do
+          Tilia::VObject::Recur::EventIterator.new(vcal, 'foo')
+        end
       end
 
       def test_hourly

@@ -21,6 +21,25 @@ module Tilia
           'URI'
         end
 
+        # Returns an iterable list of children.
+        #
+        # @return array
+        def parameters
+          parameters = super
+          if !parameters.key?('VALUE') && ['URL', 'PHOTO'].include?(@name)
+            # If we are encoding a URI value, and this URI value has no
+            # VALUE=URI parameter, we add it anyway.
+            #
+            # This is not required by any spec, but both Apple iCal and Apple
+            # AddressBook (at least in version 10.8) will trip over this if
+            # this is not set, and so it improves compatibility.
+            #
+            # See Issue #227 and #235
+            parameters['VALUE'] = Parameter.new(@root, 'VALUE', 'URI')
+          end
+          return parameters
+        end
+
         # Sets a raw value coming from a mimedir (iCalendar/vCard) file.
         #
         # This has been 'unfolded', so only 1 line will be passed. Unescaping is

@@ -9,19 +9,22 @@ module Tilia
 
         event = cal.add(
           'VEVENT',
-          'UID'        => 'foo',
-          'DTSTART'    => Time.zone.parse('2013-05-26 18:10:00Z'),
-          'DURATION'   => 'P1D',
-          'CATEGORIES' => ['home', 'testing'],
-          'CREATED'    => Time.zone.parse('2013-05-26 18:10:00Z'),
+          {
+            'UID'        => 'foo',
+            'DTSTART'    => Time.zone.parse('2013-05-26 18:10:00Z'),
+            'DURATION'   => 'P1D',
+            'CATEGORIES' => ['home', 'testing'],
+            'CREATED'    => Time.zone.parse('2013-05-26 18:10:00Z'),
 
-          'ATTENDEE'     => 'mailto:armin@example.org',
-          'GEO'          => [51.96668, 7.61876],
-          'SEQUENCE'     => 5,
-          'FREEBUSY'     => ['20130526T210213Z/PT1H', '20130626T120000Z/20130626T130000Z'],
-          'URL'          => 'http://example.org/',
-          'TZOFFSETFROM' => '+0500',
-          'RRULE'        => { 'FREQ' => 'WEEKLY', 'BYDAY' => ['MO', 'TU'] }
+            'ATTENDEE'     => 'mailto:armin@example.org',
+            'GEO'          => [51.96668, 7.61876],
+            'SEQUENCE'     => 5,
+            'FREEBUSY'     => ['20130526T210213Z/PT1H', '20130626T120000Z/20130626T130000Z'],
+            'URL'          => 'http://example.org/',
+            'TZOFFSETFROM' => '+0500',
+            'RRULE'        => { 'FREQ' => 'WEEKLY', 'BYDAY' => ['MO', 'TU'] }
+          },
+          false
         )
 
         # Modifying DTSTART to be a date-only.

@@ -32,7 +32,7 @@ module Tilia
               elsif parent_component.name == 'VEVENT'
                 end_prop = 'DTEND'
               else
-                fail 'time-range filters on VALARM components are only supported when they are a child of VTODO or VEVENT'
+                fail InvalidDataException, 'time-range filters on VALARM components are only supported when they are a child of VTODO or VEVENT'
               end
 
               if parent_component.key?(end_prop)

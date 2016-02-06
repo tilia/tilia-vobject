@@ -10,9 +10,11 @@ module Tilia
         card = Tilia::VObject::Component::VCard.new
         card.add('N', ['van der Harten', ['Rene', 'J.'], '', 'Sir', 'R.D.O.N.'], 'SORT-AS' => ['Harten', 'Rene'])
 
+        card.delete('UID')
+
         expected = [
           'BEGIN:VCARD',
-          'VERSION:3.0',
+          'VERSION:4.0',
           "PRODID:-//Tilia//Tilia VObject #{Tilia::VObject::Version::VERSION}//EN",
           'N;SORT-AS=Harten,Rene:van der Harten;Rene,J.;;Sir;R.D.O.N.',
           'END:VCARD',

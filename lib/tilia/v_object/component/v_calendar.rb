@@ -16,6 +16,7 @@ module Tilia
         #
         # @var array
         @component_map = {
+          'VCALENDAR'     => Component::VCalendar,
           'VALARM'        => Component::VAlarm,
           'VEVENT'        => Component::VEvent,
           'VFREEBUSY'     => Component::VFreeBusy,
@@ -130,7 +131,7 @@ module Tilia
         #
         # @return int
         def document_type
-          self.class::ICALENDAR20
+          ICALENDAR20
         end
 
         # Returns a list of all 'base components'. For instance, if an Event has
@@ -205,6 +206,9 @@ module Tilia
           nil
         end
 
+        # Expand all events in this VCalendar object and return a new VCalendar
+        # with the expanded events.
+        #
         # If this calendar object, has events with recurrence rules, this method
         # can be used to expand the event into multiple sub-events.
         #
@@ -215,43 +219,59 @@ module Tilia
         # In addition, this method will cause timezone information to be stripped,
         # and normalized to UTC.
         #
-        # This method will alter the VCalendar. This cannot be reversed.
-        #
-        # This functionality is specifically used by the CalDAV standard. It is
-        # possible for clients to request expand events, if they are rather simple
-        # clients and do not have the possibility to calculate recurrences.
-        #
         # @param DateTimeInterface start
         # @param DateTimeInterface end
         # @param DateTimeZone time_zone reference timezone for floating dates and
         #                     times.
         #
-        # @return void
+        # @return [VCalendar]
         def expand(start, ending, time_zone = nil)
-          new_events = []
+          new_children = []
+          recurring_events = {}
 
           time_zone = ActiveSupport::TimeZone.new('UTC') unless time_zone
 
-          # An array of events. Events are indexed by UID. Each item in this
-          # array is a list of one or more events that match the UID.
-          recurring_events = {}
+          strip_timezones = lambda do |component|
+            component.children.each do |component_child|
+              if component_child.is_a?(Property::ICalendar::DateTime) && component_child.time?
+                dt = component_child.date_times(time_zone)
 
-          select('VEVENT').each do |vevent|
-            uid = vevent['UID'].to_s
-            fail 'Event did not have a UID!' if uid.blank?
-
-            if vevent.key?('RECURRENCE-ID') || vevent.key?('RRULE')
-              if recurring_events.key?(uid)
-                recurring_events[uid] << vevent
-              else
-                recurring_events[uid] = [vevent]
+                # We only need to update the first timezone, because
+                # setDateTimes will match all other timezones to the
+                # first.
+                dt[0] = dt[0].in_time_zone(ActiveSupport::TimeZone.new('UTC'))
+                component_child.date_times = dt
+              elsif component_child.is_a?(Component)
+                strip_timezones.call(component_child)
               end
-              next
             end
 
-            unless vevent.key?('RRULE')
-              new_events << vevent if vevent.in_time_range?(start, ending)
-              next
+            component
+          end
+
+          children.each do |child|
+            if child.is_a?(Property) && child.name != 'PRODID'
+              # We explictly want to ignore PRODID, because we want to
+              # overwrite it with our own.
+              new_children << child.clone
+            elsif child.is_a?(Component) && child.name != 'VTIMEZONE'
+              # We're also stripping all VTIMEZONE objects because we're
+              # converting everything to UTC.
+
+              if child.name == 'VEVENT' && (child.key?('RECURRENCE-ID') || child.key?('RRULE') || child.key?('RDATE'))
+                # Handle these a bit later.
+                uid = child['UID'].to_s
+
+                fail InvalidDataException, 'Every VEVENT object must have a UID property' if uid.blank?
+
+                if recurring_events.key?(uid)
+                  recurring_events[uid] << child.clone
+                else
+                  recurring_events[uid] = [child.clone]
+                end
+              elsif child.name == 'VEVENT' && child.in_time_range?(start, ending)
+                new_children << strip_timezones.call(child.clone)
+              end
             end
           end
 
@@ -268,31 +288,12 @@ module Tilia
             it.fast_forward(start)
 
             while it.valid && it.dt_start < ending
-              new_events << it.event_object if it.dt_end > start
+              new_children << strip_timezones.call(it.event_object) if it.dt_end > start
               it.next
             end
           end
 
-          # Wiping out all old VEVENT objects
-          delete('VEVENT')
-
-          # Setting all properties to UTC time.
-          new_events.each do |new_event|
-            new_event.children.each do |child|
-              next unless child.is_a?(Property::ICalendar::DateTime) && child.time?
-              dt = child.date_times(time_zone)
-              # We only need to update the first timezone, because
-              # setDateTimes will match all other timezones to the
-              # first.
-              dt[0] = dt[0].in_time_zone(ActiveSupport::TimeZone.new('UTC'))
-              child.date_times = dt
-            end
-
-            add(new_event)
-          end
-
-          # Removing all VTIMEZONE components
-          delete('VTIMEZONE')
+          self.class.new(new_children)
         end
 
         protected
@@ -410,7 +411,7 @@ module Tilia
             }
           end
 
-          if options & self.class::PROFILE_CALDAV > 0
+          if options & PROFILE_CALDAV > 0
             if uid_list.size > 1
               warnings << {
                 'level'   => 3,

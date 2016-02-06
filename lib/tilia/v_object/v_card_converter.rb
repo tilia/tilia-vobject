@@ -34,6 +34,9 @@ module Tilia
 
         output = Tilia::VObject::Component::VCard.new('VERSION' => new_version)
 
+        # We might have generated a default UID. Remove it!
+        output.delete('UID')
+
         input.children.each do |property|
           convert_property(input, output, property, target_version)
         end

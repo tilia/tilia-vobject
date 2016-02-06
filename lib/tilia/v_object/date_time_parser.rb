@@ -21,7 +21,7 @@ module Tilia
         matches = /^([0-9]{4})([0-1][0-9])([0-3][0-9])T([0-2][0-9])([0-5][0-9])([0-5][0-9])([Z]?)$/.match(dt)
 
         unless matches
-          fail "The supplied iCalendar datetime value is incorrect: #{dt}"
+          fail InvalidDataException, "The supplied iCalendar datetime value is incorrect: #{dt}"
         end
 
         tz = ActiveSupport::TimeZone.new('UTC') if matches[7] == 'Z' || tz.nil?
@@ -41,7 +41,7 @@ module Tilia
         matches = /^([0-9]{4})([0-1][0-9])([0-3][0-9])$/.match(date)
 
         unless matches
-          fail "The supplied iCalendar date value is incorrect: #{date}"
+          fail InvalidDataException, "The supplied iCalendar date value is incorrect: #{date}"
         end
 
         tz = ActiveSupport::TimeZone.new('UTC') if tz.nil?
@@ -64,7 +64,7 @@ module Tilia
         matches = /^(?<plusminus>\+|-)?P((?<week>\d+)W)?((?<day>\d+)D)?(T((?<hour>\d+)H)?((?<minute>\d+)M)?((?<second>\d+)S)?)?$/.match(duration.to_s)
 
         unless matches
-          fail "The supplied iCalendar duration value is incorrect: #{duration}"
+          fail InvalidDataException, "The supplied iCalendar duration value is incorrect: #{duration}"
         end
 
         unless as_string
@@ -241,7 +241,7 @@ module Tilia
 
           matches = regex.match(date)
           unless matches
-            fail ArgumentError, "Invalid vCard date-time string: #{date}"
+            fail InvalidDataException, "Invalid vCard date-time string: #{date}"
           end
         end
 
@@ -345,7 +345,7 @@ module Tilia
 
           matches = regex.match(date)
           unless matches
-            fail ArgumentError, "Invalid vCard time string: #{date}"
+            fail InvalidDataException, "Invalid vCard time string: #{date}"
           end
         end
 
@@ -452,7 +452,7 @@ module Tilia
         matches = value_date_time.match(date) unless matches
         matches = value_time.match(date) unless matches
         unless matches
-          fail ArgumentError, "Invalid vCard date-time string: #{date}"
+          fail InvalidDataException, "Invalid vCard date-time string: #{date}"
         end
 
         map = {

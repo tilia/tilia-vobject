@@ -112,134 +112,6 @@ module Tilia
 
         protected
 
-        # The reference start date/time for the rrule.
-        #
-        # All calculations are based on this initial date.
-        #
-        # @var DateTimeInterface
-        # RUBY attr_accessor :start_date
-
-        # The date of the current iteration. You can get this by calling
-        # .current.
-        #
-        # @var DateTimeInterface
-        # RUBY attr_accessor :current_date
-
-        # Frequency is one of: secondly, minutely, hourly, daily, weekly, monthly,
-        # yearly.
-        #
-        # @var string
-        # RUBY attr_accessor :frequency
-
-        # The number of recurrences, or 'null' if infinitely recurring.
-        #
-        # @var int
-        # RUBY attr_accessor :count
-
-        # The interval.
-        #
-        # If for example frequency is set to daily, interval = 2 would mean every
-        # 2 days.
-        #
-        # @var int
-        # RUBY attr_accessor :interval
-
-        # The last instance of this recurrence, inclusively.
-        #
-        # @var DateTimeInterface|null
-        # RUBY attr_accessor :until
-
-        # Which seconds to recur.
-        #
-        # This is an array of integers (between 0 and 60)
-        #
-        # @var array
-        # RUBY attr_accessor :by_second
-
-        # Which minutes to recur.
-        #
-        # This is an array of integers (between 0 and 59)
-        #
-        # @var array
-        # RUBY attr_accessor :by_minute
-
-        # Which hours to recur.
-        #
-        # This is an array of integers (between 0 and 23)
-        #
-        # @var array
-        # RUBY attr_accessor :by_hour
-
-        # The current item in the list.
-        #
-        # You can get this number with the key method.
-        #
-        # @var int
-        # RUBY attr_accessor :counter
-
-        # Which weekdays to recur.
-        #
-        # This is an array of weekdays
-        #
-        # This may also be preceeded by a positive or negative integer. If present,
-        # this indicates the nth occurrence of a specific day within the monthly or
-        # yearly rrule. For instance, -2TU indicates the second-last tuesday of
-        # the month, or year.
-        #
-        # @var array
-        # RUBY attr_accessor :by_day
-
-        # Which days of the month to recur.
-        #
-        # This is an array of days of the months (1-31). The value can also be
-        # negative. -5 for instance means the 5th last day of the month.
-        #
-        # @var array
-        # RUBY attr_accessor :by_month_day
-
-        # Which days of the year to recur.
-        #
-        # This is an array with days of the year (1 to 366). The values can also
-        # be negative. For instance, -1 will always represent the last day of the
-        # year. (December 31st).
-        #
-        # @var array
-        # RUBY attr_accessor :by_year_day
-
-        # Which week numbers to recur.
-        #
-        # This is an array of integers from 1 to 53. The values can also be
-        # negative. -1 will always refer to the last week of the year.
-        #
-        # @var array
-        # RUBY attr_accessor :by_week_no
-
-        # Which months to recur.
-        #
-        # This is an array of integers from 1 to 12.
-        #
-        # @var array
-        # RUBY attr_accessor :by_month
-
-        # Which items in an existing st to recur.
-        #
-        # These numbers work together with an existing by* rule. It specifies
-        # exactly which items of the existing by-rule to filter.
-        #
-        # Valid values are 1 to 366 and -1 to -366. As an example, this can be
-        # used to recur the last workday of the month.
-        #
-        # This would be done by setting frequency to 'monthly', byDay to
-        # 'MO,TU,WE,TH,FR' and bySetPos to -1.
-        #
-        # @var array
-        # RUBY attr_accessor :by_set_pos
-
-        # When the week starts.
-        #
-        # @var string
-        # RUBY attr_accessor :week_start
-
         # Does the processing for advancing the iterator for hourly frequency.
         #
         # @return void
@@ -516,7 +388,7 @@ module Tilia
             when 'FREQ'
               value = value.downcase
               unless ['secondly', 'minutely', 'hourly', 'daily', 'weekly', 'monthly', 'yearly'].include?(value)
-                fail ArgumentError, "Unknown value for FREQ=#{value.upcase}"
+                fail InvalidDataException, "Unknown value for FREQ=#{value.upcase}"
               end
               @frequency = value
             when 'UNTIL'
@@ -534,7 +406,7 @@ module Tilia
             when 'INTERVAL', 'COUNT'
               val = value.to_i
               if val < 1
-                fail ArgumentError, "#{key.upcase} in RRULE must be a positive integer!"
+                fail InvalidDataException, "#{key.upcase} in RRULE must be a positive integer!"
               end
               key = key.downcase
               key == 'interval' ? @interval = val : @count = val
@@ -548,7 +420,7 @@ module Tilia
               value = value.is_a?(Array) ? value : [value]
               value.each do |part|
                 unless part =~ /^  (-|\+)? ([1-5])? (MO|TU|WE|TH|FR|SA|SU) $/xi
-                  fail ArgumentError, "Invalid part in BYDAY clause: #{part}"
+                  fail InvalidDataException, "Invalid part in BYDAY clause: #{part}"
                 end
               end
               @by_day = value
@@ -565,15 +437,10 @@ module Tilia
             when 'WKST'
               @week_start = value.upcase
             else
-              fail ArgumentError, "Not supported: #{key.upcase}"
+              fail InvalidDataException, "Not supported: #{key.upcase}"
             end
           end
         end
-
-        # Mappings between the day number and english day name.
-        #
-        # @var array
-        # RUBY: attr_accessor :day_names
 
         # Returns all the occurrences for a monthly frequency with a 'byDay' or
         # 'byMonthDay' expansion for the current month.

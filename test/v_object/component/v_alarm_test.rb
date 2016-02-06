@@ -128,7 +128,9 @@ module Tilia
         vjournal = calendar.create_component('VJOURNAL')
         vjournal.add(valarm)
 
-        assert_raises(RuntimeError) { valarm.in_time_range?(Time.zone.parse('2012-02-25 01:00:00'), Time.zone.parse('2012-03-05 01:00:00')) }
+        assert_raises(InvalidDataException) do
+          valarm.in_time_range?(Time.zone.parse('2012-02-25 01:00:00'), Time.zone.parse('2012-03-05 01:00:00'))
+        end
       end
 
       # This bug was found and reported on the mailing list.

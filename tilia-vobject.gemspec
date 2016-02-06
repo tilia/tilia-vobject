@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.email       = 'tilia@jakobsack.de'
   s.files       = `git ls-files`.split("\n")
   s.homepage    = 'https://github.com/tilia/tilia-vobject'
-  s.add_runtime_dependency 'tilia-xml', '~> 1.1'
-  s.add_runtime_dependency 'activesupport', '~> 4.2'
+  s.add_runtime_dependency 'tilia-xml', '~> 1.3'
+  s.add_runtime_dependency 'activesupport', '>= 4.0'
   s.add_runtime_dependency 'mail', '~> 2.6'
   s.add_runtime_dependency 'tzinfo', '~> 1.2'
   s.add_runtime_dependency 'rchardet', '~>1.6'

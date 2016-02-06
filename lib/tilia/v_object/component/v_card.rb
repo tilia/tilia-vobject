@@ -13,10 +13,12 @@ module Tilia
         # @var string
         @default_name = 'VCARD'
 
-        # Caching the version number.
+        # This is a list of components, and which classes they should map to.
         #
-        # @var int
-        # RUBY: attr_accessor :version
+        # @var array
+        @component_map = {
+          'VCARD' => Component::VCard
+        }
 
         # List of value-types, and which classes they map to.
         #
@@ -109,8 +111,6 @@ module Tilia
           'ORG-DIRECTORY' => Property::FlatText
         }
 
-        @component_map = {}
-
         # Returns the current document type.
         #
         # @return int
@@ -120,13 +120,15 @@ module Tilia
 
             case version
             when '2.1'
-              @version = self.class::VCARD21
+              @version = VCARD21
             when '3.0'
-              @version = self.class::VCARD30
+              @version = VCARD30
             when '4.0'
-              @version = self.class::VCARD40
+              @version = VCARD40
             else
-              @version = self.class::UNKNOWN
+              # We don't want to cache the version if it's unknown,
+              # because we might get a version property in a bit.
+              return UNKNOWN
             end
           end
 
@@ -179,9 +181,9 @@ module Tilia
           warnings = []
 
           version_map = {
-            self.class::VCARD21 => '2.1',
-            self.class::VCARD30 => '3.0',
-            self.class::VCARD40 => '4.0'
+            VCARD21 => '2.1',
+            VCARD30 => '3.0',
+            VCARD40 => '4.0'
           }
 
           version = select('VERSION')
@@ -193,12 +195,12 @@ module Tilia
                 'message' => 'Only vcard version 4.0 (RFC6350), version 3.0 (RFC2426) or version 2.1 (icm-vcard-2.1) are supported.',
                 'node'    => self
               }
-              if options & self.class::REPAIR > 0
-                self['VERSION'] = version_map[self.class::DEFAULT_VERSION]
+              if options & REPAIR > 0
+                self['VERSION'] = version_map[DEFAULT_VERSION]
               end
             end
 
-            if version == '2.1' && options & self.class::PROFILE_CARDDAV > 0
+            if version == '2.1' && options & PROFILE_CARDDAV > 0
               warnings << {
                 'level'   => 3,
                 'message' => 'CardDAV servers are not allowed to accept vCard 2.1.',
@@ -209,7 +211,7 @@ module Tilia
 
           uid = select('UID')
           if uid.size == 0
-            if options & self.class::PROFILE_CARDDAV > 0
+            if options & PROFILE_CARDDAV > 0
               # Required for CardDAV
               warning_level = 3
               message = 'vCards on CardDAV servers MUST have a UID property.'
@@ -219,7 +221,7 @@ module Tilia
               message = 'Adding a UID to a vCard property is recommended.'
             end
 
-            if options & self.class::REPAIR > 0
+            if options & REPAIR > 0
               self['UID'] = UuidUtil.uuid
               warning_level = 1
             end
@@ -235,7 +237,7 @@ module Tilia
           if fn.size != 1
             repaired = false
 
-            if options & self.class::REPAIR > 0 && fn.size == 0
+            if options & REPAIR > 0 && fn.size == 0
               # We're going to try to see if we can use the contents of the
               # N property.
               if key?('N')
@@ -365,8 +367,9 @@ module Tilia
         # @return array
         def defaults
           {
-            'VERSION' => '3.0',
-            'PRODID'  => "-//Tilia//Tilia VObject #{Version::VERSION}//EN"
+            'VERSION' => '4.0',
+            'PRODID'  => "-//Tilia//Tilia VObject #{Version::VERSION}//EN",
+            'UID'     => "tilia-vobject-#{UuidUtil.uuid}"
           }
         end
 
@@ -440,7 +443,7 @@ module Tilia
           class_name = super(property_name)
 
           # In vCard 4, BINARY no longer exists, and we need URI instead.
-          if class_name == Property::Binary && document_type == self.class::VCARD40
+          if class_name == Property::Binary && document_type == VCARD40
             return Property::Uri
           end
 

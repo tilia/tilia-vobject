@@ -71,7 +71,7 @@ module Tilia
       #
       # @return void
       def initialize(*args)
-        if args.size == 0 || args[0].is_a?(Hash)
+        if args.size == 0 || args[0].is_a?(Hash) || args[0].is_a?(Array)
           args.unshift(self.class.default_name)
           args.unshift(self)
 
@@ -86,7 +86,7 @@ module Tilia
       #
       # @return int
       def document_type
-        self.class::UNKNOWN
+        UNKNOWN
       end
 
       # Creates a new component or property.

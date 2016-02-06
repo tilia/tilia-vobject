@@ -38,7 +38,7 @@ module Tilia
           @pointer = nil
           @root = nil
 
-          options = self.class::OPTION_FORGIVING if options == 0
+          options = OPTION_FORGIVING if options == 0
 
           super(input, options)
         end
@@ -59,11 +59,11 @@ module Tilia
           end
 
           case @input['name']
-          when "{#{self.class::XCAL_NAMESPACE}}icalendar"
+          when "{#{XCAL_NAMESPACE}}icalendar"
             @root = Tilia::VObject::Component::VCalendar.new({}, false)
             @pointer = @input['value'][0]
             parse_v_calendar_components(@root)
-          when "{#{self.class::XCARD_NAMESPACE}}vcards"
+          when "{#{XCARD_NAMESPACE}}vcards"
             @input['value'].each do |v_card|
               @root = Tilia::VObject::Component::VCard.new({ 'version' => '4.0' }, false)
               @pointer = v_card
@@ -296,8 +296,8 @@ module Tilia
 
           if input.is_a?(String)
             reader = Tilia::Xml::Reader.new
-            reader.element_map["{#{self.class::XCAL_NAMESPACE}}period"] = Tilia::VObject::Parser::Xml::Element::KeyValue
-            reader.element_map["{#{self.class::XCAL_NAMESPACE}}recur"] = Tilia::VObject::Parser::Xml::Element::KeyValue
+            reader.element_map["{#{XCAL_NAMESPACE}}period"] = Tilia::VObject::Parser::Xml::Element::KeyValue
+            reader.element_map["{#{XCAL_NAMESPACE}}recur"] = Tilia::VObject::Parser::Xml::Element::KeyValue
             reader.xml(input)
             input = reader.parse
           end

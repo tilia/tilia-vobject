@@ -2,10 +2,11 @@ require 'test_helper'
 
 module Tilia
   module VObject
-    class OverrideFirstEventTest < Minitest::Test
+    class OverrideFirstEventTest < TestCase
       def test_override_first_event
         input = <<ICS
 BEGIN:VCALENDAR
+VERSION:2.0
 BEGIN:VEVENT
 UID:foobar
 DTSTART:20140803T120000Z
@@ -22,10 +23,11 @@ END:VCALENDAR
 ICS
 
         vcal = Tilia::VObject::Reader.read(input)
-        vcal.expand(Time.zone.parse('2014-08-01'), Time.zone.parse('2014-09-01'))
+        vcal = vcal.expand(Time.zone.parse('2014-08-01'), Time.zone.parse('2014-09-01'))
 
         expected = <<ICS
 BEGIN:VCALENDAR
+VERSION:2.0
 BEGIN:VEVENT
 UID:foobar
 RECURRENCE-ID:20140803T120000Z
@@ -59,14 +61,13 @@ END:VEVENT
 END:VCALENDAR
 ICS
 
-        new_ics = vcal.serialize
-        new_ics = new_ics.delete("\r")
-        assert_equal(expected, new_ics)
+        assert_v_obj_equals(expected, vcal)
       end
 
       def test_remove_first_event
         input = <<ICS
 BEGIN:VCALENDAR
+VERSION:2.0
 BEGIN:VEVENT
 UID:foobar
 DTSTART:20140803T120000Z
@@ -78,10 +79,11 @@ END:VCALENDAR
 ICS
 
         vcal = Tilia::VObject::Reader.read(input)
-        vcal.expand(Time.zone.parse('2014-08-01'), Time.zone.parse('2014-08-19'))
+        vcal = vcal.expand(Time.zone.parse('2014-08-01'), Time.zone.parse('2014-08-19'))
 
         expected = <<ICS
 BEGIN:VCALENDAR
+VERSION:2.0
 BEGIN:VEVENT
 UID:foobar
 DTSTART:20140810T120000Z
@@ -97,9 +99,7 @@ END:VEVENT
 END:VCALENDAR
 ICS
 
-        new_ics = vcal.serialize
-        new_ics = new_ics.delete("\r")
-        assert_equal(expected, new_ics)
+        assert_v_obj_equals(expected, vcal)
       end
     end
   end

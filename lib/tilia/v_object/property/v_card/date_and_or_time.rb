@@ -103,11 +103,11 @@ module Tilia
             end
 
             # Now follows a ruby Hack
-            offset = date_parts['timezone'][0..2].to_f + date_parts['timezone'][3..4].to_f / 100
+            offset = "#{date_parts['timezone'][0]}1".to_i * ( date_parts['timezone'][1..2].to_i * 3600 + date_parts['timezone'][3..4].to_i * 60)
             tz = ActiveSupport::TimeZone.new(offset)
             datetime = tz.parse("#{date_parts['year']}-#{date_parts['month']}-#{date_parts['date']} #{date_parts['hour']}:#{date_parts['minute']}:#{date_parts['second']}")
-            unless datetime.strftime('%z') == date_parts['timezone']
-              tz = ActiveSupport::TimeZone.new(offset - 1.0)
+            if datetime.dst?
+              tz = ActiveSupport::TimeZone.new(offset - 3600)
               datetime = tz.parse("#{date_parts['year']}-#{date_parts['month']}-#{date_parts['date']} #{date_parts['hour']}:#{date_parts['minute']}:#{date_parts['second']}")
             end
             # continue as usual
@@ -321,7 +321,7 @@ module Tilia
 
             begin
               DateTimeParser.parse_v_card_date_time(value)
-            rescue ArgumentError
+            rescue InvalidDataException
               messages << {
                 'level'   => 3,
                 'message' => "The supplied value (#{value}) is not a correct DATE-AND-OR-TIME property",

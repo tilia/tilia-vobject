@@ -23,9 +23,25 @@ module Tilia
       # appointments made for many years to come.
       @max_date = '2100-01-01'
 
+      # The maximum number of recurrences that will be generated.
+      #
+      # This setting limits the maximum of recurring events that this library
+      # generates in its recurrence iterators.
+      #
+      # This is a security measure. Without this, it would be possible to craft
+      # specific events that recur many, many times, potentially DDOSing the
+      # server.
+      #
+      # The default (3500) allows creation of a dialy event that goes on for 10
+      # years, which is hopefully long enough for most.
+      #
+      # Set this value to -1 to disable this control altogether.
+      @max_recurrences = 3500
+
       class << self
         attr_accessor :min_date
         attr_accessor :max_date
+        attr_accessor :max_recurrences
       end
     end
   end

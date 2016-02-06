@@ -22,10 +22,11 @@ module Tilia
       #
       # @param string|resource data
       # @param int options
-      #
+      # @param string charset
       # @return Document
-      def self.read(data, options = 0)
+      def self.read(data, options = 0, charset = 'UTF-8')
         parser = Parser::MimeDir.new
+        parser.charset = charset
         result = parser.parse(data, options)
 
         result

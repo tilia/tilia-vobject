@@ -21,6 +21,23 @@ module Tilia
           'TIME'
         end
 
+        # Sets the JSON value, as it would appear in a jCard or jCal object.
+        #
+        # The value must always be an array.
+        #
+        # @param array value
+        # @return void
+        def json_value=(value)
+          # Removing colons from value.
+          value = value.map{ |v| v.gsub(':', '') }
+
+          if value.size == 1
+            self.value = value.first
+          else
+            self.value = value
+          end
+        end
+
         # Returns the value, in the format it should be encoded for json.
         #
         # This method must always return an array.
@@ -57,7 +74,13 @@ module Tilia
           time_str += parts['second'] unless parts['second'].nil?
 
           # Timezone
-          time_str += parts['timezone'] unless parts['timezone'].nil?
+          unless parts['timezone'].nil?
+            if parts['timezone'] == 'Z'
+              time_str += 'Z'
+            else
+              time_str += parts['timezone'].gsub(/([0-9]{2})([0-9]{2})$/) { "#{$1}:#{$2}" }
+            end
+          end
 
           [time_str]
         end

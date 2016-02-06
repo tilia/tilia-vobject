@@ -192,7 +192,7 @@ module Tilia
         str = @name
         str = "#{@group}.#{@name}" if @group
 
-        @parameters.each do |_name, param|
+        parameters.each do |_name, param| # use parameters(), can be overwritten
           str += ";#{param.serialize}"
         end
 
@@ -441,7 +441,7 @@ module Tilia
           old_value = raw_mime_dir_value
           level = 3
 
-          if options & self.class::REPAIR > 0
+          if options & REPAIR > 0
             new_value = StringUtil.convert_to_utf8(old_value)
 
             self.raw_mime_dir_value = new_value
@@ -470,7 +470,7 @@ module Tilia
             'node'    => self
           }
 
-          if options & self.class::REPAIR > 0
+          if options & REPAIR > 0
             # Uppercasing and converting underscores to dashes.
             @name = @name.upcase.tr('_', '-')
 

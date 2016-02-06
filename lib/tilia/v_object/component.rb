@@ -105,16 +105,15 @@ module Tilia
       # by name.
       #
       # @return Node
-      def add(a1, a2 = nil, a3 = nil)
-        if a1.is_a?(Node)
-          unless a2.nil?
+      def add(*arguments)
+        if arguments[0].is_a?(Node)
+          if arguments[1]
             fail ArgumentError, 'The second argument must not be specified, when passing a VObject Node'
           end
-          a1.parent = self
-          new_node = a1
-        elsif a1.is_a?(String)
-          new_node = @root.create(a1, a2, a3)
-          new_node.parent = self
+          arguments[0].parent = self
+          new_node = arguments[0]
+        elsif arguments[0].is_a?(String)
+          new_node = @root.create(*arguments)
         else
           fail ArgumentError, 'The first argument must either be a Node or a string'
         end
@@ -551,7 +550,7 @@ module Tilia
           when '1'
             if !property_counters.key?(prop_name) || property_counters[prop_name] != 1
               repaired = false
-              add(prop_name, defaults[prop_name]) if options & self.class::REPAIR > 0 && defaults.key?(prop_name)
+              add(prop_name, defaults[prop_name]) if options & REPAIR > 0 && defaults.key?(prop_name)
 
               messages << {
                 'level'   => repaired ? 1 : 3,

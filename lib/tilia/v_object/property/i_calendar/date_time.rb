@@ -250,7 +250,7 @@ module Tilia
                   Tilia::VObject::DateTimeParser.parse_date_time(value)
                 end
               end
-            rescue RuntimeError
+            rescue InvalidDataException
               messages << {
                 'level'   => 3,
                 'message' => "The supplied value (#{save_val}) is not a correct #[value_type}",
@@ -260,15 +260,6 @@ module Tilia
 
             messages
           end
-
-          protected
-
-          # Raw values of dates for post_processing
-          #
-          # @return [Array<TIME>]
-          attr_accessor :raw_values
-
-          public
 
           def initialize(*args)
             super

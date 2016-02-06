@@ -10,15 +10,18 @@ module Tilia
       # Sabre\VObject\Component\VCalendar
       # Sabre\VObject\Component\VCard
       class MimeDir < Parser
-        # The input stream.
+        # The list of character sets we support when decoding.
         #
-        # @var resource
-        # RUBY: attr_accessor :input
+        # This would be a const expression but for now we need to support PHP 5.5
+        @supported_charsets = [
+            'UTF-8',
+            'ISO-8859-1',
+            'Windows-1252',
+        ]
 
-        # Root component.
-        #
-        # @var Component
-        # RUBY: attr_accessor :root
+        class << self
+          attr_reader :supported_charsets
+        end
 
         # Parses an iCalendar or vCard file.
         #
@@ -40,7 +43,23 @@ module Tilia
           @root
         end
 
-        # Sets the input buffer. Must be a string or stream.
+        # By default all input will be assumed to be UTF-8.
+        #
+        # However, both iCalendar and vCard might be encoded using different
+        # character sets. The character set is usually set in the mime-type.
+        #
+        # If this is the case, use setEncoding to specify that a different
+        # encoding will be used. If this is set, the parser will automatically
+        # convert all incoming data to UTF-8.
+        #
+        # @param string charset
+        def charset=(charset)
+          fail ArgumentError, "Unsupported encoding. (Supported encodings: #{MimeDir.supported_charsets.join(', ')})" unless MimeDir.supported_charsets.include?(charset)
+
+          @charset = charset
+        end
+
+         # Sets the input buffer. Must be a string or stream.
         #
         # @param resource|string input
         #
@@ -77,11 +96,11 @@ module Tilia
 
           case line.upcase
           when 'BEGIN:VCALENDAR'
-            klass = Tilia::VObject::Component::VCalendar
+            klass = Component::VCalendar.component_map['VCALENDAR']
           when 'BEGIN:VCARD'
-            klass = Tilia::VObject::Component::VCard
+            klass = Component::VCard.component_map['VCARD']
           else
-            fail Tilia::VObject::ParseException, 'This parser only supports VCARD and VCALENDAR files'
+            fail ParseException, 'This parser only supports VCARD and VCALENDAR files'
           end
 
           @root = klass.new({}, false)
@@ -220,7 +239,7 @@ module Tilia
         #
         # @return void
         def read_property(line)
-          if @options & self.class::OPTION_FORGIVING > 0
+          if @options & OPTION_FORGIVING > 0
             prop_name_token = 'A-Z0-9\\-\\._\\/'
           else
             prop_name_token = 'A-Z0-9\\-\\.'
@@ -243,6 +262,9 @@ module Tilia
               ) (?=[;:,])
               /xi
 
+          # RUBY: We have to convert the string to UTF-8 for Regexp
+          encoding = StringUtil.guess_encoding(line)
+          line = line.encode(encoding, encoding)
           matches = line.scan(regex)
 
           property = {
@@ -311,7 +333,7 @@ module Tilia
 
           property['value'] = '' if property['value'].nil?
           if property['name'].blank?
-            if @options & self.class::OPTION_IGNORE_INVALID_LINES > 0
+            if @options & OPTION_IGNORE_INVALID_LINES > 0
               return false
             end
             fail Tilia::VObject::ParseException, "Invalid Mimedir file. Line starting at #{@start_line} did not follow iCalendar/vCard conventions"
@@ -342,6 +364,21 @@ module Tilia
           if prop_obj.key?('ENCODING') && prop_obj['ENCODING'].to_s.upcase == 'QUOTED-PRINTABLE'
             prop_obj.quoted_printable_value = extract_quoted_printable_value
           else
+            charset = @charset
+            if @root.document_type == Document::VCARD21 && prop_obj.key?('CHARSET')
+              # vCard 2.1 allows the character set to be specified per property.
+              charset = prop_obj['CHARSET'].to_s
+            end
+
+            case charset
+            when 'UTF-8'
+              # NOOP
+            when 'ISO-8859-1',
+                'Windows-1252'
+              property['value'] = property['value'].to_s.encode('UTF-8', charset)
+            else
+              fail ParseException, "Unsupported CHARSET: #{charset.to_s}"
+            end
             prop_obj.raw_mime_dir_value = property['value']
           end
 
@@ -520,7 +557,7 @@ module Tilia
           # Microsoft products don't always correctly fold lines, they may be
           # missing a whitespace. So if 'forgiving' is turned on, we will take
           # those as well.
-          if @options & self.class::OPTION_FORGIVING > 0
+          if @options & OPTION_FORGIVING > 0
             while value[-1] == '='
               # Reading the line
               read_line
@@ -536,6 +573,7 @@ module Tilia
           super(*args)
           @start_line = 0
           @line_index = 0
+          @charset = 'UTF-8'
         end
       end
     end

@@ -22,10 +22,12 @@ END:VEVENT
 END:VCALENDAR
 ICS
 
-        vcal = Tilia::VObject::Reader.read(input)
-        assert_kind_of(Tilia::VObject::Component::VCalendar, vcal)
+        vcal = Reader.read(input)
+        assert_kind_of(Component::VCalendar, vcal)
 
-        assert_raises(Tilia::VObject::Recur::NoInstancesException) { Tilia::VObject::Recur::EventIterator.new(vcal, 'foo') }
+        assert_raises(Recur::NoInstancesException) do
+          Recur::EventIterator.new(vcal, 'foo')
+        end
       end
     end
   end

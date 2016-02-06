@@ -337,7 +337,7 @@ module Tilia
                 'node'    => self
               }
 
-              if options & self.class::REPAIR > 0
+              if options & REPAIR > 0
                 parts << '' while parts.size < minimum
                 self.parts = parts
               end
