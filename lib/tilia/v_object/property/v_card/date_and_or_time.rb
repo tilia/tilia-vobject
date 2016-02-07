@@ -103,14 +103,22 @@ module Tilia
             end
 
             # Now follows a ruby Hack
-            offset = "#{date_parts['timezone'][0]}1".to_i * ( date_parts['timezone'][1..2].to_i * 3600 + date_parts['timezone'][3..4].to_i * 60)
-            tz = ActiveSupport::TimeZone.new(offset)
-            datetime = tz.parse("#{date_parts['year']}-#{date_parts['month']}-#{date_parts['date']} #{date_parts['hour']}:#{date_parts['minute']}:#{date_parts['second']}")
-            if datetime.dst?
-              tz = ActiveSupport::TimeZone.new(offset - 3600)
+            offset = "#{date_parts['timezone'][0]}1".to_i * (date_parts['timezone'][1..2].to_i * 3600 + date_parts['timezone'][3..4].to_i * 60)
+            date_parts['timezone'] = '+0000' if date_parts['timezone'] == 'Z'
+            done = false
+            datetime = nil
+
+            ActiveSupport::TimeZone.all.each do |tz|
               datetime = tz.parse("#{date_parts['year']}-#{date_parts['month']}-#{date_parts['date']} #{date_parts['hour']}:#{date_parts['minute']}:#{date_parts['second']}")
+
+              next unless datetime.strftime('%z') == date_parts['timezone']
+
+              done = true
+              break
             end
-            # continue as usual
+
+            fail 'could not load correct time zone' unless done
+            # End ruby hack
 
             datetime.freeze
             datetime
