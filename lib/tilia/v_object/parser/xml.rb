@@ -10,29 +10,14 @@ module Tilia
         XCAL_NAMESPACE = 'urn:ietf:params:xml:ns:icalendar-2.0'
         XCARD_NAMESPACE = 'urn:ietf:params:xml:ns:vcard-4.0'
 
-        # The input data.
-        #
-        # @var array
-        # RUBY: attr_accessor :input
-
-        # A pointer/reference to the input.
-        #
-        # @var array
-        # RUBY: attr_accessor :pointer
-
-        # Document, root component.
-        #
-        # @var Sabre\VObject\Document
-        # RUBY: attr_accessor :root
-
         # Creates the parser.
         #
         # Optionally, it's possible to parse the input stream here.
         #
-        # @param mixed input
-        # @param int options Any parser options (OPTION constants).
+        # @param input
+        # @param [Fixnum] options Any parser options (OPTION constants).
         #
-        # @return void
+        # @return [void]
         def initialize(input = nil, options = 0)
           @input = nil
           @pointer = nil
@@ -45,12 +30,12 @@ module Tilia
 
         # Parse xCal or xCard.
         #
-        # @param resource|string input
-        # @param int options
+        # @param [String, IO] input
+        # @param [Fixnum] options
         #
-        # @throws \Exception
+        # @fails [StandardError]
         #
-        # @return Sabre\VObject\Document
+        # @return [Document]
         def parse(input = nil, options = 0)
           self.input = input unless input.nil?
           @options = options if options != 0
@@ -83,9 +68,9 @@ module Tilia
 
         # Parse a xCalendar component.
         #
-        # @param Component parent_component
+        # @param [Component] parent_component
         #
-        # @return void
+        # @return [void]
         def parse_v_calendar_components(parent_component)
           components = @pointer['value'] ? @pointer['value'] : []
 
@@ -103,9 +88,9 @@ module Tilia
 
         # Parse a xCard component.
         #
-        # @param Component parent_component
+        # @param [Component] parent_component
         #
-        # @return void
+        # @return [void]
         def parse_v_card_components(parent_component)
           @pointer = @pointer['value']
           parse_properties(parent_component)
@@ -113,10 +98,10 @@ module Tilia
 
         # Parse xCalendar and xCard properties.
         #
-        # @param Component parent_component
-        # @param string  property_name_prefix
+        # @param [Component] parent_component
+        # @param [String]  property_name_prefix
         #
-        # @return void
+        # @return [void]
         def parse_properties(parent_component, property_name_prefix = '')
           properties = @pointer ? @pointer : {}
 
@@ -252,9 +237,9 @@ module Tilia
 
         # Parse a component.
         #
-        # @param Component parent_component
+        # @param [Component] parent_component
         #
-        # @return void
+        # @return [void]
         def parse_component(parent_component)
           components = @pointer['value'] ? @pointer['value'] : []
 
@@ -271,13 +256,13 @@ module Tilia
 
         # Create a property.
         #
-        # @param Component parent_component
-        # @param string name
-        # @param array parameters
-        # @param string type
-        # @param mixed value
+        # @param [Component] parent_component
+        # @param [String] name
+        # @param [array] parameters
+        # @param [String] type
+        # @param value
         #
-        # @return void
+        # @return [void]
         def create_property(parent_component, name, parameters, type, value)
           property = @root.create_property(name, nil, parameters, type)
           parent_component.add(property)
@@ -288,9 +273,9 @@ module Tilia
 
         # Sets the input data.
         #
-        # @param resource|string input
+        # @param [resource|string] input
         #
-        # @return void
+        # @return [void]
         def input=(input)
           input = input.read unless input.is_a?(String)
 
@@ -307,9 +292,9 @@ module Tilia
 
         # Get tag name from a Clark notation.
         #
-        # @param string clarked_tag_name
+        # @param [String] clarked_tag_name
         #
-        # @return string
+        # @return [String]
         def self.tag_name(clarked_tag_name)
           (_, tag_name) = Tilia::Xml::Service.parse_clark_notation(clarked_tag_name)
           tag_name

@@ -31,22 +31,22 @@ module Tilia
       #
       # This should be 'VCALENDAR' or 'VCARD'.
       #
-      # @var string
+      # @return [String]
       @default_name = nil
 
       # List of properties, and which classes they map to.
       #
-      # @var array
+      # @return [array]
       @property_map = {}
 
       # List of components, along with which classes they map to.
       #
-      # @var array
+      # @return [array]
       @component_map = {}
 
       # List of value-types, and which classes they map to.
       #
-      # @var array
+      # @return [array]
       @value_map = {}
 
       class << self
@@ -69,7 +69,7 @@ module Tilia
       # new Document(array children = [], defaults = true)
       # new Document(string name, array children = [], defaults = true)
       #
-      # @return void
+      # @return [void]
       def initialize(*args)
         if args.size == 0 || args[0].is_a?(Hash) || args[0].is_a?(Array)
           args.unshift(self.class.default_name)
@@ -84,7 +84,7 @@ module Tilia
 
       # Returns the current document type.
       #
-      # @return int
+      # @return [Fixnum]
       def document_type
         UNKNOWN
       end
@@ -94,10 +94,10 @@ module Tilia
       # If it's a known component, we will automatically call createComponent.
       # otherwise, we'll assume it's a property and call createProperty instead.
       #
-      # @param string name
-      # @param string arg1,... Unlimited number of args
+      # @param [String] name
+      # @param [String] arg1,... Unlimited number of args
       #
-      # @return mixed
+      # @return [mixed]
       def create(name, *args)
         if self.class.component_map.key?(name.upcase)
           create_component(name, *args)
@@ -119,11 +119,11 @@ module Tilia
       # an iCalendar object, this may be something like CALSCALE:GREGORIAN. To
       # ensure that this does not happen, set defaults to false.
       #
-      # @param string name
-      # @param array children
-      # @param bool defaults
+      # @param [String] name
+      # @param [array] children
+      # @param [Boolean] defaults
       #
-      # @return Component
+      # @return [Component]
       def create_component(name, children = nil, defaults = true)
         name = name.upcase
 
@@ -144,12 +144,12 @@ module Tilia
       # parameters will automatically be created, or you can just pass a list of
       # Parameter objects.
       #
-      # @param string name
-      # @param mixed value
-      # @param array parameters
-      # @param string value_type Force a specific valuetype, such as URI or TEXT
+      # @param [String] name
+      # @param value
+      # @param [array] parameters
+      # @param [String] value_type Force a specific valuetype, such as URI or TEXT
       #
-      # @return Property
+      # @return [Property]
       def create_property(name, value = nil, parameters = nil, value_type = nil)
         parameters = {} unless parameters
 
@@ -190,9 +190,9 @@ module Tilia
       #
       # This method returns null if we don't have a specialized class.
       #
-      # @param string value_param
+      # @param [String] value_param
       #
-      # @return void
+      # @return [void]
       def class_name_for_property_value(value_param)
         value_param = value_param.upcase
 
@@ -203,9 +203,9 @@ module Tilia
 
       # Returns the default class for a property name.
       #
-      # @param string property_name
+      # @param [String] property_name
       #
-      # @return string
+      # @return [String]
       def class_name_for_property_name(property_name)
         if self.class.property_map.key?(property_name)
           self.class.property_map[property_name]

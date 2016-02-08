@@ -21,12 +21,12 @@ module Tilia
       #
       # This will contain a string such as VEVENT, VTODO, VCALENDAR, VCARD.
       #
-      # @var string
+      # @return [String]
       attr_accessor :name
 
       # A list of properties and/or sub-components.
       #
-      # @var array
+      # @return [array]
       # RUBY: attr_accessor :children
 
       # Creates a new component.
@@ -39,12 +39,12 @@ module Tilia
       # an iCalendar object, this may be something like CALSCALE:GREGORIAN. To
       # ensure that this does not happen, set defaults to false.
       #
-      # @param Document root
-      # @param string name such as VCALENDAR, VEVENT.
-      # @param array children
-      # @param bool defaults
+      # @param [Document] root
+      # @param [String] name such as VCALENDAR, VEVENT.
+      # @param [array] children
+      # @param [Boolean] defaults
       #
-      # @return void
+      # @return [void]
       def initialize(root, name, children = {}, defaults = true)
         @children = {}
         @name = name.to_s.upcase
@@ -104,7 +104,7 @@ module Tilia
       # add(name, array children = []) // Adds a new component
       # by name.
       #
-      # @return Node
+      # @return [Node]
       def add(*arguments)
         if arguments[0].is_a?(Node)
           if arguments[1]
@@ -135,8 +135,8 @@ module Tilia
       # pass an instance of a property or component, in which case only that
       # exact item will be removed.
       #
-      # @param string|Property|Component item
-      # @return void
+      # @param [String|Property|Component] item
+      # @return [void]
       def remove(item)
         if item.is_a?(String)
           # If there's no dot in the name, it's an exact property name and
@@ -167,7 +167,7 @@ module Tilia
       # Returns a flat list of all the properties and components in this
       # component.
       #
-      # @return array
+      # @return [array]
       def children
         result = []
         @children.each do |_, child_group|
@@ -180,7 +180,7 @@ module Tilia
       # This method only returns a list of sub-components. Properties are
       # ignored.
       #
-      # @return array
+      # @return [array]
       def components
         result = []
 
@@ -202,8 +202,8 @@ module Tilia
       # string ("HOME.EMAIL"). If you want to search on a specific property that
       # has not been assigned a group, specify ".EMAIL".
       #
-      # @param string name
-      # @return array
+      # @param [String] name
+      # @return [array]
       def select(name)
         group = nil
         name = name.upcase
@@ -242,7 +242,7 @@ module Tilia
 
       # Turns the object back into a serialized blob.
       #
-      # @return string
+      # @return [String]
       def serialize
         str = "BEGIN:#{@name}\r\n"
 
@@ -255,10 +255,10 @@ module Tilia
         # space to accomodate elements. The key is added to the score to
         # preserve the original relative order of elements.
         #
-        # @param int key
-        # @param array array
+        # @param [Fixnum] key
+        # @param [array] array
         #
-        # @return int
+        # @return [Fixnum]
         sort_score = lambda do |key, array|
           key = array.index(key)
           if array[key].is_a?(Component)
@@ -304,7 +304,7 @@ module Tilia
       # This method returns an array, with the representation as it should be
       # encoded in JSON. This is used to create jCard or jCal documents.
       #
-      # @return array
+      # @return [array]
       def json_serialize
         components = []
         properties = []
@@ -329,9 +329,9 @@ module Tilia
       # This method serializes the data into XML. This is used to create xCard or
       # xCal documents.
       #
-      # @param Xml\Writer writer  XML writer.
+      # @param [Xml\Writer] writer  XML writer.
       #
-      # @return void
+      # @return [void]
       def xml_serialize(writer)
         components = []
         properties = []
@@ -371,7 +371,7 @@ module Tilia
 
       # This method should return a list of default property values.
       #
-      # @return array
+      # @return [array]
       def defaults
         []
       end
@@ -387,9 +387,9 @@ module Tilia
       #
       # event = calendar->VEVENT
       #
-      # @param string name
+      # @param [String] name
       #
-      # @return Property
+      # @return [Property]
       def [](name)
         return super(name) if name.is_a?(Fixnum)
 
@@ -403,7 +403,7 @@ module Tilia
           return nil
         else
           first_match = matches.first
-          # @var first_match Property
+          # @return [first_match] Property
           first_match.iterator = ElementList.new(matches.to_a)
           return first_match
         end
@@ -411,9 +411,9 @@ module Tilia
 
       # This method checks if a sub-element with the specified name exists.
       #
-      # @param string name
+      # @param [String] name
       #
-      # @return bool
+      # @return [Boolean]
       def key?(name)
         matches = select(name)
         matches.any?
@@ -427,10 +427,10 @@ module Tilia
       # If the item already exists, it will be removed. If you want to add
       # a new item with the same name, always use the add method.
       #
-      # @param string name
-      # @param mixed value
+      # @param [String] name
+      # @param value
       #
-      # @return void
+      # @return [void]
       def []=(name, value)
         return super(name, value) if name.is_a?(Fixnum)
         name = name.upcase
@@ -447,9 +447,9 @@ module Tilia
       # Removes all properties and components within this component with the
       # specified name.
       #
-      # @param string name
+      # @param [String] name
       #
-      # @return void
+      # @return [void]
       def delete(name)
         return super(name) if name.is_a?(Fixnum)
         remove(name)
@@ -458,7 +458,7 @@ module Tilia
       # This method is automatically called when the object is cloned.
       # Specifically, this will ensure all child elements are also cloned.
       #
-      # @return void
+      # @return [void]
       def initialize_copy(_original)
         new_children = {}
         @children.each do |child_name, child_group|
@@ -491,7 +491,7 @@ module Tilia
       # See the VEVENT implementation for getValidationRules for a more complex
       # example.
       #
-      # @var array
+      # @return [array]
       def validation_rules
         []
       end
@@ -515,9 +515,9 @@ module Tilia
       #   2 - A warning.
       #   3 - An error.
       #
-      # @param int options
+      # @param [Fixnum] options
       #
-      # @return array
+      # @return [array]
       def validate(options = 0)
         rules = validation_rules
         defaults = self.defaults
@@ -586,7 +586,7 @@ module Tilia
       # It's intended to remove all circular references, so PHP can easily clean
       # it up.
       #
-      # @return void
+      # @return [void]
       def destroy
         super
 

@@ -8,7 +8,7 @@ module Tilia
         class DateAndOrTime < Property
           # Field separator.
           #
-          # @var null|string
+          # @return [null|string]
           attr_accessor :delimiter
 
           # Returns the type of value.
@@ -16,7 +16,7 @@ module Tilia
           # This corresponds to the VALUE= parameter. Every property also has a
           # 'default' valueType.
           #
-          # @return string
+          # @return [String]
           def value_type
             'DATE-AND-OR-TIME'
           end
@@ -25,9 +25,9 @@ module Tilia
           #
           # You may also specify DateTime objects here.
           #
-          # @param array parts
+          # @param [array] parts
           #
-          # @return void
+          # @return [void]
           def parts=(parts)
             fail ArgumentError, 'Only one value allowed' if parts.size > 1
 
@@ -44,9 +44,9 @@ module Tilia
           #
           # Instead of strings, you may also use DateTime here.
           #
-          # @param string|array|\DateTime value
+          # @param [String|array|\DateTime] value
           #
-          # @return void
+          # @return [void]
           def value=(value)
             if value.is_a?(::Time)
               self.date_time = value
@@ -57,9 +57,9 @@ module Tilia
 
           # Sets the property as a DateTime object.
           #
-          # @param DateTimeInterface dt
+          # @param [Time] dt
           #
-          # @return void
+          # @return [void]
           def date_time=(dt)
             tz = dt.time_zone
             is_utc = ['UTC', 'GMT', 'Z'].include?(tz.name)
@@ -87,7 +87,7 @@ module Tilia
           # current values for those. So at the time of writing, if the year was
           # omitted, we would have filled in 2014.
           #
-          # @return DateTimeImmutable
+          # @return [Time]
           def date_time
             now = ::Time.zone.now
 
@@ -127,7 +127,7 @@ module Tilia
           #
           # This method must always return an array.
           #
-          # @return array
+          # @return [array]
           def json_value
             parts = DateTimeParser.parse_v_card_date_time(value)
 
@@ -208,9 +208,9 @@ module Tilia
           # This method serializes only the value of a property. This is used to
           # create xCard or xCal documents.
           #
-          # @param Xml\Writer writer  XML writer.
+          # @param [Xml\Writer] writer  XML writer.
           #
-          # @return void
+          # @return [void]
           def xml_serialize_value(writer)
             value_type = self.value_type.downcase
             parts     = DateTimeParser.parse_v_card_date_and_or_time(value)
@@ -288,40 +288,21 @@ module Tilia
           # This has been 'unfolded', so only 1 line will be passed. Unescaping is
           # not yet done, but parameters are not included.
           #
-          # @param string val
+          # @param [String] val
           #
-          # @return void
+          # @return [void]
           def raw_mime_dir_value=(val)
             self.value = val
           end
 
           # Returns a raw mime-dir representation of the value.
           #
-          # @return string
+          # @return [String]
           def raw_mime_dir_value
             parts.join(@delimiter)
           end
 
-          # Validates the node for correctness.
-          #
-          # The following options are supported:
-          #   Node::REPAIR - May attempt to automatically repair the problem.
-          #
-          # This method returns an array with detected problems.
-          # Every element has the following properties:
-          #
-          #  * level - problem level.
-          #  * message - A human-readable string describing the issue.
-          #  * node - A reference to the problematic node.
-          #
-          # The level means:
-          #   1 - The issue was repaired (only happens if REPAIR was turned on)
-          #   2 - An inconsequential issue
-          #   3 - A severe issue.
-          #
-          # @param int options
-          #
-          # @return array
+          # (see Component#validate)
           def validate(options = 0)
             messages = super(options)
             value = self.value

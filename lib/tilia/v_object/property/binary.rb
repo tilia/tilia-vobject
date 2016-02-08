@@ -14,16 +14,16 @@ module Tilia
         # In case this is a multi-value property. This string will be used as a
         # delimiter.
         #
-        # @var string|null
+        # @return [String, nil]
         attr_accessor :delimiter
 
         # Updates the current value.
         #
         # This may be either a single, or multiple strings in an array.
         #
-        # @param string|array value
+        # @param [String|array] value
         #
-        # @return void
+        # @return [void]
         def value=(value)
           if value.is_a?(Array)
             if value.size == 1
@@ -41,16 +41,16 @@ module Tilia
         # This has been 'unfolded', so only 1 line will be passed. Unescaping is
         # not yet done, but parameters are not included.
         #
-        # @param string val
+        # @param [String] val
         #
-        # @return void
+        # @return [void]
         def raw_mime_dir_value=(val)
           @value = Base64.decode64(val)
         end
 
         # Returns a raw mime-dir representation of the value.
         #
-        # @return string
+        # @return [String]
         def raw_mime_dir_value
           Base64.strict_encode64(@value)
         end
@@ -60,7 +60,7 @@ module Tilia
         # This corresponds to the VALUE= parameter. Every property also has a
         # 'default' valueType.
         #
-        # @return string
+        # @return [String]
         def value_type
           'BINARY'
         end
@@ -69,7 +69,7 @@ module Tilia
         #
         # This method must always return an array.
         #
-        # @return array
+        # @return [array]
         def json_value
           [Base64.strict_encode64(value)]
         end
@@ -78,9 +78,9 @@ module Tilia
         #
         # The value must always be an array.
         #
-        # @param array value
+        # @param [array] value
         #
-        # @return void
+        # @return [void]
         def json_value=(value)
           value = value.map { |v| Base64.decode64(v) }
           super(value)

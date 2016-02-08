@@ -6,16 +6,6 @@ module Tilia
       #
       # This parser parses both the jCal and jCard formats.
       class Json < Parser
-        # The input data.
-        #
-        # @var array
-        # RUBY: attr_accessor :input
-
-        # Root component.
-        #
-        # @var Document
-        # RUBY: attr_accessor :root
-
         # This method starts the parsing process.
         #
         # If the input was not supplied during construction, it's possible to pass
@@ -23,10 +13,10 @@ module Tilia
         #
         # If either input or options are not supplied, the defaults will be used.
         #
-        # @param resource|string|array|null input
-        # @param int options
+        # @param [String, #read, nil] input
+        # @param [Fixnum] options
         #
-        # @return Sabre\VObject\Document
+        # @return [Document]
         def parse(input = nil, options = 0)
           self.input = input unless input.nil?
           if @input.nil?
@@ -61,9 +51,9 @@ module Tilia
 
         # Parses a component.
         #
-        # @param array j_comp
+        # @param [Array] j_comp
         #
-        # @return \Sabre\VObject\Component
+        # @return [Component]
         def parse_component(j_comp)
           properties = j_comp[1].map do |j_prop|
             parse_property(j_prop)
@@ -86,9 +76,9 @@ module Tilia
 
         # Parses properties.
         #
-        # @param array j_prop
+        # @param [Array] j_prop
         #
-        # @return \Sabre\VObject\Property
+        # @return [\Sabre\VObject\Property]
         def parse_property(j_prop)
           (
               property_name,
@@ -134,9 +124,9 @@ module Tilia
 
         # Sets the input data.
         #
-        # @param resource|string|array input
+        # @param [String, #read] input
         #
-        # @return void
+        # @return [void]
         def input=(input)
           input = input.read unless input.is_a?(String)
           input = JSON.parse(input)

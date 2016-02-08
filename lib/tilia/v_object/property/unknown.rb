@@ -10,7 +10,7 @@ module Tilia
         #
         # This method must always return an array.
         #
-        # @return array
+        # @return [array]
         def json_value
           [raw_mime_dir_value]
         end
@@ -20,7 +20,7 @@ module Tilia
         # This corresponds to the VALUE= parameter. Every property also has a
         # 'default' valueType.
         #
-        # @return string
+        # @return [String]
         def value_type
           'UNKNOWN'
         end

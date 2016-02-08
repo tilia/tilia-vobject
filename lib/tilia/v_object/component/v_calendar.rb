@@ -9,12 +9,12 @@ module Tilia
         #
         # This should be 'VCALENDAR' or 'VCARD'.
         #
-        # @var string
+        # @return [String]
         @default_name = 'VCALENDAR'
 
         # This is a list of components, and which classes they should map to.
         #
-        # @var array
+        # @return [Hash]
         @component_map = {
           'VCALENDAR'     => Component::VCalendar,
           'VALARM'        => Component::VAlarm,
@@ -29,7 +29,7 @@ module Tilia
 
         # List of value-types, and which classes they map to.
         #
-        # @var array
+        # @return [Hash]
         @value_map = {
           'BINARY'           => Property::Binary,
           'BOOLEAN'          => Property::Boolean,
@@ -50,7 +50,7 @@ module Tilia
 
         # List of properties, and which classes they map to.
         #
-        # @var array
+        # @return [Hash]
         @property_map = {
           # Calendar properties
           'CALSCALE'      => Property::FlatText,
@@ -129,7 +129,7 @@ module Tilia
 
         # Returns the current document type.
         #
-        # @return int
+        # @return [Fixnum]
         def document_type
           ICALENDAR20
         end
@@ -140,9 +140,9 @@ module Tilia
         #
         # VTIMEZONE components will always be excluded.
         #
-        # @param string component_name filter by component name
+        # @param [String] component_name filter by component name
         #
-        # @return VObject\Component[]
+        # @return [Array<Component>]
         def base_components(component_name = nil)
           is_base_component = lambda do |component|
             return false unless component.is_a?(Component)
@@ -179,9 +179,9 @@ module Tilia
         #
         # If there is no such component, null will be returned.
         #
-        # @param string component_name filter by component name
+        # @param [String] component_name filter by component name
         #
-        # @return VObject\Component|null
+        # @return [Component, nil]
         def base_component(component_name = nil)
           is_base_component = lambda do |component|
             return false unless component.is_a?(Component)
@@ -219,10 +219,10 @@ module Tilia
         # In addition, this method will cause timezone information to be stripped,
         # and normalized to UTC.
         #
-        # @param DateTimeInterface start
-        # @param DateTimeInterface end
-        # @param DateTimeZone time_zone reference timezone for floating dates and
-        #                     times.
+        # @param [Time] start
+        # @param [Time] end
+        # @param [ActiveSupport::TimeZone, nil] time_zone reference timezone for floating dates and
+        #                                       times.
         #
         # @return [VCalendar]
         def expand(start, ending, time_zone = nil)
@@ -300,7 +300,7 @@ module Tilia
 
         # This method should return a list of default property values.
         #
-        # @return array
+        # @return [Hash]
         def defaults
           {
             'VERSION'  => '2.0',
@@ -311,19 +311,7 @@ module Tilia
 
         public
 
-        # A simple list of validation rules.
-        #
-        # This is simply a list of properties, and how many times they either
-        # must or must not appear.
-        #
-        # Possible values per property:
-        #   * 0 - Must not appear.
-        #   * 1 - Must appear exactly once.
-        #   * + - Must appear at least once.
-        #   * * - Can appear any number of times.
-        #   * ? - May appear, but not more than once.
-        #
-        # @var array
+        # (see Component#validation_rules)
         def validation_rules
           {
             'PRODID'  => 1,
@@ -334,28 +322,7 @@ module Tilia
           }
         end
 
-        # Validates the node for correctness.
-        #
-        # The following options are supported:
-        #   Node::REPAIR - May attempt to automatically repair the problem.
-        #   Node::PROFILE_CARDDAV - Validate the vCard for CardDAV purposes.
-        #   Node::PROFILE_CALDAV - Validate the iCalendar for CalDAV purposes.
-        #
-        # This method returns an array with detected problems.
-        # Every element has the following properties:
-        #
-        #  * level - problem level.
-        #  * message - A human-readable string describing the issue.
-        #  * node - A reference to the problematic node.
-        #
-        # The level means:
-        #   1 - The issue was repaired (only happens if REPAIR was turned on).
-        #   2 - A warning.
-        #   3 - An error.
-        #
-        # @param int options
-        #
-        # @return array
+        # (see Component#validate)
         def validate(options = 0)
           warnings = super(options)
 
@@ -451,7 +418,7 @@ module Tilia
 
         # Returns all components with a specific UID value.
         #
-        # @return array
+        # @return [array]
         def by_uid(uid)
           components.select do |item|
             item_uid = item.select('UID')

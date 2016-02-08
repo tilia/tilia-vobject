@@ -11,16 +11,16 @@ module Tilia
           # This has been 'unfolded', so only 1 line will be passed. Unescaping is
           # not yet done, but parameters are not included.
           #
-          # @param string val
+          # @param [String] val
           #
-          # @return void
+          # @return [void]
           def raw_mime_dir_value=(val)
             self.value = val
           end
 
           # Returns a raw mime-dir representation of the value.
           #
-          # @return string
+          # @return [String]
           def raw_mime_dir_value
             value
           end
@@ -30,7 +30,7 @@ module Tilia
           # This corresponds to the VALUE= parameter. Every property also has a
           # 'default' valueType.
           #
-          # @return string
+          # @return [String]
           def value_type
             'LANGUAGE-TAG'
           end

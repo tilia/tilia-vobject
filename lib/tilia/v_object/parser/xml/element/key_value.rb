@@ -24,9 +24,9 @@ module Tilia
             # reader.parse_inner_tree will parse the entire sub-tree, and advance to
             # the next element.
             #
-            # @param XML\Reader reader
+            # @param [XML\Reader] reader
             #
-            # @return mixed
+            # @return [mixed]
             def self.xml_deserialize(reader)
               # If there's no children, we don't do anything.
               if reader.empty_element?

@@ -17,8 +17,8 @@ module Tilia
       #
       # If input and output version are identical, a clone is returned.
       #
-      # @param Component\VCard input
-      # @param int target_version
+      # @param [Component::VCard] input
+      # @param [Fixnum] target_version
       def convert(input, target_version)
         input_version = input.document_type
         return input.dup if input_version == target_version
@@ -48,12 +48,12 @@ module Tilia
 
       # Handles conversion of a single property.
       #
-      # @param Component\VCard input
-      # @param Component\VCard output
-      # @param Property property
-      # @param int target_version
+      # @param [Component::VCard] input
+      # @param [Component::VCard] output
+      # @param [Property] property
+      # @param [Fixnum] target_version
       #
-      # @return void
+      # @return [void]
       def convert_property(input, output, property, target_version)
         # Skipping these, those are automatically added.
         return nil if %w(VERSION PRODID).include?(property.name)
@@ -207,12 +207,12 @@ module Tilia
       #
       # vCard 4.0 no longer supports BINARY properties.
       #
-      # @param Component\VCard output
-      # @param Tilia::VObject::Property::Uri property The input property.
-      # @param parameters List of parameters that will eventually be added to
-      #                    the new property.
+      # @param [Component::VCard] output
+      # @param [Tilia::VObject::Property::Uri] property The input property.
+      # @param [Hash] parameters List of parameters that will eventually be added to
+      #                          the new property.
       #
-      # @return Tilia::VObject::Property::Uri
+      # @return [Tilia::VObject::Property::Uri]
       def convert_binary_to_uri(output, new_property, parameters)
         value = new_property.value
         new_property = output.create_property(
@@ -254,10 +254,10 @@ module Tilia
       # be valid in vCard 3.0 as well, we should convert those to BINARY if
       # possible, to improve compatibility.
       #
-      # @param Component\VCard output
-      # @param Tilia::VObject::Property::Uri property The input property.
+      # @param [Component::VCard] output
+      # @param [Property::Uri] property The input property.
       #
-      # @return Tilia::VObject::Property::Binary|null
+      # @return [Property::Binary, nil]
       def convert_uri_to_binary(output, new_property)
         value = new_property.value
 
@@ -294,10 +294,10 @@ module Tilia
 
       # Adds parameters to a new property for vCard 4.0.
       #
-      # @param Property new_property
-      # @param array parameters
+      # @param [Property] new_property
+      # @param [Hash] parameters
       #
-      # @return void
+      # @return [void]
       def convert_parameters40(new_property, parameters)
         # Adding all parameters.
         parameters.each do |_, param|
@@ -325,10 +325,10 @@ module Tilia
 
       # Adds parameters to a new property for vCard 3.0.
       #
-      # @param Property new_property
-      # @param array parameters
+      # @param [Property] new_property
+      # @param [Hash] parameters
       #
-      # @return void
+      # @return [void]
       def convert_parameters30(new_property, parameters)
         # Adding all parameters.
         parameters.each do |_, param|

@@ -9,7 +9,7 @@ module Tilia
         #
         # This ignores repeated alarm, only the first trigger is returned.
         #
-        # @return DateTimeImmutable
+        # @return [Time]
         def effective_trigger_time
           trigger = self['TRIGGER']
           if !trigger.key?('VALUE') || trigger['VALUE'].to_s.upcase == 'DURATION'
@@ -61,10 +61,10 @@ module Tilia
         # The rules used to determine if an event falls within the specified
         # time-range is based on the CalDAV specification.
         #
-        # @param DateTime start
-        # @param DateTime ending
+        # @param [Time] start
+        # @param [Time] ending
         #
-        # @return bool
+        # @return [Boolean]
         def in_time_range?(start, ending)
           effective_trigger = effective_trigger_time
 
@@ -86,19 +86,7 @@ module Tilia
           end
         end
 
-        # A simple list of validation rules.
-        #
-        # This is simply a list of properties, and how many times they either
-        # must or must not appear.
-        #
-        # Possible values per property:
-        #   * 0 - Must not appear.
-        #   * 1 - Must appear exactly once.
-        #   * + - Must appear at least once.
-        #   * * - Can appear any number of times.
-        #   * ? - May appear, but not more than once.
-        #
-        # @var array
+        # (see Component#validation_rules)
         def validation_rules
           {
             'ACTION'  => 1,

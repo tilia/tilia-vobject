@@ -13,11 +13,11 @@ module Tilia
       # It only generates the freebusy report for the following time-range:
       # 2011-01-01 11:00:00 until 2011-01-03 11:11:11
       #
-      # @param string expected
-      # @param array input
-      # @param string|null time_zone
-      # @param string vavailability
-      # @return void
+      # @param [String] expected
+      # @param [array] input
+      # @param [String, nil] time_zone
+      # @param [String] vavailability
+      # @return [void]
       def assert_free_busy_report(expected, input, time_zone = nil, vavailability = nil)
         utc = ActiveSupport::TimeZone.new('UTC')
         gen = Tilia::VObject::FreeBusyGenerator.new(

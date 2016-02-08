@@ -9,7 +9,7 @@ module Tilia
           # In case this is a multi-value property. This string will be used as a
           # delimiter.
           #
-          # @var string|null
+          # @return [String, nil]
           attr_accessor :delimiter
 
           # Returns the type of value.
@@ -17,7 +17,7 @@ module Tilia
           # This corresponds to the VALUE= parameter. Every property also has a
           # 'default' valueType.
           #
-          # @return string
+          # @return [String]
           def value_type
             'CAL-ADDRESS'
           end
@@ -29,7 +29,7 @@ module Tilia
           #
           # Evolution in particular tends to encode mailto: as MAILTO:.
           #
-          # @return string
+          # @return [String]
           def normalized_value
             input = value
             return input unless input.index(':')

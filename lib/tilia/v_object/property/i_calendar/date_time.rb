@@ -15,16 +15,16 @@ module Tilia
           # In case this is a multi-value property. This string will be used as a
           # delimiter.
           #
-          # @var string|null
+          # @return [String, nil]
           attr_accessor :delimiter
 
           # Sets a multi-valued property.
           #
           # You may also specify DateTime objects here.
           #
-          # @param array parts
+          # @param [array] parts
           #
-          # @return void
+          # @return [void]
           def parts=(parts)
             if parts[0].is_a?(::Time)
               self.date_times = parts
@@ -39,9 +39,9 @@ module Tilia
           #
           # Instead of strings, you may also use DateTime here.
           #
-          # @param string|array|DateTimeInterface value
+          # @param [String|array|DateTimeInterface] value
           #
-          # @return void
+          # @return [void]
           def value=(value)
             if value.is_a?(Array) && value[0].is_a?(::Time)
               self.date_times = value
@@ -57,23 +57,23 @@ module Tilia
           # This has been 'unfolded', so only 1 line will be passed. Unescaping is
           # not yet done, but parameters are not included.
           #
-          # @param string val
+          # @param [String] val
           #
-          # @return void
+          # @return [void]
           def raw_mime_dir_value=(val)
             self.value = val.split(@delimiter)
           end
 
           # Returns a raw mime-dir representation of the value.
           #
-          # @return string
+          # @return [String]
           def raw_mime_dir_value
             parts.join(@delimiter)
           end
 
           # Returns true if this is a DATE-TIME value, false if it's a DATE.
           #
-          # @return bool
+          # @return [Boolean]
           def time?
             self['VALUE'].to_s.upcase != 'DATE'
           end
@@ -95,9 +95,9 @@ module Tilia
           # property or floating time, we will use the DateTimeZone argument to
           # figure out the exact date.
           #
-          # @param DateTimeZone time_zone
+          # @param [ActiveSupport::TimeZone] time_zone
           #
-          # @return DateTimeImmutable
+          # @return [Time]
           def date_time(time_zone = nil)
             dt = date_times(time_zone)
             return nil unless dt
@@ -111,10 +111,10 @@ module Tilia
           # property or floating time, we will use the DateTimeZone argument to
           # figure out the exact date.
           #
-          # @param DateTimeZone time_zone
+          # @param [ActiveSupport::TimeZone] time_zone
           #
-          # @return DateTimeImmutable[]
-          # @return \DateTime[]
+          # @return [DateTimeImmutable[]]
+          # @return [\DateTime[]]
           def date_times(time_zone = nil)
             # Does the property have a TZID?
             tzid = self['TZID']
@@ -130,10 +130,10 @@ module Tilia
 
           # Sets the property as a DateTime object.
           #
-          # @param DateTimeInterface dt
-          # @param bool isFloating If set to true, timezones will be ignored.
+          # @param [Time] dt
+          # @param [Boolean] isFloating If set to true, timezones will be ignored.
           #
-          # @return void
+          # @return [void]
           def date_time=(dt)
             self.date_times = [dt]
           end
@@ -143,10 +143,10 @@ module Tilia
           # The first value will be used as a reference for the timezones, and all
           # the otehr values will be adjusted for that timezone
           #
-          # @param DateTimeInterface[] dt
-          # @param bool isFloating If set to true, timezones will be ignored.
+          # @param [DateTimeInterface[]] dt
+          # @param [Boolean] isFloating If set to true, timezones will be ignored.
           #
-          # @return void
+          # @return [void]
           def date_times=(dt)
             update_date_times(dt)
           end
@@ -156,7 +156,7 @@ module Tilia
           # This corresponds to the VALUE= parameter. Every property also has a
           # 'default' valueType.
           #
-          # @return string
+          # @return [String]
           def value_type
             time? ? 'DATE-TIME' : 'DATE'
           end
@@ -165,7 +165,7 @@ module Tilia
           #
           # This method must always return an array.
           #
-          # @return array
+          # @return [array]
           def json_value
             dts = date_times
 
@@ -185,9 +185,9 @@ module Tilia
           #
           # The value must always be an array.
           #
-          # @param array value
+          # @param [array] value
           #
-          # @return void
+          # @return [void]
           def json_value=(value)
             # dates and times in jCal have one difference to dates and times in
             # iCalendar. In jCal date-parts are separated by dashes, and
@@ -201,10 +201,10 @@ module Tilia
           # We need to intercept offsetSet, because it may be used to alter the
           # VALUE from DATE-TIME to DATE or vice-versa.
           #
-          # @param string name
-          # @param mixed value
+          # @param [String] name
+          # @param value
           #
-          # @return void
+          # @return [void]
           def []=(name, value)
             super
 
@@ -214,26 +214,7 @@ module Tilia
             update_date_times(date_times)
           end
 
-          # Validates the node for correctness.
-          #
-          # The following options are supported:
-          #   Node::REPAIR - May attempt to automatically repair the problem.
-          #
-          # This method returns an array with detected problems.
-          # Every element has the following properties:
-          #
-          #  * level - problem level.
-          #  * message - A human-readable string describing the issue.
-          #  * node - A reference to the problematic node.
-          #
-          # The level means:
-          #   1 - The issue was repaired (only happens if REPAIR was turned on)
-          #   2 - An inconsequential issue
-          #   3 - A severe issue.
-          #
-          # @param int options
-          #
-          # @return array
+          # (see Component#validate)
           def validate(options = 0)
             messages = super(options)
             value_type = self.value_type

@@ -14,20 +14,20 @@ module Tilia
 
         # Timezones.
         #
-        # @var array
+        # @return [array]
         # RUBY: attr_accessor :vtimezones
 
         # iCalendar objects.
         #
-        # @var array
+        # @return [array]
         # RUBY: attr_accessor :objects
 
         # Constructor.
         #
         # The splitter should receive an readable file stream as it's input.
         #
-        # @param resource input
-        # @param int options Parser options, see the OPTIONS constants.
+        # @param [resource] input
+        # @param [Fixnum] options Parser options, see the OPTIONS constants.
         def initialize(input, options = 0)
           @vtimezones = {}
           @objects = {}
@@ -65,7 +65,7 @@ module Tilia
         #
         # When the end is reached, null will be returned.
         #
-        # @return Sabre\VObject\Component|null
+        # @return [Sabre\VObject\Component, nil]
         def next
           key = @objects.keys.first
 

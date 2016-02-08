@@ -13,7 +13,7 @@ module Tilia
         #
         # The splitter should receive an readable file stream as it's input.
         #
-        # @param resource input
+        # @param [resource] input
         def initialize(_input)
         end
 
@@ -22,7 +22,7 @@ module Tilia
         #
         # When the end is reached, null will be returned.
         #
-        # @return Sabre\VObject\Component|null
+        # @return [Sabre\VObject\Component, nil]
         def next
         end
       end

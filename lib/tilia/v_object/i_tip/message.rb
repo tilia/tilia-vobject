@@ -10,23 +10,23 @@ module Tilia
       class Message
         # The object's UID.
         #
-        # @var string
+        # @return [String]
         attr_accessor :uid
 
         # The component type, such as VEVENT.
         #
-        # @var string
+        # @return [String]
         attr_accessor :component
 
         # Contains the ITip method, which is something like REQUEST, REPLY or
         # CANCEL.
         #
-        # @var string
+        # @return [String]
         attr_accessor :method
 
         # The current sequence number for the event.
         #
-        # @var int
+        # @return [Fixnum]
         attr_accessor :sequence
 
         # The senders' email address.
@@ -35,24 +35,24 @@ module Tilia
         # if the message is sent by email. It may also be populated in Reply-To:
         # or not at all.
         #
-        # @var string
+        # @return [String]
         attr_accessor :sender
 
         # The name of the sender. This is often populated from a CN parameter from
         # either the ORGANIZER or ATTENDEE, depending on the message.
         #
-        # @var string|null
+        # @return [String, nil]
         attr_accessor :sender_name
 
         # The recipient's email address.
         #
-        # @var string
+        # @return [String]
         attr_accessor :recipient
 
         # The name of the recipient. This is usually populated with the CN
         # parameter from the ATTENDEE or ORGANIZER property, if it's available.
         #
-        # @var string|null
+        # @return [String, nil]
         attr_accessor :recipient_name
 
         # After the message has been delivered, this should contain a string such
@@ -63,12 +63,12 @@ module Tilia
         # See:
         # http://tools.ietf.org/html/rfc6638#section-7.3
         #
-        # @var string
+        # @return [String]
         attr_accessor :schedule_status
 
         # The iCalendar / iTip body.
         #
-        # @var \Sabre\VObject\Component\VCalendar
+        # @return [Component::VCalendar]
         attr_accessor :message
 
         # This will be set to true, if the iTip broker considers the change
@@ -82,7 +82,7 @@ module Tilia
         # To see the list of properties that are considered 'significant', check
         # out Sabre\VObject\ITip\Broker::significant_change_properties.
         #
-        # @var bool
+        # @return [Boolean]
         attr_accessor :significant_change
 
         # Returns the schedule status as a string.
@@ -90,7 +90,7 @@ module Tilia
         # For example:
         # 1.2
         #
-        # @return mixed bool|string
+        # @return [String, false]
         def schedule_status
           if !@schedule_status
             false
@@ -99,7 +99,7 @@ module Tilia
           end
         end
 
-        # TODO: document
+        # Initialize instance variables
         def initialize
           @significant_change = true
         end

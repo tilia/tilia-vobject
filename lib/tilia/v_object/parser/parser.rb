@@ -16,19 +16,14 @@ module Tilia
         # by the reader.
         OPTION_IGNORE_INVALID_LINES = 2
 
-        # Bitmask of parser options.
-        #
-        # @var int
-        # RUBY: attr_accessor :options
-
         # Creates the parser.
         #
         # Optionally, it's possible to parse the input stream here.
         #
-        # @param mixed input
-        # @param int options Any parser options (OPTION constants).
+        # @param input
+        # @param [Fixnum] options Any parser options (OPTION constants).
         #
-        # @return void
+        # @return [void]
         def initialize(input = nil, options = 0)
           self.input = input unless input.nil?
           @options = options
@@ -41,18 +36,18 @@ module Tilia
         #
         # If either input or options are not supplied, the defaults will be used.
         #
-        # @param mixed input
-        # @param int options
+        # @param input
+        # @param [Fixnum] options
         #
-        # @return array
-        def parse(_input = nil, _options = 0)
+        # @return [Document]
+        def parse(input = nil, options = 0)
         end
 
         # Sets the input data.
         #
-        # @param mixed input
+        # @param input
         #
-        # @return void
+        # @return [void]
         def input=(_input)
         end
       end

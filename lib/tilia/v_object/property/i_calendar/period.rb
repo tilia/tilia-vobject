@@ -11,7 +11,7 @@ module Tilia
           # In case this is a multi-value property. This string will be used as a
           # delimiter.
           #
-          # @var string|null
+          # @return [String, nil]
           attr_accessor :delimiter
 
           # Sets a raw value coming from a mimedir (iCalendar/vCard) file.
@@ -19,16 +19,16 @@ module Tilia
           # This has been 'unfolded', so only 1 line will be passed. Unescaping is
           # not yet done, but parameters are not included.
           #
-          # @param string val
+          # @param [String] val
           #
-          # @return void
+          # @return [void]
           def raw_mime_dir_value=(val)
             self.value = val.split(@delimiter)
           end
 
           # Returns a raw mime-dir representation of the value.
           #
-          # @return string
+          # @return [String]
           def raw_mime_dir_value
             parts.join(@delimiter)
           end
@@ -38,7 +38,7 @@ module Tilia
           # This corresponds to the VALUE= parameter. Every property also has a
           # 'default' valueType.
           #
-          # @return string
+          # @return [String]
           def value_type
             'PERIOD'
           end
@@ -47,9 +47,9 @@ module Tilia
           #
           # The value must always be an array.
           #
-          # @param array value
+          # @param [array] value
           #
-          # @return void
+          # @return [void]
           def json_value=(value)
             value = value.values if value.is_a?(Hash)
             value = value.map do |item|
@@ -63,7 +63,7 @@ module Tilia
           #
           # This method must always return an array.
           #
-          # @return array
+          # @return [array]
           def json_value
             result = []
             parts.each do |item|
@@ -94,9 +94,9 @@ module Tilia
           # This method serializes only the value of a property. This is used to
           # create xCard or xCal documents.
           #
-          # @param Xml\Writer writer  XML writer.
+          # @param [Xml\Writer] writer  XML writer.
           #
-          # @return void
+          # @return [void]
           def xml_serialize_value(writer)
             writer.start_element(value_type.downcase)
 

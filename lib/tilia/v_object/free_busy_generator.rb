@@ -11,22 +11,22 @@ module Tilia
     class FreeBusyGenerator
       # Input objects.
       #
-      # @var array
+      # @return [array]
       # RUBY: attr_accessor :objects
 
       # Start of range.
       #
-      # @var DateTimeInterface|null
+      # @return [DateTimeInterface, nil]
       # RUBY: attr_accessor :start
 
       # End of range.
       #
-      # @var DateTimeInterface|null
+      # @return [DateTimeInterface, nil]
       # RUBY: attr_accessor :end
 
       # VCALENDAR object.
       #
-      # @var Document
+      # @return [Document]
       # RUBY: attr_accessor :base_object
 
       # Reference timezone.
@@ -39,7 +39,7 @@ module Tilia
       #
       # This defaults to UTC.
       #
-      # @var DateTimeZone
+      # @return [ActiveSupport::TimeZone]
       # RUBY: attr_accessor :time_zone
 
       # A VAVAILABILITY document.
@@ -47,7 +47,7 @@ module Tilia
       # If this is set, it's information will be included when calculating
       # freebusy time.
       #
-      # @var Document
+      # @return [Document]
       # RUBY: attr_accessor :vavailability
 
       # Creates the generator.
@@ -55,10 +55,10 @@ module Tilia
       # Check the setTimeRange and setObjects methods for details about the
       # arguments.
       #
-      # @param DateTimeInterface start
-      # @param DateTimeInterface end
-      # @param mixed objects
-      # @param DateTimeZone time_zone
+      # @param [Time] start
+      # @param [Time] end
+      # @param objects
+      # @param [ActiveSupport::TimeZone] time_zone
       def initialize(start = nil, ending = nil, objects = nil, time_zone = nil)
         start = Time.zone.parse(Settings.min_date) unless start
         ending = Time.zone.parse(Settings.max_date) unless ending
@@ -78,14 +78,14 @@ module Tilia
       #
       # The VFREEBUSY object will be automatically added though.
       #
-      # @param Document vcalendar
-      # @return void
+      # @param [Document] vcalendar
+      # @return [void]
       attr_writer :base_object
 
       # Sets a VAVAILABILITY document.
       #
-      # @param Document vcalendar
-      # @return void
+      # @param [Document] vcalendar
+      # @return [void]
       def v_availability=(vcalendar)
         @vavailability = vcalendar
       end
@@ -96,9 +96,9 @@ module Tilia
       # Component.
       # It's also possible to specify multiple objects as an array.
       #
-      # @param mixed objects
+      # @param objects
       #
-      # @return void
+      # @return [void]
       def objects=(objects)
         objects = [objects] unless objects.is_a?(Array)
 
@@ -118,10 +118,10 @@ module Tilia
       #
       # Any freebusy object falling outside of this time range will be ignored.
       #
-      # @param DateTimeInterface start
-      # @param DateTimeInterface end
+      # @param [Time] start
+      # @param [Time] end
       #
-      # @return void
+      # @return [void]
       def time_range=(range)
         @start = range.begin
         @end = range.end
@@ -129,15 +129,15 @@ module Tilia
 
       # Sets the reference timezone for floating times.
       #
-      # @param DateTimeZone time_zone
+      # @param [ActiveSupport::TimeZone] time_zone
       #
-      # @return void
+      # @return [void]
       attr_writer :time_zone
 
       # Parses the input data and returns a correct VFREEBUSY object, wrapped in
       # a VCALENDAR.
       #
-      # @return Component
+      # @return [Component]
       def result
         fb_data = FreeBusyData.new(@start.to_i, @end.to_i)
 
@@ -152,9 +152,9 @@ module Tilia
       # This method takes a VAVAILABILITY component and figures out all the
       # available times.
       #
-      # @param FreeBusyData fb_data
-      # @param VCalendar vavailability
-      # @return void
+      # @param [FreeBusyData] fb_data
+      # @param [VCalendar] vavailability
+      # @return [void]
       def calculate_availability(fb_data, vavailability)
         vavail_comps = vavailability['VAVAILABILITY'].to_a
         vavail_comps.sort! do |a, b|
@@ -288,8 +288,8 @@ module Tilia
       # This method takes an array of iCalendar objects and applies its busy
       # times on fbData.
       #
-      # @param FreeBusyData fb_data
-      # @param VCalendar[] objects
+      # @param [FreeBusyData] fb_data
+      # @param [VCalendar[]] objects
       def calculate_busy(fb_data, objects)
         objects.each_with_index do |object, key|
           object.base_components.each do |component|
@@ -407,7 +407,7 @@ module Tilia
       # This method takes a FreeBusyData object and generates the VCALENDAR
       # object associated with it.
       #
-      # @return VCalendar
+      # @return [VCalendar]
       def generate_free_busy_calendar(fb_data)
         if @base_object
           calendar = @base_object

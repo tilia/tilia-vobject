@@ -12,10 +12,10 @@ module Tilia
       # if the non-UTC format is used. The argument is used as a reference, the
       # returned DateTimeImmutable object will still be in the UTC timezone.
       #
-      # @param string dt
-      # @param DateTimeZone tz
+      # @param [String] dt
+      # @param [ActiveSupport::TimeZone] tz
       #
-      # @return DateTimeImmutable
+      # @return [Time]
       def self.parse_date_time(dt, tz = nil)
         # Format is YYYYMMDD + "T" + hhmmss
         matches = /^([0-9]{4})([0-1][0-9])([0-3][0-9])T([0-2][0-9])([0-5][0-9])([0-5][0-9])([Z]?)$/.match(dt)
@@ -32,10 +32,10 @@ module Tilia
 
       # Parses an iCalendar (rfc5545) formatted date and returns a DateTimeImmutable object.
       #
-      # @param string date
-      # @param DateTimeZone tz
+      # @param [String] date
+      # @param [ActiveSupport::TimeZone] tz
       #
-      # @return DateTimeImmutable
+      # @return [Time]
       def self.parse_date(date, tz = nil)
         # Format is YYYYMMDD
         matches = /^([0-9]{4})([0-1][0-9])([0-3][0-9])$/.match(date)
@@ -56,10 +56,10 @@ module Tilia
       # This method will either return a DateTimeInterval object, or a string
       # suitable for strtotime or DateTime::modify.
       #
-      # @param string duration
-      # @param bool as_string
+      # @param [String] duration
+      # @param [Boolean] as_string
       #
-      # @return DateInterval|string
+      # @return [DateInterval|string]
       def self.parse_duration(duration, as_string = false)
         matches = /^(?<plusminus>\+|-)?P((?<week>\d+)W)?((?<day>\d+)D)?(T((?<hour>\d+)H)?((?<minute>\d+)M)?((?<second>\d+)S)?)?$/.match(duration.to_s)
 
@@ -122,10 +122,10 @@ module Tilia
 
       # Parses either a Date or DateTime, or Duration value.
       #
-      # @param string date
-      # @param DateTimeZone|string reference_tz
+      # @param [String] date
+      # @param [ActiveSupport::TimeZone|string] reference_tz
       #
-      # @return DateTimeImmutable|DateInterval
+      # @return [DateTimeImmutable|DateInterval]
       def self.parse(date, reference_tz = nil)
         if date[0] == 'P' || (date[0] == '-' && date[1] == 'P')
           parse_duration(date)
@@ -187,9 +187,9 @@ module Tilia
       # Times may be postfixed by a timezone offset. This can be either 'Z' for
       # UTC, or a string like -0500 or +1100.
       #
-      # @param string date
+      # @param [String] date
       #
-      # @return array
+      # @return [array]
       def self.parse_v_card_date_time(date)
         regex = /^
             (?:  # date part
@@ -310,9 +310,9 @@ module Tilia
       # Times may be postfixed by a timezone offset. This can be either 'Z' for
       # UTC, or a string like -0500 or +11:00.
       #
-      # @param string date
+      # @param [String] date
       #
-      # @return array
+      # @return [array]
       def self.parse_v_card_time(date)
         regex = /^
             (?<hour> [0-9]{2} | -)
@@ -416,9 +416,9 @@ module Tilia
       # Times may be postfixed by a timezone offset. This can be either 'Z' for
       # UTC, or a string like -0500 or +1100.
       #
-      # @param string date
+      # @param [String] date
       #
-      # @return array
+      # @return [array]
       def self.parse_v_card_date_and_or_time(date)
         # \d{8}|\d{4}-\d\d|--\d\d(\d\d)?|---\d\d
         value_date     = /^(?:

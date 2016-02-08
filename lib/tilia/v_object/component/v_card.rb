@@ -10,19 +10,19 @@ module Tilia
         #
         # This should be 'VCALENDAR' or 'VCARD'.
         #
-        # @var string
+        # @return [String]
         @default_name = 'VCARD'
 
         # This is a list of components, and which classes they should map to.
         #
-        # @var array
+        # @return [Hash]
         @component_map = {
           'VCARD' => Component::VCard
         }
 
         # List of value-types, and which classes they map to.
         #
-        # @var array
+        # @return [Hash]
         @value_map = {
           'BINARY'           => Property::Binary,
           'BOOLEAN'          => Property::Boolean,
@@ -44,7 +44,7 @@ module Tilia
 
         # List of properties, and which classes they map to.
         #
-        # @var array
+        # @return [Hash]
         @property_map = {
           # vCard 2.1 properties and up
           'N'       => Property::Text,
@@ -113,7 +113,7 @@ module Tilia
 
         # Returns the current document type.
         #
-        # @return int
+        # @return [Fixnum]
         def document_type
           unless @version
             version = self['VERSION'].to_s
@@ -144,9 +144,9 @@ module Tilia
         #
         # If input and output version are identical, a clone is returned.
         #
-        # @param int target
+        # @param [Fixnum] target
         #
-        # @return VCard
+        # @return [VCard]
         def convert(target)
           converter = VCardConverter.new
           converter.convert(self, target)
@@ -157,26 +157,7 @@ module Tilia
         # If the VCARD doesn't know its version, 2.1 is assumed.
         DEFAULT_VERSION = VCARD21
 
-        # Validates the node for correctness.
-        #
-        # The following options are supported:
-        #   Node::REPAIR - May attempt to automatically repair the problem.
-        #
-        # This method returns an array with detected problems.
-        # Every element has the following properties:
-        #
-        #  * level - problem level.
-        #  * message - A human-readable string describing the issue.
-        #  * node - A reference to the problematic node.
-        #
-        # The level means:
-        #   1 - The issue was repaired (only happens if REPAIR was turned on)
-        #   2 - An inconsequential issue
-        #   3 - A severe issue.
-        #
-        # @param int options
-        #
-        # @return array
+        # (see Component#validate)
         def validate(options = 0)
           warnings = []
 
@@ -270,19 +251,7 @@ module Tilia
           w
         end
 
-        # A simple list of validation rules.
-        #
-        # This is simply a list of properties, and how many times they either
-        # must or must not appear.
-        #
-        # Possible values per property:
-        #   * 0 - Must not appear.
-        #   * 1 - Must appear exactly once.
-        #   * + - Must appear at least once.
-        #   * * - Can appear any number of times.
-        #   * ? - May appear, but not more than once.
-        #
-        # @var array
+        # (see Component#validation_rules)
         def validation_rules
           {
             'ADR'          => '*',
@@ -336,9 +305,9 @@ module Tilia
         # If neither of those parameters are specified, the first is returned, if
         # a field with that name does not exist, null is returned.
         #
-        # @param string field_name
+        # @param [String] field_name
         #
-        # @return VObject\Property|null
+        # @return [Property, nil]
         def preferred(property_name)
           preferred = nil
           last_pref = 101
@@ -364,7 +333,7 @@ module Tilia
 
         # This method should return a list of default property values.
         #
-        # @return array
+        # @return [Hash]
         def defaults
           {
             'VERSION' => '4.0',
@@ -378,7 +347,7 @@ module Tilia
         # This method returns an array, with the representation as it should be
         # encoded in json. This is used to create jCard or jCal documents.
         #
-        # @return array
+        # @return [Array]
         def json_serialize
           # A vcard does not have sub-components, so we're overriding this
           # method to remove that array element.
@@ -394,9 +363,9 @@ module Tilia
         # This method serializes the data into XML. This is used to create xCard or
         # xCal documents.
         #
-        # @param Xml\Writer writer  XML writer.
+        # @param [Tilia::Xml::Writer] writer  XML writer.
         #
-        # @return void
+        # @return [void]
         def xml_serialize(writer)
           properties_by_group = {}
 
@@ -436,9 +405,9 @@ module Tilia
 
         # Returns the default class for a property name.
         #
-        # @param string property_name
+        # @param [String] property_name
         #
-        # @return string
+        # @return [String]
         def class_name_for_property_name(property_name)
           class_name = super(property_name)
 
@@ -450,8 +419,9 @@ module Tilia
           class_name
         end
 
+        # sets instance variables
         def initialize(*args)
-          super(*args)
+          super
           @version = nil
         end
       end

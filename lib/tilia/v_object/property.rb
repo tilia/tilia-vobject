@@ -22,43 +22,43 @@ module Tilia
       #
       # This will contain a string such as DTSTART, SUMMARY, FN.
       #
-      # @var string
+      # @return [String]
       attr_accessor :name
 
       # Property group.
       #
       # This is only used in vcards
       #
-      # @var string
+      # @return [String]
       attr_accessor :group
 
       # List of parameters.
       #
-      # @var array
+      # @return [array]
       attr_accessor :parameters
 
       # Current value.
       #
-      # @var mixed
+      # @return [mixed]
       # RUBY: attr_accessor :value
 
       # In case this is a multi-value property. This string will be used as a
       # delimiter.
       #
-      # @var string|null
+      # @return [String, nil]
       attr_accessor :delimiter
 
       # Creates the generic property.
       #
       # Parameters must be specified in key=>value syntax.
       #
-      # @param Component root The root document
-      # @param string name
-      # @param string|array|null value
-      # @param array parameters List of parameters
-      # @param string group The vcard property group
+      # @param [Component] root The root document
+      # @param [String] name
+      # @param [String|array, nil] value
+      # @param [array] parameters List of parameters
+      # @param [String] group The vcard property group
       #
-      # @return void
+      # @return [void]
       def initialize(root, name, value = nil, parameters = {}, group = nil)
         @parameters = {}
         @delimiter = ';'
@@ -77,9 +77,9 @@ module Tilia
       #
       # This may be either a single, or multiple strings in an array.
       #
-      # @param string|array value
+      # @param [String|array] value
       #
-      # @return void
+      # @return [void]
       attr_writer :value
 
       # Returns the current value.
@@ -90,7 +90,7 @@ module Tilia
       #
       # To get the correct multi-value version, use getParts.
       #
-      # @return string
+      # @return [String]
       def value
         if @value.is_a?(Array)
           if @value.empty?
@@ -107,9 +107,9 @@ module Tilia
 
       # Sets a multi-valued property.
       #
-      # @param array parts
+      # @param [array] parts
       #
-      # @return void
+      # @return [void]
       def parts=(parts)
         @value = parts
       end
@@ -119,7 +119,7 @@ module Tilia
       # This method always returns an array, if there was only a single value,
       # it will still be wrapped in an array.
       #
-      # @return array
+      # @return [array]
       def parts
         if @value.nil?
           []
@@ -136,8 +136,8 @@ module Tilia
       # combined.
       # If nameless parameter is added, we try to guess it's name.
       #
-      # @param string name
-      # @param string|null|array value
+      # @param [String] name
+      # @param [String, nil|array] value
       def add(name, value = nil)
         no_name = false
         if name.nil?
@@ -156,7 +156,7 @@ module Tilia
 
       # Returns an iterable list of children.
       #
-      # @return array
+      # @return [array]
       attr_reader :parameters
 
       # Returns the type of value.
@@ -164,7 +164,7 @@ module Tilia
       # This corresponds to the VALUE= parameter. Every property also has a
       # 'default' valueType.
       #
-      # @return string
+      # @return [String]
       def value_type
       end
 
@@ -173,21 +173,21 @@ module Tilia
       # This has been 'unfolded', so only 1 line will be passed. Unescaping is
       # not yet done, but parameters are not included.
       #
-      # @param string val
+      # @param [String] val
       #
-      # @return void
+      # @return [void]
       def raw_mime_dir_value=(_val)
       end
 
       # Returns a raw mime-dir representation of the value.
       #
-      # @return string
+      # @return [String]
       def raw_mime_dir_value
       end
 
       # Turns the object back into a serialized blob.
       #
-      # @return string
+      # @return [String]
       def serialize
         str = @name
         str = "#{@group}.#{@name}" if @group
@@ -218,7 +218,7 @@ module Tilia
       #
       # This method must always return an array.
       #
-      # @return array
+      # @return [array]
       def json_value
         parts
       end
@@ -227,9 +227,9 @@ module Tilia
       #
       # The value must always be an array.
       #
-      # @param array value
+      # @param [array] value
       #
-      # @return void
+      # @return [void]
       def json_value=(value)
         value = value.values if value.is_a?(Hash)
         if value.size == 1
@@ -242,7 +242,7 @@ module Tilia
       # This method returns an array, with the representation as it should be
       # encoded in JSON. This is used to create jCard or jCal documents.
       #
-      # @return array
+      # @return [array]
       def json_serialize
         parameters = {}
 
@@ -267,9 +267,9 @@ module Tilia
       # Hydrate data from a XML subtree, as it would appear in a xCard or xCal
       # object.
       #
-      # @param array value
+      # @param [array] value
       #
-      # @return void
+      # @return [void]
       def xml_value=(value)
         self.json_value = value
       end
@@ -277,9 +277,9 @@ module Tilia
       # This method serializes the data into XML. This is used to create xCard or
       # xCal documents.
       #
-      # @param Xml\Writer writer  XML writer.
+      # @param [Xml\Writer] writer  XML writer.
       #
-      # @return void
+      # @return [void]
       def xml_serialize(writer)
         parameters = []
 
@@ -312,9 +312,9 @@ module Tilia
       # This method serializes only the value of a property. This is used to
       # create xCard or xCal documents.
       #
-      # @param Xml\Writer writer  XML writer.
+      # @param [Xml\Writer] writer  XML writer.
       #
-      # @return void
+      # @return [void]
       def xml_serialize_value(writer)
         value_type = self.value_type.downcase
 
@@ -334,16 +334,16 @@ module Tilia
       # case the property had multiple values, the contents will be escaped and
       # combined with ,.
       #
-      # @return string
+      # @return [String]
       def to_s
         value.to_s
       end
 
       # Checks if an array element exists.
       #
-      # @param mixed name
+      # @param name
       #
-      # @return bool
+      # @return [Boolean]
       def key?(name)
         name = name.upcase
 
@@ -357,9 +357,9 @@ module Tilia
       #
       # If the parameter does not exist, null is returned.
       #
-      # @param string name
+      # @param [String] name
       #
-      # @return Node
+      # @return [Node]
       def [](name)
         return super(name) if name.is_a?(Fixnum)
 
@@ -368,10 +368,10 @@ module Tilia
 
       # Creates a new parameter.
       #
-      # @param string name
-      # @param mixed value
+      # @param [String] name
+      # @param value
       #
-      # @return void
+      # @return [void]
       def []=(name, value)
         if name.is_a?(Fixnum)
           super(name, value)
@@ -388,9 +388,9 @@ module Tilia
 
       # Removes one or more parameters with the specified name.
       #
-      # @param string name
+      # @param [String] name
       #
-      # @return void
+      # @return [void]
       def delete(name)
         if name.is_a?(Fixnum)
           super(name)
@@ -407,7 +407,7 @@ module Tilia
       # This method is automatically called when the object is cloned.
       # Specifically, this will ensure all child elements are also cloned.
       #
-      # @return void
+      # @return [void]
       def initialize_copy(_original)
         new_params = {}
         @parameters.each do |key, child|
@@ -430,9 +430,9 @@ module Tilia
       #    * message - (human readable message)
       #    * node - (reference to the offending node)
       #
-      # @param int options
+      # @param [Fixnum] options
       #
-      # @return array
+      # @return [array]
       def validate(options = 0)
         warnings = []
 
@@ -524,7 +524,7 @@ module Tilia
       # It's intended to remove all circular references, so PHP can easily clean
       # it up.
       #
-      # @return void
+      # @return [void]
       def destroy
         super
 

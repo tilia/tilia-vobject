@@ -18,9 +18,9 @@ module Tilia
           #
           # This may be either a single, or multiple strings in an array.
           #
-          # @param string|array value
+          # @param [String|array] value
           #
-          # @return void
+          # @return [void]
           def value=(value)
             if value.is_a?(Hash)
               new_val = {}
@@ -54,7 +54,7 @@ module Tilia
           #
           # To get the correct multi-value version, use getParts.
           #
-          # @return string
+          # @return [String]
           def value
             out = []
             @value.each do |key, value|
@@ -65,8 +65,8 @@ module Tilia
 
           # Sets a multi-valued property.
           #
-          # @param array parts
-          # @return void
+          # @param [array] parts
+          # @return [void]
           def parts=(parts)
             self.value = parts
           end
@@ -76,7 +76,7 @@ module Tilia
           # This method always returns an array, if there was only a single value,
           # it will still be wrapped in an array.
           #
-          # @return array
+          # @return [array]
           def parts
             @value
           end
@@ -86,15 +86,15 @@ module Tilia
           # This has been 'unfolded', so only 1 line will be passed. Unescaping is
           # not yet done, but parameters are not included.
           #
-          # @param string val
-          # @return void
+          # @param [String] val
+          # @return [void]
           def raw_mime_dir_value=(val)
             self.value = val
           end
 
           # Returns a raw mime-dir representation of the value.
           #
-          # @return string
+          # @return [String]
           def raw_mime_dir_value
             value
           end
@@ -104,7 +104,7 @@ module Tilia
           # This corresponds to the VALUE= parameter. Every property also has a
           # 'default' valueType.
           #
-          # @return string
+          # @return [String]
           def value_type
             'RECUR'
           end
@@ -113,7 +113,7 @@ module Tilia
           #
           # This method must always return an array.
           #
-          # @return array
+          # @return [array]
           def json_value
             values = {}
             parts.each do |k, v|
@@ -127,8 +127,8 @@ module Tilia
           # This method serializes only the value of a property. This is used to
           # create xCard or xCal documents.
           #
-          # @param Xml\Writer writer  XML writer.
-          # @return void
+          # @param [Xml\Writer] writer  XML writer.
+          # @return [void]
           def xml_serialize_value(writer)
             value_type = self.value_type.downcase
 
@@ -139,8 +139,8 @@ module Tilia
 
           # Parses an RRULE value string, and turns it into a struct-ish array.
           #
-          # @param string value
-          # @return array
+          # @param [String] value
+          # @return [array]
           def self.string_to_array(value)
             value = value.upcase
             new_value = {}

@@ -18,16 +18,16 @@ module Tilia
       class FlatText < Property::Text
         # Field separator.
         #
-        # @var string
+        # @return [String]
         attr_accessor :delimiter
 
         # Sets the value as a quoted-printable encoded string.
         #
         # Overriding this so we're not splitting on a ; delimiter.
         #
-        # @param string val
+        # @param [String] val
         #
-        # @return void
+        # @return [void]
         def quoted_printable_value=(val)
           val = Mail::Encodings::QuotedPrintable.decode(val)
           val = val.gsub(/\n/, "\r\n").gsub(/\r\r/, "\r")

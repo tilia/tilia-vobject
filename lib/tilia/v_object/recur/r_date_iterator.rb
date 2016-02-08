@@ -13,8 +13,8 @@ module Tilia
 
         # Creates the Iterator.
         #
-        # @param string|array rrule
-        # @param DateTimeInterface start
+        # @param [String|array] rrule
+        # @param [Time] start
         def initialize(rrule, start)
           @counter = 0
           @dates = []
@@ -30,7 +30,7 @@ module Tilia
 
         # Returns the current item number.
         #
-        # @return int
+        # @return [Fixnum]
         def key
           @counter
         end
@@ -38,14 +38,14 @@ module Tilia
         # Returns whether the current item is a valid item for the recurrence
         # iterator.
         #
-        # @return bool
+        # @return [Boolean]
         def valid
           @counter <= @dates.size
         end
 
         # Resets the iterator.
         #
-        # @return void
+        # @return [void]
         def rewind
           @current_date = @start_date.clone
           @counter = 0
@@ -53,7 +53,7 @@ module Tilia
 
         # Goes on to the next iteration.
         #
-        # @return void
+        # @return [void]
         def next
           @counter += 1
 
@@ -67,7 +67,7 @@ module Tilia
 
         # Returns true if this recurring event never ends.
         #
-        # @return bool
+        # @return [Boolean]
         def infinite?
           false
         end
@@ -75,9 +75,9 @@ module Tilia
         # This method allows you to quickly go to the next occurrence after the
         # specified date.
         #
-        # @param DateTimeInterface dt
+        # @param [Time] dt
         #
-        # @return void
+        # @return [void]
         def fast_forward(dt)
           self.next while valid && @current_date < dt
         end
@@ -87,9 +87,9 @@ module Tilia
         # This method receives a string from an RRULE property, and populates this
         # class with all the values.
         #
-        # @param string|array rrule
+        # @param [String|array] rrule
         #
-        # @return void
+        # @return [void]
         def parse_r_date(rdate)
           rdate = rdate.split(',') if rdate.is_a?(String)
 

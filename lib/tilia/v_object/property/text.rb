@@ -8,12 +8,12 @@ module Tilia
         # In case this is a multi-value property. This string will be used as a
         # delimiter.
         #
-        # @var string
+        # @return [String]
         attr_accessor :delimiter
 
         # List of properties that are considered 'structured'.
         #
-        # @var array
+        # @return [array]
         # RUBY: attr_accessor :structured_values
 
         # Some text components have a minimum number of components.
@@ -21,7 +21,7 @@ module Tilia
         # N must for instance be represented as 5 components, separated by ;, even
         # if the last few components are unused.
         #
-        # @var array
+        # @return [array]
         # RUBY: attr_accessor :minimum_property_values
 
         # Creates the property.
@@ -30,13 +30,13 @@ module Tilia
         # parameters will automatically be created, or you can just pass a list of
         # Parameter objects.
         #
-        # @param Component root The root document
-        # @param string name
-        # @param string|array|null value
-        # @param array parameters List of parameters
-        # @param string group The vcard property group
+        # @param [Component] root The root document
+        # @param [String] name
+        # @param [String|array, nil] value
+        # @param [array] parameters List of parameters
+        # @param [String] group The vcard property group
         #
-        # @return void
+        # @return [void]
         def initialize(root, name, value = nil, parameters = [], group = nil)
           super(root, name, value, parameters, group)
 
@@ -70,18 +70,18 @@ module Tilia
         # This has been 'unfolded', so only 1 line will be passed. Unescaping is
         # not yet done, but parameters are not included.
         #
-        # @param string val
+        # @param [String] val
         #
-        # @return void
+        # @return [void]
         def raw_mime_dir_value=(val)
           self.value = Parser::MimeDir.unescape_value(val, @delimiter)
         end
 
         # Sets the value as a quoted-printable encoded string.
         #
-        # @param string val
+        # @param [String] val
         #
-        # @return void
+        # @return [void]
         def quoted_printable_value=(val)
           val = Mail::Encodings::QuotedPrintable.decode(val)
           val = val.gsub(/\n/, "\r\n").gsub(/\r\r/, "\r")
@@ -105,7 +105,7 @@ module Tilia
 
         # Returns a raw mime-dir representation of the value.
         #
-        # @return string
+        # @return [String]
         def raw_mime_dir_value
           val = parts
 
@@ -136,7 +136,7 @@ module Tilia
         #
         # This method must always return an array.
         #
-        # @return array
+        # @return [array]
         def json_value
           # Structured text values should always be returned as a single
           # array-item. Multi-value text should be returned as multiple items in
@@ -151,14 +151,14 @@ module Tilia
         # This corresponds to the VALUE= parameter. Every property also has a
         # 'default' valueType.
         #
-        # @return string
+        # @return [String]
         def value_type
           'TEXT'
         end
 
         # Turns the object back into a serialized blob.
         #
-        # @return string
+        # @return [String]
         def serialize
           # We need to kick in a special type of encoding, if it's a 2.1 vcard.
           return super unless @root.document_type == Document::VCARD21
@@ -240,9 +240,9 @@ module Tilia
         # This method serializes only the value of a property. This is used to
         # create xCard or xCal documents.
         #
-        # @param Xml\Writer writer  XML writer.
+        # @param [Xml\Writer] writer  XML writer.
         #
-        # @return void
+        # @return [void]
         def xml_serialize_value(writer)
           values = parts
 
@@ -308,22 +308,7 @@ module Tilia
 
         public
 
-        # Validates the node for correctness.
-        #
-        # The following options are supported:
-        #   - Node::REPAIR - If something is broken, and automatic repair may
-        #                    be attempted.
-        #
-        # An array is returned with warnings.
-        #
-        # Every item in the array has the following properties:
-        #    * level - (number between 1 and 3 with severity information)
-        #    * message - (human readable message)
-        #    * node - (reference to the offending node)
-        #
-        # @param int options
-        #
-        # @return array
+        # (see Component#validate)
         def validate(options = 0)
           warnings = super(options)
 

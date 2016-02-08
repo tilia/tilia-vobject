@@ -37,7 +37,7 @@ module Tilia
         # server, but if you're writing an iTip application that doesn't deal with
         # CalDAV, you may want to ignore this parameter.
         #
-        # @return [bool]
+        # @return [Boolean]
         attr_accessor :schedule_agent_server_rules
 
         # The broker will try during 'parseEvent' figure out whether the change
@@ -49,7 +49,7 @@ module Tilia
         # This list is taken from:
         # * http://tools.ietf.org/html/rfc5546#section-2.1.4
         #
-        # @return [String[]]
+        # @return [Array<String>]
         attr_accessor :significant_change_properties
 
         # This method is used to process an incoming itip message.
@@ -81,7 +81,7 @@ module Tilia
         # @param [Message] itip_message
         # @param [VCalendar] existing_object
         #
-        # @return [VCalendar|null]
+        # @return [VCalendar, nil]
         def process_message(itip_message, existing_object = nil)
           # We only support events at the moment.
           return false unless itip_message.component == 'VEVENT'
@@ -118,11 +118,11 @@ module Tilia
         # people. If the user was an attendee, we need to make sure that the
         # organizer gets the 'declined' message.
         #
-        # @param [VCalendar|string] calendar
-        # @param [String|array] user_href
-        # @param [VCalendar|string] old_calendar
+        # @param [VCalendar, String] calendar
+        # @param [String, Array<String>] user_href
+        # @param [VCalendar, String, nil] old_calendar
         #
-        # @return [array]
+        # @return [Array]
         def parse_event(calendar, user_href, old_calendar = nil)
           if old_calendar
             if old_calendar.is_a?(String)
@@ -232,9 +232,9 @@ module Tilia
         #
         #
         # @param [Message] itip_message
-        # @param [VCalendar] existing_object
+        # @param [VCalendar, nil] existing_object
         #
-        # @return [VCalendar|null]
+        # @return [VCalendar, nil]
         def process_message_request(itip_message, existing_object = nil)
           if !existing_object
             # This is a new invite, and we're just going to copy over
@@ -265,9 +265,9 @@ module Tilia
         # altogether.
         #
         # @param [Message] itip_message
-        # @param [VCalendar] existing_object
+        # @param [VCalendar, nil] existing_object
         #
-        # @return [VCalendar|null]
+        # @return [VCalendar, nil]
         def process_message_cancel(itip_message, existing_object = nil)
           if !existing_object
             # The event didn't exist in the first place, so we're just
@@ -288,9 +288,9 @@ module Tilia
         # an organizer he accepted the invite, or declined it.
         #
         # @param [Message] itip_message
-        # @param [VCalendar] existing_object
+        # @param [VCalendar, nil] existing_object
         #
-        # @return [VCalendar|null]
+        # @return [VCalendar, nil]
         def process_message_reply(itip_message, existing_object = nil)
           # A reply can only be processed based on an existing object.
           # If the object is not available, the reply is ignored.
@@ -411,10 +411,10 @@ module Tilia
         # specific messages for these situations.
         #
         # @param [VCalendar] calendar
-        # @param [array] event_info
-        # @param [array] old_event_info
+        # @param [Hash] event_info
+        # @param [Hash] old_event_info
         #
-        # @return [array]
+        # @return [Array<Message>]
         def parse_event_for_organizer(calendar, event_info, old_event_info)
           # Merging attendee lists.
           attendees = {}
@@ -574,11 +574,11 @@ module Tilia
         # This function figures out if we need to send a reply to an organizer.
         #
         # @param [VCalendar] calendar
-        # @param [array] event_info
-        # @param [array] old_event_info
+        # @param [Hash] event_info
+        # @param [Hash] old_event_info
         # @param [String] attendee
         #
-        # @return [Message[]]
+        # @return [Array<Message>]
         def parse_event_for_attendee(calendar, event_info, old_event_info, attendee)
           if schedule_agent_server_rules && event_info['organizer_schedule_agent'] == 'CLIENT'
             return []
@@ -750,7 +750,7 @@ module Tilia
         #
         # @param [VCalendar] calendar
         #
-        # @return [array]
+        # @return [Hash]
         def parse_event_info(calendar = nil)
           uid = nil
           organizer = nil
@@ -907,7 +907,7 @@ module Tilia
 
         public
 
-        # TODO: document
+        # Sets instance variables
         def initialize
           @schedule_agent_server_rules = true
           @significant_change_properties = [

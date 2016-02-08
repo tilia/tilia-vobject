@@ -28,10 +28,10 @@ module Tilia
         # Pass a stream or a string. If null is parsed, the existing buffer is
         # used.
         #
-        # @param string|resource|null input
-        # @param int options
+        # @param [String|resource, nil] input
+        # @param [Fixnum] options
         #
-        # @return Sabre\VObject\Document
+        # @return [Document]
         def parse(input = nil, options = 0)
           @root = nil
 
@@ -52,7 +52,7 @@ module Tilia
         # encoding will be used. If this is set, the parser will automatically
         # convert all incoming data to UTF-8.
         #
-        # @param string charset
+        # @param [String] charset
         def charset=(charset)
           fail ArgumentError, "Unsupported encoding. (Supported encodings: #{MimeDir.supported_charsets.join(', ')})" unless MimeDir.supported_charsets.include?(charset)
 
@@ -61,9 +61,9 @@ module Tilia
 
         # Sets the input buffer. Must be a string or stream.
         #
-        # @param resource|string input
+        # @param [IO, String] input
         #
-        # @return void
+        # @return [void]
         def input=(input)
           # Resetting the parser
           @line_index = 0
@@ -86,7 +86,7 @@ module Tilia
 
         # Parses an entire document.
         #
-        # @return void
+        # @return [void]
         def parse_document
           line = read_line
 
@@ -120,9 +120,9 @@ module Tilia
         # Parses a line, and if it hits a component, it will also attempt to parse
         # the entire component.
         #
-        # @param string line Unfolded line
+        # @param [String] line Unfolded line
         #
-        # @return Node
+        # @return [Node]
         def parse_line(line)
           # Start of a new component
           if line[0...6].upcase == 'BEGIN:'
@@ -160,7 +160,7 @@ module Tilia
         #
         # If that was not the case, we store it here.
         #
-        # @var null|string
+        # @return [null|string]
         # RUBY: attr_accessor :protected line_buffer
 
         # The real current line number.
@@ -169,12 +169,12 @@ module Tilia
         # In the case of unfolded lines, this property holds the line number for
         # the start of the line.
         #
-        # @var int
+        # @return [Fixnum]
         # RUBY: attr_accessor :start_line
 
         # Contains a 'raw' representation of the current line.
         #
-        # @var string
+        # @return [String]
         # RUBY: attr_accessor :raw_line
 
         # Reads a single line from the buffer.
@@ -183,7 +183,7 @@ module Tilia
         #
         # @throws \Sabre\VObject\EofException
         #
-        # @return string
+        # @return [String]
         def read_line
           if !@line_buffer.nil?
             raw_line = @line_buffer
@@ -235,7 +235,7 @@ module Tilia
 
         # Reads a property or component from a line.
         #
-        # @return void
+        # @return [Property]
         def read_property(line)
           if @options & OPTION_FORGIVING > 0
             prop_name_token = 'A-Z0-9\\-\\._\\/'
@@ -438,10 +438,10 @@ module Tilia
         # If it's a comma or a semi-colon the string will be split on those
         # characters, and always return an array.
         #
-        # @param string input
-        # @param string delimiter
+        # @param [String] input
+        # @param [String] delimiter
         #
-        # @return string|string[]
+        # @return [String|Array<String>]
         def self.unescape_value(input, delimiter = ';')
           regex = '(?: (\\\\ (?: \\\\ | N | n | ; | , ) )'
           regex += ' | (' + delimiter + ')' unless delimiter.blank?
@@ -506,9 +506,9 @@ module Tilia
         #   * ^ is encoded as ^^.
         #   * " is encoded as ^'
         #
-        # @param string input
+        # @param [String] input
         #
-        # @return void
+        # @return [String]
         def unescape_param(input)
           input.gsub(/(\^(\^|n|\'))/) do |match|
             case match
@@ -529,7 +529,7 @@ module Tilia
         #
         # This method does not do any decoding.
         #
-        # @return string
+        # @return [String]
         def extract_quoted_printable_value
           # We need to parse the raw line again to get the start of the value.
           #
@@ -564,6 +564,7 @@ module Tilia
           value
         end
 
+        # Initialize instance variables
         def initialize(*args)
           super(*args)
           @start_line = 0

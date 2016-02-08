@@ -104,10 +104,10 @@ module Tilia
       # Alternatively, if fail_if_uncertain is set to true, it will throw an
       # exception if we cannot accurately determine the timezone.
       #
-      # @param string tzid
-      # @param Sabre\VObject\Component vcalendar
+      # @param [String] tzid
+      # @param [Component] vcalendar
       #
-      # @return DateTimeZone
+      # @return [ActiveSupport::TimeZone]
       def self.time_zone(tzid, vcalendar = nil, fail_if_uncertain = false)
         # First we will just see if the tzid is a support timezone identifier.
         #
@@ -198,9 +198,9 @@ module Tilia
         return @map if @map
 
         @map = TimeZoneData::PhpZones.list
-        @map.merge! TimeZoneData::ExchangeZones.list
-        @map.merge! TimeZoneData::LotusZones.list
-        @map.merge! TimeZoneData::WindowsZones.list
+        @map.merge!(TimeZoneData::ExchangeZones.list)
+        @map.merge!(TimeZoneData::LotusZones.list)
+        @map.merge!(TimeZoneData::WindowsZones.list)
         @map
       end
 

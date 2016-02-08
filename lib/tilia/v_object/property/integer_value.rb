@@ -11,16 +11,16 @@ module Tilia
         # This has been 'unfolded', so only 1 line will be passed. Unescaping is
         # not yet done, but parameters are not included.
         #
-        # @param string val
+        # @param [String] val
         #
-        # @return void
+        # @return [void]
         def raw_mime_dir_value=(val)
           self.value = val.to_i
         end
 
         # Returns a raw mime-dir representation of the value.
         #
-        # @return string
+        # @return [String]
         def raw_mime_dir_value
           @value
         end
@@ -30,7 +30,7 @@ module Tilia
         # This corresponds to the VALUE= parameter. Every property also has a
         # 'default' valueType.
         #
-        # @return string
+        # @return [String]
         def value_type
           'INTEGER'
         end
@@ -39,7 +39,7 @@ module Tilia
         #
         # This method must always return an array.
         #
-        # @return array
+        # @return [array]
         def json_value
           [value.to_i]
         end
@@ -47,9 +47,9 @@ module Tilia
         # Hydrate data from a XML subtree, as it would appear in a xCard or xCal
         # object.
         #
-        # @param array value
+        # @param [array] value
         #
-        # @return void
+        # @return [void]
         def xml_value=(value)
           value = value.map(&:to_i)
           super(value)

@@ -16,9 +16,9 @@ require 'minitest/autorun'
 #   #
 #   # CALSCALE will automatically get removed if it's set to GREGORIAN.
 #   #
-#   # @param resource|string|Component expected
-#   # @param resource|string|Component actual
-#   # @param string message
+#   # @param [resource|string|Component] expected
+#   # @param [resource|string|Component] actual
+#   # @param [String] message
 #   self.obj = lambda do |input|
 #     if input.respond_to?(:readlines)
 #       input = input.readlines.join("\n")

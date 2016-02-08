@@ -9,7 +9,7 @@ module Tilia
           # In case this is a multi-value property. This string will be used as a
           # delimiter.
           #
-          # @var string|null
+          # @return [String, nil]
           attr_accessor :delimiter
 
           # Returns the type of value.
@@ -17,7 +17,7 @@ module Tilia
           # This corresponds to the VALUE= parameter. Every property also has a
           # 'default' valueType.
           #
-          # @return string
+          # @return [String]
           def value_type
             'TIMESTAMP'
           end
@@ -26,7 +26,7 @@ module Tilia
           #
           # This method must always return an array.
           #
-          # @return array
+          # @return [array]
           def json_value
             parts = DateTimeParser.parse_v_card_date_time(value)
 
@@ -51,9 +51,9 @@ module Tilia
           # This method serializes only the value of a property. This is used to
           # create xCard or xCal documents.
           #
-          # @param Xml\Writer writer  XML writer.
+          # @param [Xml\Writer] writer  XML writer.
           #
-          # @return void
+          # @return [void]
           def xml_serialize_value(writer)
             # xCard is the only XML and JSON format that has the same date and time
             # format than vCard.

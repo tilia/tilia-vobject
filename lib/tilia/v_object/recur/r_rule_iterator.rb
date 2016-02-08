@@ -11,8 +11,8 @@ module Tilia
       class RRuleIterator
         # Creates the Iterator.
         #
-        # @param string|array rrule
-        # @param DateTimeInterface start
+        # @param [String|array] rrule
+        # @param [Time] start
         def initialize(rrule, start)
           @week_start = 'MO'
           @counter = 0
@@ -48,7 +48,7 @@ module Tilia
 
         # Returns the current item number.
         #
-        # @return int
+        # @return [Fixnum]
         def key
           @counter
         end
@@ -57,7 +57,7 @@ module Tilia
         # iterator. This will return false if we've gone beyond the UNTIL or COUNT
         # statements.
         #
-        # @return bool
+        # @return [Boolean]
         def valid
           return @counter < @count if @count
           @until.nil? || @current_date <= @until
@@ -65,7 +65,7 @@ module Tilia
 
         # Resets the iterator.
         #
-        # @return void
+        # @return [void]
         def rewind
           @current_date = @start_date.clone
           @counter = 0
@@ -73,7 +73,7 @@ module Tilia
 
         # Goes on to the next iteration.
         #
-        # @return void
+        # @return [void]
         def next
           # Otherwise, we find the next event in the normal RRULE
           # sequence.
@@ -95,7 +95,7 @@ module Tilia
 
         # Returns true if this recurring event never ends.
         #
-        # @return bool
+        # @return [Boolean]
         def infinite?
           !@count && !@until
         end
@@ -103,9 +103,9 @@ module Tilia
         # This method allows you to quickly go to the next occurrence after the
         # specified date.
         #
-        # @param DateTimeInterface dt
+        # @param [Time] dt
         #
-        # @return void
+        # @return [void]
         def fast_forward(dt)
           self.next while valid && @current_date < dt
         end
@@ -114,14 +114,14 @@ module Tilia
 
         # Does the processing for advancing the iterator for hourly frequency.
         #
-        # @return void
+        # @return [void]
         def next_hourly
           @current_date += @interval.hours
         end
 
         # Does the processing for advancing the iterator for daily frequency.
         #
-        # @return void
+        # @return [void]
         def next_daily
           unless @by_hour || @by_day
             @current_date += @interval.days
@@ -162,7 +162,7 @@ module Tilia
 
         # Does the processing for advancing the iterator for weekly frequency.
         #
-        # @return void
+        # @return [void]
         def next_weekly
           if !@by_hour && !@by_day
             @current_date += @interval.weeks
@@ -206,7 +206,7 @@ module Tilia
 
         # Does the processing for advancing the iterator for monthly frequency.
         #
-        # @return void
+        # @return [void]
         def next_monthly
           current_day_of_month = @current_date.day
           unless @by_month_day || @by_day
@@ -261,7 +261,7 @@ module Tilia
 
         # Does the processing for advancing the iterator for yearly frequency.
         #
-        # @return void
+        # @return [void]
         def next_yearly
           current_month = @current_date.month
           current_year = @current_date.year
@@ -374,9 +374,9 @@ module Tilia
         # This method receives a string from an RRULE property, and populates this
         # class with all the values.
         #
-        # @param string|array rrule
+        # @param [String|array] rrule
         #
-        # @return void
+        # @return [void]
         def parse_r_rule(rrule)
           if rrule.is_a?(String)
             rrule = Property::ICalendar::Recur.string_to_array(rrule)
@@ -447,7 +447,7 @@ module Tilia
         #
         # The returned list is an array of integers with the day of month (1-31).
         #
-        # @return array
+        # @return [array]
         def monthly_occurrences
           start_date = @current_date.clone
 
@@ -549,7 +549,7 @@ module Tilia
 
         # Simple mapping from iCalendar day names to day numbers.
         #
-        # @var array
+        # @return [array]
         # RUBY: attr_accessor :day_map
 
         def hours

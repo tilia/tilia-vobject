@@ -20,10 +20,10 @@ module Tilia
       #
       # You can either supply a string, or a readable stream for input.
       #
-      # @param string|resource data
-      # @param int options
-      # @param string charset
-      # @return Document
+      # @param [String, #read] data
+      # @param [Fixnum] options
+      # @param [String] charset
+      # @return [Document]
       def self.read(data, options = 0, charset = 'UTF-8')
         parser = Parser::MimeDir.new
         parser.charset = charset
@@ -41,10 +41,10 @@ module Tilia
       # Specifying the array is useful if json_decode was already called on the
       # input.
       #
-      # @param string|resource|array data
-      # @param int options
+      # @param [String, |resource|array] data
+      # @param [Fixnum] options
       #
-      # @return Document
+      # @return [Document]
       def self.read_json(data, options = 0)
         parser = Parser::Json.new
         result = parser.parse(data, options)
@@ -59,10 +59,10 @@ module Tilia
       #
       # You can either supply a string, or a readable stream for input.
       #
-      # @param string|resource data
-      # @param int options
+      # @param [String|resource] data
+      # @param [Fixnum] options
       #
-      # @return Document
+      # @return [Document]
       def self.read_xml(data, options = 0)
         parser = Parser::Xml.new
         result = parser.parse(data, options)

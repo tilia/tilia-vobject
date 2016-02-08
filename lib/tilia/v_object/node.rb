@@ -27,34 +27,29 @@ module Tilia
 
       # Reference to the parent object, if this is not the top object.
       #
-      # @var Node
+      # @return [Node]
       attr_accessor :parent
-
-      # The root document.
-      #
-      # @var Component
-      # RUBY: attr_accessor :root
 
       # Serializes the node into a mimedir format.
       #
-      # @return string
+      # @return [String]
       def serialize
       end
 
       # This method returns an array, with the representation as it should be
       # encoded in JSON. This is used to create jCard or jCal documents.
       #
-      # @return array
+      # @return [array]
       def json_serialize
       end
 
       # This method serializes the data into XML. This is used to create xCard or
       # xCal documents.
       #
-      # @param Xml\Writer writer  XML writer.
+      # @param [Xml\Writer] writer  XML writer.
       #
-      # @return void
-      def xml_serialize(_writer)
+      # @return [void]
+      def xml_serialize(writer)
       end
 
       # Call this method on a document if you're done using it.
@@ -62,7 +57,7 @@ module Tilia
       # It's intended to remove all circular references, so PHP can easily clean
       # it up.
       #
-      # @return void
+      # @return [void]
       def destroy
         @parent = nil
         @root = nil
@@ -85,16 +80,16 @@ module Tilia
       #   2 - An inconsequential issue
       #   3 - A severe issue.
       #
-      # @param int options
+      # @param [Fixnum] options
       #
-      # @return array
+      # @return [array]
       def validate(_options = 0)
         []
       end
 
       # Returns the iterator for this object.
       #
-      # @return ElementList
+      # @return [ElementList]
       def iterator
         return @iterator if @iterator
 
@@ -105,14 +100,14 @@ module Tilia
       #
       # Note that this is not actually part of the iterator interface
       #
-      # @param ElementList $iterator
+      # @param [ElementList] $iterator
       #
-      # @return void
+      # @return [void]
       attr_writer :iterator
 
       # Returns the number of elements.
       #
-      # @return int
+      # @return [Fixnum]
       def size
         it = iterator
         it.size
@@ -124,9 +119,9 @@ module Tilia
       #
       # This method just forwards the request to the inner iterator
       #
-      # @param int $offset
+      # @param [Fixnum] $offset
       #
-      # @return bool
+      # @return [Boolean]
       def key?(offset)
         iterator = self.iterator
         iterator.key?(offset)
@@ -136,9 +131,9 @@ module Tilia
       #
       # This method just forwards the request to the inner iterator
       #
-      # @param int $offset
+      # @param [Fixnum] $offset
       #
-      # @return mixed
+      # @return [mixed]
       def [](offset)
         iterator = self.iterator
         iterator[offset]
@@ -148,10 +143,10 @@ module Tilia
       #
       # This method just forwards the request to the inner iterator
       #
-      # @param int $offset
-      # @param mixed $value
+      # @param [Fixnum] $offset
+      # @param $value
       #
-      # @return void
+      # @return [void]
       def []=(offset, value)
         iterator = self.iterator
         iterator[offset] = value
@@ -161,9 +156,9 @@ module Tilia
       #
       # This method just forwards the request to the inner iterator
       #
-      # @param int $offset
+      # @param [Fixnum] $offset
       #
-      # @return void
+      # @return [void]
       def delete(offset)
         iterator = self.iterator
         iterator.delete(offset)

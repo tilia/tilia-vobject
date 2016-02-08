@@ -44,12 +44,12 @@ module Tilia
       class EventIterator
         # Reference timeZone for floating dates and times.
         #
-        # @var DateTimeZone
+        # @return [ActiveSupport::TimeZone]
         # RUBY: attr_accessor :time_zone
 
         # True if we're iterating an all-day event.
         #
-        # @var bool
+        # @return [Boolean]
         # RUBY: attr_accessor :all_day
 
         # Creates the iterator.
@@ -65,9 +65,9 @@ module Tilia
         #
         # The uid parameter is only required for the first method.
         #
-        # @param Component|array input
-        # @param string|null uid
-        # @param DateTimeZone time_zone Reference timezone for floating dates and
+        # @param [Component|array] input
+        # @param [String, nil] uid
+        # @param [ActiveSupport::TimeZone] time_zone Reference timezone for floating dates and
         #                               times.
         def initialize(input, uid = nil, time_zone = nil)
           @overridden_events = []
@@ -166,7 +166,7 @@ module Tilia
 
         # Returns the date for the current position of the iterator.
         #
-        # @return DateTimeImmutable
+        # @return [Time]
         def current
           @current_date.clone if @current_date
         end
@@ -174,7 +174,7 @@ module Tilia
         # This method returns the start date for the current iteration of the
         # event.
         #
-        # @return DateTimeImmutable
+        # @return [Time]
         def dt_start
           @current_date.clone if @current_date
         end
@@ -182,7 +182,7 @@ module Tilia
         # This method returns the end date for the current iteration of the
         # event.
         #
-        # @return DateTimeImmutable
+        # @return [Time]
         def dt_end
           return nil unless valid
 
@@ -194,7 +194,7 @@ module Tilia
         # This VEVENT will have a recurrence id, and it's DTSTART and DTEND
         # altered.
         #
-        # @return VEvent
+        # @return [VEvent]
         def event_object
           return @current_overridden_event if @current_overridden_event
 
@@ -232,7 +232,7 @@ module Tilia
         #
         # This is for us simply a 0-based index.
         #
-        # @return int
+        # @return [Fixnum]
         def key
           # The counter is always 1 ahead.
           @counter - 1
@@ -241,7 +241,7 @@ module Tilia
         # This is called after next, to see if the iterator is still at a valid
         # position, or if it's at the end.
         #
-        # @return bool
+        # @return [Boolean]
         def valid
           if @counter > Settings.max_recurrences &&
              Settings.max_recurrences != -1
@@ -273,7 +273,7 @@ module Tilia
 
         # Advances the iterator with one step.
         #
-        # @return void
+        # @return [void]
         def next
           @current_overridden_event = nil
           @counter += 1
@@ -321,21 +321,21 @@ module Tilia
 
         # Quickly jump to a date in the future.
         #
-        # @param DateTimeInterface date_time
+        # @param [Time] date_time
         def fast_forward(date_time)
           self.next while valid && dt_end < date_time
         end
 
         # Returns true if this recurring event never ends.
         #
-        # @return bool
+        # @return [Boolean]
         def infinite?
           @recur_iterator.infinite?
         end
 
         # RRULE parser.
         #
-        # @var RRuleIterator
+        # @return [RRuleIterator]
         # RUBY: attr_accessor :recur_iterator
 
         # The duration, in seconds, of the master event.
@@ -345,12 +345,12 @@ module Tilia
 
         # A reference to the main (master) event.
         #
-        # @var VEVENT
+        # @return [VEVENT]
         # RUBY: attr_accessor :master_event
 
         # List of overridden events.
         #
-        # @var array
+        # @return [array]
         # RUBY: attr_accessor :overridden_events
 
         # Overridden event index.
@@ -358,28 +358,28 @@ module Tilia
         # Key is timestamp, value is the index of the item in the overridden_event
         # property.
         #
-        # @var array
+        # @return [array]
         # RUBY: attr_accessor :overridden_events_index
 
         # A list of recurrence-id's that are either part of EXDATE, or are
         # overridden.
         #
-        # @var array
+        # @return [array]
         # RUBY: attr_accessor :exceptions
 
         # Internal event counter.
         #
-        # @var int
+        # @return [Fixnum]
         # RUBY: attr_accessor :counter
 
         # The very start of the iteration process.
         #
-        # @var DateTimeImmutable
+        # @return [Time]
         # RUBY: attr_accessor :start_date
 
         # Where we are currently in the iteration process.
         #
-        # @var DateTimeImmutable
+        # @return [Time]
         # RUBY: attr_accessor :current_date
 
         # The next date from the rrule parser.
@@ -387,7 +387,7 @@ module Tilia
         # Sometimes we need to temporary store the next date, because an
         # overridden event came before.
         #
-        # @var DateTimeImmutable
+        # @return [Time]
         # RUBY: attr_accessor :next_date
 
         def to_a

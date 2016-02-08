@@ -4,9 +4,9 @@ module Tilia
     class StringUtil
       # Returns true or false depending on if a string is valid UTF-8.
       #
-      # @param string str
+      # @param [String] str
       #
-      # @return bool
+      # @return [Boolean]
       def self.utf8?(str)
         fail ArgumentError, 'str needs to be a String' unless str.is_a?(String)
         # Control characters
@@ -20,9 +20,9 @@ module Tilia
       # Currently only ISO-5991-1 input and UTF-8 input is supported, but this
       # may be expanded upon if we receive other examples.
       #
-      # @param string str
+      # @param [String] str
       #
-      # @return string
+      # @return [String]
       def self.convert_to_utf8(str)
         str = str.encode('UTF-8', guess_encoding(str))
 
@@ -35,7 +35,7 @@ module Tilia
       # Currently only supports 'UTF-8', 'ISO-5991-1' and 'Windows-1252'.
       #
       # @param [String] str
-      # @return [String] 'UTF-8', 'ISO-5991-1' or 'Windows-1252'
+      # @return [String] encoding
       def self.guess_encoding(str)
         cd = CharDet.detect(str)
 
@@ -47,7 +47,11 @@ module Tilia
         end
       end
 
-      # TODO: document
+      # Cuts the string after a certain bytelength
+      #
+      # @param [String] string
+      # @param [Fixnum] length
+      # @return [String] cut string
       def self.mb_strcut(string, length)
         return '' if string == ''
 

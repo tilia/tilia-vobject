@@ -8,7 +8,7 @@ module Tilia
         # In case this is a multi-value property. This string will be used as a
         # delimiter.
         #
-        # @var string|null
+        # @return [String, nil]
         attr_accessor :delimiter
 
         # Returns the type of value.
@@ -16,14 +16,14 @@ module Tilia
         # This corresponds to the VALUE= parameter. Every property also has a
         # 'default' valueType.
         #
-        # @return string
+        # @return [String]
         def value_type
           'URI'
         end
 
         # Returns an iterable list of children.
         #
-        # @return array
+        # @return [array]
         def parameters
           parameters = super
           if !parameters.key?('VALUE') && ['URL', 'PHOTO'].include?(@name)
@@ -45,9 +45,9 @@ module Tilia
         # This has been 'unfolded', so only 1 line will be passed. Unescaping is
         # not yet done, but parameters are not included.
         #
-        # @param string val
+        # @param [String] val
         #
-        # @return void
+        # @return [void]
         def raw_mime_dir_value=(val)
           # Normally we don't need to do any type of unescaping for these
           # properties, however.. we've noticed that Google Contacts
@@ -76,7 +76,7 @@ module Tilia
 
         # Returns a raw mime-dir representation of the value.
         #
-        # @return string
+        # @return [String]
         def raw_mime_dir_value
           if @value.is_a?(Array)
             value = @value[0]

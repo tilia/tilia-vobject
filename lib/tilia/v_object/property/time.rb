@@ -8,7 +8,7 @@ module Tilia
         # In case this is a multi-value property. This string will be used as a
         # delimiter.
         #
-        # @var string|null
+        # @return [String, nil]
         attr_accessor :delimiter
 
         # Returns the type of value.
@@ -16,7 +16,7 @@ module Tilia
         # This corresponds to the VALUE= parameter. Every property also has a
         # 'default' valueType.
         #
-        # @return string
+        # @return [String]
         def value_type
           'TIME'
         end
@@ -25,8 +25,8 @@ module Tilia
         #
         # The value must always be an array.
         #
-        # @param array value
-        # @return void
+        # @param [array] value
+        # @return [void]
         def json_value=(value)
           # Removing colons from value.
           value = value.map { |v| v.delete(':') }
@@ -42,7 +42,7 @@ module Tilia
         #
         # This method must always return an array.
         #
-        # @return array
+        # @return [array]
         def json_value
           parts = DateTimeParser.parse_v_card_time(value)
           time_str = ''
@@ -88,9 +88,9 @@ module Tilia
         # Hydrate data from a XML subtree, as it would appear in a xCard or xCal
         # object.
         #
-        # @param array value
+        # @param [array] value
         #
-        # @return void
+        # @return [void]
         def xml_value=(value)
           value = value.map do |v|
             v.delete(':')

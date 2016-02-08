@@ -9,27 +9,27 @@ module Tilia
     class Parameter < Node
       # Parameter name.
       #
-      # @var string
+      # @return [String]
       attr_accessor :name
 
       # vCard 2.1 allows parameters to be encoded without a name.
       #
       # We can deduce the parameter name based on it's value.
       #
-      # @var bool
+      # @return [Boolean]
       attr_accessor :no_name
 
       # Parameter value.
       #
-      # @var string
+      # @return [String]
       # RUBY: attr_accessor :value
 
       # Sets up the object.
       #
       # It's recommended to use the create:: factory method instead.
       #
-      # @param string name
-      # @param string value
+      # @param [String] name
+      # @param [String] value
       def initialize(root, name, value = nil)
         @no_name = false
         @name = (name || '').upcase
@@ -59,9 +59,9 @@ module Tilia
       # these are rather silly in 2014 and would probably rarely be
       # used, but we like to be complete.
       #
-      # @param string value
+      # @param [String] value
       #
-      # @return string
+      # @return [String]
       def self.guess_parameter_name_by_value(value)
         value ||= ''
         case value.upcase
@@ -148,9 +148,9 @@ module Tilia
       #
       # This may be either a single, or multiple strings in an array.
       #
-      # @param string|array value
+      # @param [String|array] value
       #
-      # @return void
+      # @return [void]
       attr_writer :value
 
       # Returns the current value.
@@ -158,7 +158,7 @@ module Tilia
       # This method will always return a string, or null. If there were multiple
       # values, it will automatically concatenate them (separated by comma).
       #
-      # @return string|null
+      # @return [String, nil]
       def value
         if @value.is_a?(Array)
           @value.join(',')
@@ -169,9 +169,9 @@ module Tilia
 
       # Sets multiple values for this parameter.
       #
-      # @param array value
+      # @param [array] value
       #
-      # @return void
+      # @return [void]
       def parts=(value)
         @value = value
       end
@@ -180,7 +180,7 @@ module Tilia
       #
       # If there were no values, an empty array will be returned.
       #
-      # @return array
+      # @return [array]
       def parts
         if @value.is_a?(Array)
           @value
@@ -196,9 +196,9 @@ module Tilia
       # If the argument is specified as an array, all items will be added to the
       # parameter value list.
       #
-      # @param string|array part
+      # @param [String|array] part
       #
-      # @return void
+      # @return [void]
       def add_value(part)
         if @value.nil?
           @value = part
@@ -215,9 +215,9 @@ module Tilia
       # instance the TYPE parameter, to see if it contains a keyword such as
       # 'WORK' or 'FAX'.
       #
-      # @param string value
+      # @param [String] value
       #
-      # @return bool
+      # @return [Boolean]
       def has(value)
         value = value.downcase
         results = (@value.is_a?(Array) ? @value : [@value]).select do |entry|
@@ -228,7 +228,7 @@ module Tilia
 
       # Turns the object back into a serialized blob.
       #
-      # @return string
+      # @return [String]
       def serialize
         value = parts
 
@@ -278,7 +278,7 @@ module Tilia
       # This method returns an array, with the representation as it should be
       # encoded in JSON. This is used to create jCard or jCal documents.
       #
-      # @return array
+      # @return [array]
       def json_serialize
         @value
       end
@@ -286,9 +286,9 @@ module Tilia
       # This method serializes the data into XML. This is used to create xCard or
       # xCal documents.
       #
-      # @param Xml\Writer writer  XML writer.
+      # @param [Xml\Writer] writer  XML writer.
       #
-      # @return void
+      # @return [void]
       def xml_serialize(writer)
         @value.split(',').each do |value|
           writer.write_element('text', value)
@@ -297,7 +297,7 @@ module Tilia
 
       # Called when this object is being cast to a string.
       #
-      # @return string
+      # @return [String]
       def to_s
         value.to_s
       end

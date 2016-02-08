@@ -9,10 +9,10 @@ module Tilia
         # Checks based on the contained FREEBUSY information, if a timeslot is
         # available.
         #
-        # @param DateTimeInterface start
-        # @param DateTimeInterface end
+        # @param [Time] start
+        # @param [Time] end
         #
-        # @return bool
+        # @return [Boolean]
         def free?(start, ending)
           select('FREEBUSY').each do |freebusy|
             # We are only interested in FBTYPE=BUSY (the default),
@@ -45,19 +45,7 @@ module Tilia
           true
         end
 
-        # A simple list of validation rules.
-        #
-        # This is simply a list of properties, and how many times they either
-        # must or must not appear.
-        #
-        # Possible values per property:
-        #   * 0 - Must not appear.
-        #   * 1 - Must appear exactly once.
-        #   * + - Must appear at least once.
-        #   * * - Can appear any number of times.
-        #   * ? - May appear, but not more than once.
-        #
-        # @var array
+        # (see Component#validation_rules)
         def validation_rules
           {
             'UID'     => 1,

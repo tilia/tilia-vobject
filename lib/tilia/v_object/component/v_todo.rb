@@ -11,10 +11,10 @@ module Tilia
         # The rules used to determine if an event falls within the specified
         # time-range is based on the CalDAV specification.
         #
-        # @param DateTimeInterface start
-        # @param DateTimeInterface end
+        # @param [Time] start
+        # @param [Time] end
         #
-        # @return bool
+        # @return [Boolean]
         def in_time_range?(start, ending)
           dtstart = key?('DTSTART') ? self['DTSTART'].date_time : nil
           duration = key?('DURATION') ? Tilia::VObject::DateTimeParser.parse_duration(self['DURATION']) : nil
@@ -46,19 +46,7 @@ module Tilia
           true
         end
 
-        # A simple list of validation rules.
-        #
-        # This is simply a list of properties, and how many times they either
-        # must or must not appear.
-        #
-        # Possible values per property:
-        #   * 0 - Must not appear.
-        #   * 1 - Must appear exactly once.
-        #   * + - Must appear at least once.
-        #   * * - Can appear any number of times.
-        #   * ? - May appear, but not more than once.
-        #
-        # @var array
+        # (see Component#validation_rules)
         def validation_rules
           {
             'UID'     => 1,
@@ -98,26 +86,7 @@ module Tilia
           }
         end
 
-        # Validates the node for correctness.
-        #
-        # The following options are supported:
-        #   Node::REPAIR - May attempt to automatically repair the problem.
-        #
-        # This method returns an array with detected problems.
-        # Every element has the following properties:
-        #
-        #  * level - problem level.
-        #  * message - A human-readable string describing the issue.
-        #  * node - A reference to the problematic node.
-        #
-        # The level means:
-        #   1 - The issue was repaired (only happens if REPAIR was turned on)
-        #   2 - An inconsequential issue
-        #   3 - A severe issue.
-        #
-        # @param int options
-        #
-        # @return array
+        # (see Component#validate)
         def validate(options = 0)
           result = super(options)
           if key?('DUE') && key?('DTSTART')
@@ -146,7 +115,7 @@ module Tilia
 
         # This method should return a list of default property values.
         #
-        # @return array
+        # @return [Hash]
         def defaults
           {
             'UID'     => "tilia-vobject-#{UuidUtil.uuid}",

@@ -5,62 +5,62 @@ module Tilia
     class Cli
       # No output.
       #
-      # @var bool
+      # @return [Boolean]
       # RUBY: attr_accessor :quiet
 
       # Help display.
       #
-      # @var bool
+      # @return [Boolean]
       # RUBY: attr_accessor :show_help
 
       # Wether to spit out 'mimedir' or 'json' format.
       #
-      # @var string
+      # @return [String]
       # RUBY: attr_accessor :format
 
       # JSON pretty print.
       #
-      # @var bool
+      # @return [Boolean]
       # RUBY: attr_accessor :pretty
 
       # Source file.
       #
-      # @var string
+      # @return [String]
       # RUBY: attr_accessor :input_path
 
       # Destination file.
       #
-      # @var string
+      # @return [String]
       # RUBY: attr_accessor :output_path
 
       # output stream.
       #
-      # @var resource
+      # @return [resource]
       # RUBY: attr_accessor :stdout
 
       # stdin.
       #
-      # @var resource
+      # @return [resource]
       # RUBY: attr_accessor :stdin
 
       # stderr.
       #
-      # @var resource
+      # @return [resource]
       # RUBY: attr_accessor :stderr
 
       # Input format (one of json or mimedir).
       #
-      # @var string
+      # @return [String]
       # RUBY: attr_accessor :input_format
 
       # Makes the parser less strict.
       #
-      # @var bool
+      # @return [Boolean]
       # RUBY: attr_accessor :forgiving
 
       # Main function.
       #
-      # @return int
+      # @return [Fixnum]
       def main(argv)
         # @codeCoverageIgnoreStart
         # We cannot easily test this, so we'll skip it. Pretty basic anyway.
@@ -171,7 +171,7 @@ module Tilia
 
       # Shows the help message.
       #
-      # @return void
+      # @return [void]
       def show_help
         log('Usage:', 'yellow')
         log('  vobject [options] command [arguments]')
@@ -211,9 +211,9 @@ HELP
 
       # Validates a VObject file.
       #
-      # @param Component v_obj
+      # @param [Component] v_obj
       #
-      # @return int
+      # @return [Fixnum]
       def validate(v_obj)
         return_code = 0
 
@@ -249,9 +249,9 @@ HELP
 
       # Repairs a VObject file.
       #
-      # @param Component v_obj
+      # @param [Component] v_obj
       #
-      # @return int
+      # @return [Fixnum]
       def repair(v_obj)
         return_code = 0
 
@@ -289,9 +289,9 @@ HELP
 
       # Converts a vObject file to a new format.
       #
-      # @param Component v_obj
+      # @param [Component] v_obj
       #
-      # @return int
+      # @return [Fixnum]
       def convert(v_obj)
         json = false
         convert_version = nil
@@ -337,9 +337,9 @@ HELP
 
       # Colorizes a file.
       #
-      # @param Component v_obj
+      # @param [Component] v_obj
       #
-      # @return int
+      # @return [Fixnum]
       def color(v_obj)
         @stdout.write(serialize_component(v_obj))
         0 # otherwise bytes written will be returned
@@ -347,9 +347,9 @@ HELP
 
       # Returns an ansi color string for a color name.
       #
-      # @param string color
+      # @param [String] color
       #
-      # @return string
+      # @return [String]
       def colorize(color, str, reset_to = 'default')
         colors = {
           'cyan'    => '1;36',
@@ -365,10 +365,10 @@ HELP
 
       # Writes out a string in specific color.
       #
-      # @param string color
-      # @param string str
+      # @param [String] color
+      # @param [String] str
       #
-      # @return void
+      # @return [void]
       def c_write(color, str)
         @stdout.write(colorize(color, str))
       end
@@ -387,10 +387,10 @@ HELP
         # space to accomodate elements. The key is added to the score to
         # preserve the original relative order of elements.
         #
-        # @param int key
-        # @param array array
+        # @param [Fixnum] key
+        # @param [array] array
         #
-        # @return int
+        # @return [Fixnum]
         sort_score = lambda do |key, array|
           key = array.index(key)
           if array[key].is_a?(Component)
@@ -440,9 +440,9 @@ HELP
 
       # Colorizes a property.
       #
-      # @param Property property
+      # @param [Property] property
       #
-      # @return void
+      # @return [void]
       def serialize_property(property)
         if property.group
           c_write('default', property.group)
@@ -501,9 +501,9 @@ HELP
 
       # Parses the list of arguments.
       #
-      # @param array argv
+      # @param [array] argv
       #
-      # @return void
+      # @return [void]
       def parse_arguments(argv)
         positional = []
         options = {}
@@ -544,7 +544,7 @@ HELP
 
       # Reads the input file.
       #
-      # @return Component
+      # @return [Component]
       def read_input
         unless @parser
           @stdin = File.open(@input_path, 'r') if @input_path != '-'
@@ -561,9 +561,9 @@ HELP
 
       # Sends a message to STDERR.
       #
-      # @param string msg
+      # @param [String] msg
       #
-      # @return void
+      # @return [void]
       def log(msg, color = 'default')
         return if @quiet
 

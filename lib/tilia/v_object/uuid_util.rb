@@ -12,7 +12,7 @@ module Tilia
       #
       # @see http://www.php.net/manual/en/function.uniqid.php#94959
       #
-      # @return string
+      # @return [String]
       def self.uuid
         format(
           '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
@@ -41,8 +41,8 @@ module Tilia
 
       # Checks if a string is a valid UUID.
       #
-      # @param string $uuid
-      # @return bool
+      # @param [String] $uuid
+      # @return [Boolean]
       def self.validate_uuid(uuid)
         uuid =~ /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i
       end

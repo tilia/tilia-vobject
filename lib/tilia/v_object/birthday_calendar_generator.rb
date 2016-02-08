@@ -4,7 +4,7 @@ module Tilia
     class BirthdayCalendarGenerator
       # Input objects.
       #
-      # @var array
+      # @return [array]
       # RUBY: attr_accessor :objects
 
       # Default year.
@@ -13,7 +13,7 @@ module Tilia
 
       # Output format for the SUMMARY.
       #
-      # @var string
+      # @return [String]
       # RUBY: attr_accessor :format
 
       # Creates the generator.
@@ -21,7 +21,7 @@ module Tilia
       # Check the setTimeRange and setObjects methods for details about the
       # arguments.
       #
-      # @param mixed objects
+      # @param objects
       def initialize(objects = nil)
         @objects = []
         @format = '%1s\'s Birthday'
@@ -34,9 +34,9 @@ module Tilia
       # You must either supply a vCard as a string or as a Component/VCard object.
       # It's also possible to supply an array of strings or objects.
       #
-      # @param mixed objects
+      # @param objects
       #
-      # @return void
+      # @return [void]
       def objects=(objects)
         objects = [objects] unless objects.is_a?(Array)
 
@@ -59,14 +59,14 @@ module Tilia
 
       # Sets the output format for the SUMMARY
       #
-      # @param string format
+      # @param [String] format
       #
-      # @return void
+      # @return [void]
       attr_writer :format
 
       # Parses the input data and returns a VCALENDAR.
       #
-      # @return Component/VCalendar
+      # @return [Component/VCalendar]
       def result
         calendar = Component::VCalendar.new
 

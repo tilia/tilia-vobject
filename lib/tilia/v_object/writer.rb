@@ -8,28 +8,28 @@ module Tilia
     class Writer
       # Serializes a vCard or iCalendar object.
       #
-      # @param Component component
+      # @param [Component] component
       #
-      # @return string
+      # @return [String]
       def self.write(component)
         component.serialize
       end
 
       # Serializes a jCal or jCard object.
       #
-      # @param Component component
-      # @param int options
+      # @param [Component] component
+      # @param [Fixnum] options
       #
-      # @return string
+      # @return [String]
       def self.write_json(component)
         component.json_serialize.to_json
       end
 
       # Serializes a xCal or xCard object.
       #
-      # @param Component component
+      # @param [Component] component
       #
-      # @return string
+      # @return [String]
       def self.write_xml(component)
         writer = Tilia::Xml::Writer.new
         writer.open_memory

@@ -11,10 +11,10 @@ module Tilia
         # The rules used to determine if an event falls within the specified
         # time-range is based on the CalDAV specification.
         #
-        # @param DateTimeInterface start
-        # @param DateTimeInterface end
+        # @param [Time] start
+        # @param [Time] end
         #
-        # @return bool
+        # @return [Boolean]
         def in_time_range?(start, ending)
           if self['RRULE']
             begin
@@ -63,7 +63,7 @@ module Tilia
 
         # This method should return a list of default property values.
         #
-        # @return array
+        # @return [Hash]
         def defaults
           {
             'UID'     => 'sabre-vobject-' + Tilia::VObject::UuidUtil.uuid,
@@ -73,19 +73,7 @@ module Tilia
 
         public
 
-        # A simple list of validation rules.
-        #
-        # This is simply a list of properties, and how many times they either
-        # must or must not appear.
-        #
-        # Possible values per property:
-        #   * 0 - Must not appear.
-        #   * 1 - Must appear exactly once.
-        #   * + - Must appear at least once.
-        #   * * - Can appear any number of times.
-        #   * ? - May appear, but not more than once.
-        #
-        # @var array
+        # (see Component#validation_rules)
         def validation_rules
           {
             'UID'           => 1,
