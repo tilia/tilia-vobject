@@ -196,11 +196,11 @@ module Tilia
             else
               # This is an attendee deleting the event.
               event_info['attendees'].each do |key, attendee|
-                if user_href.include?(attendee['href'])
-                  event_info['attendees'][key]['instances'] = {
-                    'master' => { 'id' => 'master', 'partstat' => 'DECLINED' }
-                  }
-                end
+                next unless user_href.include?(attendee['href'])
+
+                event_info['attendees'][key]['instances'] = {
+                  'master' => { 'id' => 'master', 'partstat' => 'DECLINED' }
+                }
               end
             end
 
@@ -220,7 +220,7 @@ module Tilia
             end
           end
 
-          return []
+          []
         end
 
         protected
@@ -317,33 +317,33 @@ module Tilia
             recur_id = vevent.key?('RECURRENCE-ID') ? vevent['RECURRENCE-ID'].value : 'master'
             master_object = vevent if recur_id == 'master'
 
-            if instances.key?(recur_id)
-              attendee_found = false
-              if vevent.key?('ATTENDEE')
-                vevent['ATTENDEE'].each do |attendee|
-                  if attendee.value == itip_message.sender
-                    attendee_found = true
-                    attendee['PARTSTAT'] = instances[recur_id]
-                    attendee['SCHEDULE-STATUS'] = request_status
-                    # Un-setting the RSVP status, because we now know
-                    # that the attendee already replied.
-                    attendee.delete('RSVP')
-                    break
-                  end
-                end
-              end
+            next unless instances.key?(recur_id)
 
-              unless attendee_found
-                # Adding a new attendee. The iTip documentation calls this
-                # a party crasher.
-                attendee = vevent.add('ATTENDEE', itip_message.sender, 'PARTSTAT' => instances[recur_id])
-                if itip_message.sender_name
-                  attendee['CN'] = itip_message.sender_name
-                end
-              end
+            attendee_found = false
+            if vevent.key?('ATTENDEE')
+              vevent['ATTENDEE'].each do |attendee|
+                next unless attendee.value == itip_message.sender
 
-              instances.delete(recur_id)
+                attendee_found = true
+                attendee['PARTSTAT'] = instances[recur_id]
+                attendee['SCHEDULE-STATUS'] = request_status
+                # Un-setting the RSVP status, because we now know
+                # that the attendee already replied.
+                attendee.delete('RSVP')
+                break
+              end
             end
+
+            unless attendee_found
+              # Adding a new attendee. The iTip documentation calls this
+              # a party crasher.
+              attendee = vevent.add('ATTENDEE', itip_message.sender, 'PARTSTAT' => instances[recur_id])
+              if itip_message.sender_name
+                attendee['CN'] = itip_message.sender_name
+              end
+            end
+
+            instances.delete(recur_id)
           end
 
           unless master_object
@@ -380,17 +380,17 @@ module Tilia
             attendee_found = false
             if new_object.key?('ATTENDEE')
               new_object['ATTENDEE'].each do |attendee|
-                if attendee.value == itip_message.sender
-                  attendee_found = true
-                  attendee['PARTSTAT'] = partstat
-                  break
-                end
+                next unless attendee.value == itip_message.sender
+
+                attendee_found = true
+                attendee['PARTSTAT'] = partstat
+                break
               end
             end
 
             unless attendee_found
               # Adding a new attendee
-              attendee = new_object.add('ATTENDEE', itip_message.sender, 'PARTSTAT' => partstat )
+              attendee = new_object.add('ATTENDEE', itip_message.sender, 'PARTSTAT' => partstat)
 
               if itip_message.sender_name
                 attendee['CN'] = itip_message.sender_name
@@ -525,10 +525,10 @@ module Tilia
                   # We need to find a list of events that the attendee
                   # is not a part of to add to the list of exceptions.
                   exceptions = []
-                  event_info['instances'].each do |instance_id, _vevent|
-                    unless attendee['newInstances'].key?(instance_id)
-                      exceptions << instance_id
-                    end
+                  event_info['instances'].each do |id, _vevent|
+                    next if attendee['newInstances'].key?(id)
+
+                    exceptions << id
                   end
 
                   # If there were exceptions, we need to add it to an
@@ -546,15 +546,15 @@ module Tilia
                   current_event['ORGANIZER'].delete('SCHEDULE-FORCE-SEND')
                   current_event['ORGANIZER'].delete('SCHEDULE-STATUS')
 
-                  current_event['ATTENDEE'].each do |attendee|
-                    attendee.delete('SCHEDULE-FORCE-SEND')
-                    attendee.delete('SCHEDULE-STATUS')
+                  current_event['ATTENDEE'].each do |event_attendee|
+                    event_attendee.delete('SCHEDULE-FORCE-SEND')
+                    event_attendee.delete('SCHEDULE-STATUS')
 
                     # We're adding PARTSTAT=NEEDS-ACTION to ensure that
                     # iOS shows an "Inbox Item"
-                    unless attendee.key?('PARTSTAT')
-                      attendee['PARTSTAT'] = 'NEEDS-ACTION'
-                    end
+                    next if event_attendee.key?('PARTSTAT')
+
+                    event_attendee['PARTSTAT'] = 'NEEDS-ACTION'
                   end
                 end
 
@@ -566,7 +566,7 @@ module Tilia
             messages << message
           end
 
-          return messages
+          messages
         end
 
         # Parse an event update for an attendee.
@@ -622,16 +622,16 @@ module Tilia
           # We only need to do that though, if the master event is not declined.
           if instances.key?('master') && instances['master']['newstatus'] != 'DECLINED'
             event_info['exdate'].each do |ex_date|
-              unless old_event_info['exdate'].include?(ex_date)
-                if instances.key?(ex_date)
-                  instances[ex_date]['newstatus'] = 'DECLINED'
-                else
-                  instances[ex_date] = {
-                    'id'        => ex_date,
-                    'oldstatus' => nil,
-                    'newstatus' => 'DECLINED'
-                  }
-                end
+              next if old_event_info['exdate'].include?(ex_date)
+
+              if instances.key?(ex_date)
+                instances[ex_date]['newstatus'] = 'DECLINED'
+              else
+                instances[ex_date] = {
+                  'id'        => ex_date,
+                  'oldstatus' => nil,
+                  'newstatus' => 'DECLINED'
+                }
               end
             end
           end
@@ -698,9 +698,9 @@ module Tilia
 
               # Treat is as a DATE field
               if instance['id'].size <= 8
-                recur = event.add('DTSTART', dt, 'VALUE' => 'DATE')
+                event.add('DTSTART', dt, 'VALUE' => 'DATE')
               else
-                recur = event.add('DTSTART', dt)
+                event.add('DTSTART', dt)
               end
 
               event.add('SUMMARY', summary) unless summary.blank?
@@ -710,9 +710,9 @@ module Tilia
               dt = Tilia::VObject::DateTimeParser.parse(instance['id'], event_info['timezone'])
               # Treat is as a DATE field
               if instance['id'].size <= 8
-                recur = event.add('RECURRENCE-ID', dt, 'VALUE' => 'DATE')
+                event.add('RECURRENCE-ID', dt, 'VALUE' => 'DATE')
               else
-                recur = event.add('RECURRENCE-ID', dt)
+                event.add('RECURRENCE-ID', dt)
               end
             end
 
@@ -792,14 +792,18 @@ module Tilia
                   fail Tilia::VObject::ITip::SameOrganizerForAllComponentsException, 'Every instance of the event must have the same organizer.'
                 end
               end
-              organizer_force_send =
-                  vevent['ORGANIZER'].key?('SCHEDULE-FORCE-SEND') ?
-                  vevent['ORGANIZER']['SCHEDULE-FORCE-SEND'].to_s.upcase :
-                  nil
-              organizer_schedule_agent =
-                  vevent['ORGANIZER'].key?('SCHEDULE-AGENT') ?
-                  vevent['ORGANIZER']['SCHEDULE-AGENT'].to_s.upcase :
-                  'SERVER'
+
+              if vevent['ORGANIZER'].key?('SCHEDULE-FORCE-SEND')
+                organizer_force_send = vevent['ORGANIZER']['SCHEDULE-FORCE-SEND'].to_s.upcase
+              else
+                organizer_force_send = nil
+              end
+
+              if vevent['ORGANIZER'].key?('SCHEDULE-AGENT')
+                organizer_schedule_agent = vevent['ORGANIZER']['SCHEDULE-AGENT'].to_s.upcase
+              else
+                organizer_schedule_agent = 'SERVER'
+              end
             end
 
             if sequence.nil? && vevent.key?('SEQUENCE')
@@ -808,7 +812,7 @@ module Tilia
 
             if vevent.key?('EXDATE')
               vevent.select('EXDATE').each do |val|
-                exdate = exdate + val.parts
+                exdate += val.parts
               end
               exdate.sort!
             end
@@ -828,15 +832,17 @@ module Tilia
                   next
                 end
 
-                part_stat =
-                    attendee.key?('PARTSTAT') ?
-                    attendee['PARTSTAT'].to_s.upcase :
-                    'NEEDS-ACTION'
+                if attendee.key?('PARTSTAT')
+                  part_stat = attendee['PARTSTAT'].to_s.upcase
+                else
+                  'NEEDS-ACTION'
+                end
 
-                force_send =
-                    attendee.key?('SCHEDULE-FORCE-SEND') ?
-                    attendee['SCHEDULE-FORCE-SEND'].to_s.upcase :
-                    nil
+                if attendee.key?('SCHEDULE-FORCE-SEND')
+                  force_send = attendee['SCHEDULE-FORCE-SEND'].to_s.upcase
+                else
+                  force_send = nil
+                end
 
                 if attendees.key?(attendee.normalized_value)
                   attendees[attendee.normalized_value]['instances'][recur_id] = {
@@ -863,17 +869,17 @@ module Tilia
             end
 
             significant_change_properties.each do |prop|
-              if vevent.key?(prop)
-                property_values = vevent.select(prop)
+              next unless vevent.key?(prop)
 
-                significant_change_hash += prop + ':'
+              property_values = vevent.select(prop)
 
-                if prop == 'EXDATE'
-                  significant_change_hash += exdate.join(',') + ';'
-                else
-                  property_values.each do |val|
-                    significant_change_hash += val.value + ';'
-                  end
+              significant_change_hash += prop + ':'
+
+              if prop == 'EXDATE'
+                significant_change_hash += exdate.join(',') + ';'
+              else
+                property_values.each do |val|
+                  significant_change_hash += val.value + ';'
                 end
               end
             end

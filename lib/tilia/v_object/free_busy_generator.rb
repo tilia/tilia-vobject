@@ -132,9 +132,7 @@ module Tilia
       # @param DateTimeZone time_zone
       #
       # @return void
-      def time_zone=(time_zone)
-        @time_zone = time_zone
-      end
+      attr_writer :time_zone
 
       # Parses the input data and returns a correct VFREEBUSY object, wrapped in
       # a VCALENDAR.
@@ -201,13 +199,13 @@ module Tilia
           skip = false
           new.each do |higher_vavail|
             (higher_start, higher_end) = higher_vavail.effective_start_end
-            if (higher_start.nil? || higher_start < comp_start) &&
-               (higher_end.nil? || higher_end > comp_end)
-              # Component is fully covered by a higher priority
-              # component. We can skip this component.
-              skip = true
-              break
-            end
+
+            next unless (higher_start.nil? || higher_start < comp_start) && (higher_end.nil? || higher_end > comp_end)
+
+            # Component is fully covered by a higher priority
+            # component. We can skip this component.
+            skip = true
+            break
           end
           next if skip
 
@@ -238,50 +236,50 @@ module Tilia
           )
 
           # Looping over the AVAILABLE components.
-          if vavail.key?('AVAILABLE')
-            vavail['AVAILABLE'].each do |available|
-              (avail_start, avail_end) = available.effective_start_end
+          next unless vavail.key?('AVAILABLE')
+
+          vavail['AVAILABLE'].each do |available|
+            (avail_start, avail_end) = available.effective_start_end
+            fb_data.add(
+              avail_start.to_i,
+              avail_end.to_i,
+              'FREE'
+            )
+
+            next unless available['RRULE']
+
+            # Our favourite thing: recurrence!!
+            rrule_iterator = Recur::RRuleIterator.new(
+              available['RRULE'].value,
+              avail_start
+            )
+
+            rrule_iterator.fast_forward(vavail_start)
+
+            start_end_diff = avail_end - avail_start
+
+            while rrule_iterator.valid
+              recur_start = rrule_iterator.current
+              recur_end = recur_start + start_end_diff
+
+              if recur_start > vavail_end
+                # We're beyond the legal timerange.
+                break
+              end
+
+              if recur_end > vavail_end
+                # Truncating the end if it exceeds the
+                # VAVAILABILITY end.
+                recur_end = vavail_end
+              end
+
               fb_data.add(
-                avail_start.to_i,
-                avail_end.to_i,
+                recur_start.to_i,
+                recur_end.to_i,
                 'FREE'
               )
 
-              if available['RRULE']
-                # Our favourite thing: recurrence!!
-                rrule_iterator = Recur::RRuleIterator.new(
-                  available['RRULE'].value,
-                  avail_start
-                )
-
-                rrule_iterator.fast_forward(vavail_start)
-
-                start_end_diff = avail_end - avail_start
-
-                while rrule_iterator.valid
-                  recur_start = rrule_iterator.current
-                  recur_end = recur_start + start_end_diff
-
-                  if recur_start > vavail_end
-                    # We're beyond the legal timerange.
-                    break
-                  end
-
-                  if recur_end > vavail_end
-                    # Truncating the end if it exceeds the
-                    # VAVAILABILITY end.
-                    recur_end = vavail_end
-                  end
-
-                  fb_data.add(
-                    recur_start.to_i,
-                    recur_end.to_i,
-                    'FREE'
-                  )
-
-                  rrule_iterator.next
-                end
-              end
+              rrule_iterator.next
             end
           end
         end
@@ -317,7 +315,7 @@ module Tilia
                 if component.key?('RRULE')
                   begin
                     iterator = Recur::EventIterator.new(object, component['UID'].to_s, @time_zone)
-                  rescue Recur::NoInstancesException => e
+                  rescue Recur::NoInstancesException
                     # This event is recurring, but it doesn't have a single
                     # instance. We are skipping this event from the output
                     # entirely.

@@ -233,8 +233,8 @@ module Tilia
               property_type  = self.class.tag_name(xml_property['value'][0]['name'])
 
               property_value ||= []
-              xml_property['value'].each do |value|
-                property_value << value['value']
+              xml_property['value'].each do |v|
+                property_value << v['value']
               end
 
               property_parameters['value'] = 'DATE' if 'date' == property_type
@@ -304,8 +304,6 @@ module Tilia
 
           @input = input
         end
-
-        protected
 
         # Get tag name from a Clark notation.
         #

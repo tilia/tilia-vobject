@@ -163,7 +163,7 @@ ICS
           }
         ]
 
-        result = parse(old_message, new_message, expected, 'mailto:strunk@example.org')
+        parse(old_message, new_message, expected, 'mailto:strunk@example.org')
       end
 
       def test_attendee_delete_with_dtend
@@ -214,13 +214,13 @@ ATTENDEE;PARTSTAT=DECLINED;CN=One:mailto:one@example.org
 END:VEVENT
 END:VCALENDAR
 ICS
-          },
+          }
         ]
 
-        result = parse(old_message, new_message, expected, 'mailto:one@example.org')
+        parse(old_message, new_message, expected, 'mailto:one@example.org')
       end
 
-      def test_attendee_delete_with_duration
+      def test_attendee_reply_with_duration
         old_message = <<ICS
 BEGIN:VCALENDAR
 VERSION:2.0

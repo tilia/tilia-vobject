@@ -30,7 +30,10 @@ EOT
         objects = Tilia::VObject::Splitter::ICalendar.new(temp_file)
 
         to_return = ''
-        while object = objects.next
+        loop do
+          object = objects.next
+          break unless object
+
           to_return += object.serialize
         end
         assert_equal([], Tilia::VObject::Reader.read(to_return).validate)
@@ -64,7 +67,10 @@ EOT
         objects = Tilia::VObject::Splitter::ICalendar.new(temp_file)
 
         to_return = ''
-        while object = objects.next
+        loop do
+          object = objects.next
+          break unless object
+
           to_return += object.serialize
         end
 
@@ -75,7 +81,9 @@ EOT
         data = <<EOT
 EOT
         temp_file = create_stream(data)
-        assert_raises(Tilia::VObject::ParseException) { objects = Tilia::VObject::Splitter::ICalendar.new(temp_file) }
+        assert_raises(Tilia::VObject::ParseException) do
+          Tilia::VObject::Splitter::ICalendar.new(temp_file)
+        end
       end
 
       def test_i_calendar_import_multiple_valid_events
@@ -108,7 +116,10 @@ EOT
 
         to_return = ''
         i = 0
-        while object = objects.next
+        loop do
+          object = objects.next
+          break unless object
+
           # event[i] already includes \n
           expected = <<EOT
 BEGIN:VCALENDAR
@@ -144,7 +155,10 @@ EOT
         objects = Tilia::VObject::Splitter::ICalendar.new(temp_file)
 
         to_return = ''
-        while object = objects.next
+        loop do
+          object = objects.next
+          break unless object
+
           to_return += object.serialize
         end
 
@@ -237,7 +251,10 @@ EOT
 
         to_return = ''
         i = 0
-        while object = objects.next
+        loop do
+          object = objects.next
+          break unless object
+
           # newlines are part of the variables
           expected = <<EOT
 BEGIN:VCALENDAR
@@ -287,7 +304,10 @@ EOT
         objects = Tilia::VObject::Splitter::ICalendar.new(temp_file)
 
         to_return = ''
-        while object = objects.next
+        loop do
+          object = objects.next
+          break unless object
+
           to_return += object.serialize
         end
 

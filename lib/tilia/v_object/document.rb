@@ -32,7 +32,7 @@ module Tilia
       # This should be 'VCALENDAR' or 'VCARD'.
       #
       # @var string
-      @default_name
+      @default_name = nil
 
       # List of properties, and which classes they map to.
       #

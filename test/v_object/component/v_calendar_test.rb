@@ -97,7 +97,7 @@ END:VCALENDAR
         tests << [input, output]
 
         # Removing timezone info from sub-components. See Issue #278
-        $input = 'BEGIN:VCALENDAR
+        input = 'BEGIN:VCALENDAR
 CALSCALE:GREGORIAN
 VERSION:2.0
 BEGIN:VTIMEZONE
@@ -112,9 +112,9 @@ TRIGGER;VALUE=DATE-TIME;TZID=America/New_York:20151209T133200
 END:VALARM
 END:VEVENT
 END:VCALENDAR
-';
+'
 
-        $output = 'BEGIN:VCALENDAR
+        output = 'BEGIN:VCALENDAR
 CALSCALE:GREGORIAN
 VERSION:2.0
 BEGIN:VEVENT
@@ -126,7 +126,7 @@ TRIGGER;VALUE=DATE-TIME:20151209T183200Z
 END:VALARM
 END:VEVENT
 END:VCALENDAR
-';
+'
 
         tests << [input, output]
 

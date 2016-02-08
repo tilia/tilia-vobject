@@ -16,7 +16,7 @@ module Tilia
       end
 
       def test_exceed_max_recurrences
-        input =  <<ICS
+        input = <<ICS
 BEGIN:VCALENDAR
 VERSION:2.0
 BEGIN:VEVENT

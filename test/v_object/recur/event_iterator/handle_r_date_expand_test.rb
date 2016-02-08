@@ -36,11 +36,11 @@ ICS
 
         utc = ActiveSupport::TimeZone.new('UTC')
         expected = [
-            utc.parse("2015-10-12"),
-            utc.parse("2015-10-15"),
-            utc.parse("2015-10-17"),
-            utc.parse("2015-10-18"),
-            utc.parse("2015-10-20"),
+          utc.parse('2015-10-12'),
+          utc.parse('2015-10-15'),
+          utc.parse('2015-10-17'),
+          utc.parse('2015-10-18'),
+          utc.parse('2015-10-20')
         ]
 
         result = result.map { |ev| ev['DTSTART'].date_time }

@@ -1,6 +1,7 @@
 module Tilia
   module VObject
     class Property
+      # Namespace of the VCard Properties
       module VCard
         require 'tilia/v_object/property/v_card/date_and_or_time'
         require 'tilia/v_object/property/v_card/date'

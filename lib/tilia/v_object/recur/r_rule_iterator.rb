@@ -248,7 +248,7 @@ module Tilia
             # If we made it all the way here, it means there were no
             # valid occurrences, and we need to advance to the next
             # month.
-            @current_date - (@current_date.day - 1).days
+            @current_date -= (@current_date.day - 1).days
             @current_date += @interval.months
 
             # This goes to 0 because we need to start counting at the

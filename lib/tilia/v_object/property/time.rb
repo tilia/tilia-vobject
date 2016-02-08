@@ -29,7 +29,7 @@ module Tilia
         # @return void
         def json_value=(value)
           # Removing colons from value.
-          value = value.map{ |v| v.gsub(':', '') }
+          value = value.map { |v| v.delete(':') }
 
           if value.size == 1
             self.value = value.first
@@ -78,7 +78,7 @@ module Tilia
             if parts['timezone'] == 'Z'
               time_str += 'Z'
             else
-              time_str += parts['timezone'].gsub(/([0-9]{2})([0-9]{2})$/) { "#{$1}:#{$2}" }
+              time_str += parts['timezone'].gsub(/([0-9]{2})([0-9]{2})$/) { "#{Regexp.last_match(1)}:#{Regexp.last_match(2)}" }
             end
           end
 

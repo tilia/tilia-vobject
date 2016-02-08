@@ -1,6 +1,7 @@
 module Tilia
   module VObject
     class Property
+      # Namespace of the ICalendar Properties
       module ICalendar
         require 'tilia/v_object/property/i_calendar/cal_address'
         require 'tilia/v_object/property/i_calendar/date_time'

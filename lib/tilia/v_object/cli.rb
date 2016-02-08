@@ -156,9 +156,10 @@ module Tilia
             return_code = send(command, input)
             real_code = return_code unless return_code == 0
           end
-        rescue EofException => e
+        rescue EofException
           # end of file
-        rescue Exception => e
+          return real_code
+        rescue StandardError => e
           log("Error: #{e}", 'red')
           return 2
         end

@@ -103,7 +103,6 @@ module Tilia
             end
 
             # Now follows a ruby Hack
-            offset = "#{date_parts['timezone'][0]}1".to_i * (date_parts['timezone'][1..2].to_i * 3600 + date_parts['timezone'][3..4].to_i * 60)
             date_parts['timezone'] = '+0000' if date_parts['timezone'] == 'Z'
             done = false
             datetime = nil

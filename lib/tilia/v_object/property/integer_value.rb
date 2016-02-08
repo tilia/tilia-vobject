@@ -51,7 +51,7 @@ module Tilia
         #
         # @return void
         def xml_value=(value)
-          value = value.map &:to_i
+          value = value.map(&:to_i)
           super(value)
         end
       end

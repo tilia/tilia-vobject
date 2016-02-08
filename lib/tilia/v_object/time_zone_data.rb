@@ -1,5 +1,6 @@
 module Tilia
   module VObject
+    # Namespace of the shipped time zone data
     module TimeZoneData
       require 'tilia/v_object/time_zone_data/exchange_zones'
       require 'tilia/v_object/time_zone_data/lotus_zones'

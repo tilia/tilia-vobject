@@ -161,9 +161,7 @@ module Tilia
 
           rewind
 
-          unless valid
-            fail Recur::NoInstancesException, 'This recurrence rule does not generate any valid instances'
-          end
+          fail Recur::NoInstancesException, 'This recurrence rule does not generate any valid instances' unless valid
         end
 
         # Returns the date for the current position of the iterator.
@@ -246,11 +244,11 @@ module Tilia
         # @return bool
         def valid
           if @counter > Settings.max_recurrences &&
-              Settings.max_recurrences != -1
-            fail MaxInstancesExceededException, "Recurring events are only allowed to generate #{Settings::max_recurrences}"
+             Settings.max_recurrences != -1
+            fail MaxInstancesExceededException, "Recurring events are only allowed to generate #{Settings.max_recurrences}"
           end
 
-          !!@current_date
+          !@current_date.nil?
         end
 
         # Sets the iterator back to the starting point.

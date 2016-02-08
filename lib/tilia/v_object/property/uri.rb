@@ -37,7 +37,7 @@ module Tilia
             # See Issue #227 and #235
             parameters['VALUE'] = Parameter.new(@root, 'VALUE', 'URI')
           end
-          return parameters
+          parameters
         end
 
         # Sets a raw value coming from a mimedir (iCalendar/vCard) file.

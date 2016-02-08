@@ -590,10 +590,8 @@ module Tilia
       def destroy
         super
 
-        @children.each do |child_name, child_group|
-          child_group.each do |child|
-            child.destroy
-          end
+        @children.each do |_child_name, child_group|
+          child_group.each(&:destroy)
         end
 
         @children = {}

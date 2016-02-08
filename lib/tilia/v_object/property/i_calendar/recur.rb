@@ -22,9 +22,6 @@ module Tilia
           #
           # @return void
           def value=(value)
-            # If we're getting the data from json, we'll be receiving an object
-            value = [value] if false # value.is_a?(Array) TODO
-
             if value.is_a?(Hash)
               new_val = {}
               value.each do |k, v|
@@ -139,8 +136,6 @@ module Tilia
               writer.write_element(value_type, value)
             end
           end
-
-          public
 
           # Parses an RRULE value string, and turns it into a struct-ish array.
           #

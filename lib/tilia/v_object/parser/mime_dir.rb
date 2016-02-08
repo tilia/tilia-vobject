@@ -14,9 +14,9 @@ module Tilia
         #
         # This would be a const expression but for now we need to support PHP 5.5
         @supported_charsets = [
-            'UTF-8',
-            'ISO-8859-1',
-            'Windows-1252',
+          'UTF-8',
+          'ISO-8859-1',
+          'Windows-1252'
         ]
 
         class << self
@@ -59,7 +59,7 @@ module Tilia
           @charset = charset
         end
 
-         # Sets the input buffer. Must be a string or stream.
+        # Sets the input buffer. Must be a string or stream.
         #
         # @param resource|string input
         #
@@ -114,9 +114,7 @@ module Tilia
           end
 
           name = line[4..-1].upcase
-          if name != @root.name
-            fail Tilia::VObject::ParseException, "Invalid MimeDir file. expected: \"END:#{@root.name}\" got: \"END:#{name}\""
-          end
+          fail Tilia::VObject::ParseException, "Invalid MimeDir file. expected: \"END:#{@root.name}\" got: \"END:#{name}\"" unless name == @root.name
         end
 
         # Parses a line, and if it hits a component, it will also attempt to parse
@@ -333,9 +331,8 @@ module Tilia
 
           property['value'] = '' if property['value'].nil?
           if property['name'].blank?
-            if @options & OPTION_IGNORE_INVALID_LINES > 0
-              return false
-            end
+            return false if @options & OPTION_IGNORE_INVALID_LINES > 0
+
             fail Tilia::VObject::ParseException, "Invalid Mimedir file. Line starting at #{@start_line} did not follow iCalendar/vCard conventions"
           end
 
@@ -377,15 +374,13 @@ module Tilia
                 'Windows-1252'
               property['value'] = property['value'].to_s.encode('UTF-8', charset)
             else
-              fail ParseException, "Unsupported CHARSET: #{charset.to_s}"
+              fail ParseException, "Unsupported CHARSET: #{charset}"
             end
             prop_obj.raw_mime_dir_value = property['value']
           end
 
           prop_obj
         end
-
-        public
 
         # Unescapes a property value.
         #

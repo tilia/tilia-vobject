@@ -11,7 +11,7 @@ module Tilia
       end
 
       def test_decode_latin1
-         vcard = <<VCF
+        vcard = <<VCF
 BEGIN:VCARD
 VERSION:3.0
 FN:umlaut u - \xFC

@@ -55,7 +55,8 @@ EOT
         splitter = Tilia::VObject::Splitter::VCard.new(temp_file)
 
         assert_raises(Tilia::VObject::ParseException) do
-          while object = splitter.next
+          loop do
+            break unless splitter.next
           end
         end
       end
@@ -97,7 +98,7 @@ EOT
         temp_file = create_stream(data)
 
         objects = Tilia::VObject::Splitter::VCard.new(temp_file)
-        object = objects.next
+        objects.next
 
         assert_nil(objects.next)
       end
@@ -111,7 +112,8 @@ EOT
 
         objects = Tilia::VObject::Splitter::VCard.new(temp_file)
         assert_raises(Tilia::VObject::ParseException) do
-          while object = objects.next
+          loop do
+            break unless objects.next
           end
         end
       end

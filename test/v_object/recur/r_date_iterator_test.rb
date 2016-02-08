@@ -19,13 +19,13 @@ module Tilia
       end
 
       def test_timezone
-        tz =  ActiveSupport::TimeZone.new('Europe/Berlin')
+        tz = ActiveSupport::TimeZone.new('Europe/Berlin')
         it = Recur::RDateIterator.new('20140901T000000,20141001T000000', tz.parse('2014-08-01 00:00:00'))
 
         expected = [
           tz.parse('2014-08-01 00:00:00'),
           tz.parse('2014-09-01 00:00:00'),
-          tz.parse('2014-10-01 00:00:00'),
+          tz.parse('2014-10-01 00:00:00')
         ]
 
         assert_equal(
