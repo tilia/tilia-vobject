@@ -294,7 +294,7 @@ module Tilia
         end
 
         tmp.each do |child|
-          str += child.serialize
+          str += child.serialize.encode('utf-8', 'utf-8')
         end
         str += "END:#{@name}\r\n"
 
