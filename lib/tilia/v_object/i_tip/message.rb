@@ -26,7 +26,7 @@ module Tilia
 
         # The current sequence number for the event.
         #
-        # @return [Fixnum]
+        # @return [Integer]
         attr_accessor :sequence
 
         # The senders' email address.

@@ -50,7 +50,7 @@ module Tilia
       # Cuts the string after a certain bytelength
       #
       # @param [String] string
-      # @param [Fixnum] length
+      # @param [Integer] length
       # @return [String] cut string
       def self.mb_strcut(string, length)
         return '' if string == ''

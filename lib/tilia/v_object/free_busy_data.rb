@@ -4,12 +4,12 @@ module Tilia
     class FreeBusyData
       # Start timestamp
       #
-      # @return [Fixnum]
+      # @return [Integer]
       # RUBY: attr_accessor :start
 
       # End timestamp
       #
-      # @return [Fixnum]
+      # @return [Integer]
       # RUBY: attr_accessor :end
 
       # A list of free-busy times.
@@ -31,8 +31,8 @@ module Tilia
 
       # Adds free or busytime to the data.
       #
-      # @param [Fixnum] start
-      # @param [Fixnum] end
+      # @param [Integer] start
+      # @param [Integer] end
       # @param [String] type FREE, BUSY, BUSY-UNAVAILABLE or BUSY-TENTATIVE
       # @return [void]
       def add(start, ending, type)

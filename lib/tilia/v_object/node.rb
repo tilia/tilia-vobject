@@ -80,7 +80,7 @@ module Tilia
       #   2 - An inconsequential issue
       #   3 - A severe issue.
       #
-      # @param [Fixnum] options
+      # @param [Integer] options
       #
       # @return [array]
       def validate(_options = 0)
@@ -107,7 +107,7 @@ module Tilia
 
       # Returns the number of elements.
       #
-      # @return [Fixnum]
+      # @return [Integer]
       def size
         it = iterator
         it.size
@@ -119,7 +119,7 @@ module Tilia
       #
       # This method just forwards the request to the inner iterator
       #
-      # @param [Fixnum] $offset
+      # @param [Integer] $offset
       #
       # @return [Boolean]
       def key?(offset)
@@ -131,7 +131,7 @@ module Tilia
       #
       # This method just forwards the request to the inner iterator
       #
-      # @param [Fixnum] $offset
+      # @param [Integer] $offset
       #
       # @return [mixed]
       def [](offset)
@@ -143,7 +143,7 @@ module Tilia
       #
       # This method just forwards the request to the inner iterator
       #
-      # @param [Fixnum] $offset
+      # @param [Integer] $offset
       # @param $value
       #
       # @return [void]
@@ -156,7 +156,7 @@ module Tilia
       #
       # This method just forwards the request to the inner iterator
       #
-      # @param [Fixnum] $offset
+      # @param [Integer] $offset
       #
       # @return [void]
       def delete(offset)

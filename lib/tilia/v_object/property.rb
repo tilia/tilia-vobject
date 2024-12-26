@@ -361,7 +361,7 @@ module Tilia
       #
       # @return [Node]
       def [](name)
-        return super(name) if name.is_a?(Fixnum)
+        return super(name) if name.is_a?(Integer)
 
         @parameters[name.upcase]
       end
@@ -373,7 +373,7 @@ module Tilia
       #
       # @return [void]
       def []=(name, value)
-        if name.is_a?(Fixnum)
+        if name.is_a?(Integer)
           super(name, value)
           # @codeCoverageIgnoreStart
           # This will never be reached, because an exception is always
@@ -392,7 +392,7 @@ module Tilia
       #
       # @return [void]
       def delete(name)
-        if name.is_a?(Fixnum)
+        if name.is_a?(Integer)
           super(name)
           # @codeCoverageIgnoreStart
           # This will never be reached, because an exception is always
@@ -430,7 +430,7 @@ module Tilia
       #    * message - (human readable message)
       #    * node - (reference to the offending node)
       #
-      # @param [Fixnum] options
+      # @param [Integer] options
       #
       # @return [array]
       def validate(options = 0)

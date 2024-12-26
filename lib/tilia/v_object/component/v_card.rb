@@ -113,7 +113,7 @@ module Tilia
 
         # Returns the current document type.
         #
-        # @return [Fixnum]
+        # @return [Integer]
         def document_type
           unless @version
             version = self['VERSION'].to_s
@@ -144,7 +144,7 @@ module Tilia
         #
         # If input and output version are identical, a clone is returned.
         #
-        # @param [Fixnum] target
+        # @param [Integer] target
         #
         # @return [VCard]
         def convert(target)

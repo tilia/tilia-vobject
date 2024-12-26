@@ -232,7 +232,7 @@ module Tilia
         #
         # This is for us simply a 0-based index.
         #
-        # @return [Fixnum]
+        # @return [Integer]
         def key
           # The counter is always 1 ahead.
           @counter - 1
@@ -369,7 +369,7 @@ module Tilia
 
         # Internal event counter.
         #
-        # @return [Fixnum]
+        # @return [Integer]
         # RUBY: attr_accessor :counter
 
         # The very start of the iteration process.

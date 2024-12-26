@@ -48,7 +48,7 @@ module Tilia
 
         # Returns the current item number.
         #
-        # @return [Fixnum]
+        # @return [Integer]
         def key
           @counter
         end

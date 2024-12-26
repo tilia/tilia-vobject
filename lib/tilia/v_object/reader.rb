@@ -21,7 +21,7 @@ module Tilia
       # You can either supply a string, or a readable stream for input.
       #
       # @param [String, #read] data
-      # @param [Fixnum] options
+      # @param [Integer] options
       # @param [String] charset
       # @return [Document]
       def self.read(data, options = 0, charset = 'UTF-8')
@@ -42,7 +42,7 @@ module Tilia
       # input.
       #
       # @param [String, |resource|array] data
-      # @param [Fixnum] options
+      # @param [Integer] options
       #
       # @return [Document]
       def self.read_json(data, options = 0)
@@ -60,7 +60,7 @@ module Tilia
       # You can either supply a string, or a readable stream for input.
       #
       # @param [String|resource] data
-      # @param [Fixnum] options
+      # @param [Integer] options
       #
       # @return [Document]
       def self.read_xml(data, options = 0)

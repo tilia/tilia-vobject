@@ -18,7 +18,7 @@ module Tilia
       # Serializes a jCal or jCard object.
       #
       # @param [Component] component
-      # @param [Fixnum] options
+      # @param [Integer] options
       #
       # @return [String]
       def self.write_json(component)

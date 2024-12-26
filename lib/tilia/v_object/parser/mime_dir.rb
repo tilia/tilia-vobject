@@ -29,7 +29,7 @@ module Tilia
         # used.
         #
         # @param [String|resource, nil] input
-        # @param [Fixnum] options
+        # @param [Integer] options
         #
         # @return [Document]
         def parse(input = nil, options = 0)
@@ -169,7 +169,7 @@ module Tilia
         # In the case of unfolded lines, this property holds the line number for
         # the start of the line.
         #
-        # @return [Fixnum]
+        # @return [Integer]
         # RUBY: attr_accessor :start_line
 
         # Contains a 'raw' representation of the current line.

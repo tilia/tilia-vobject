@@ -14,7 +14,7 @@ module Tilia
         # If either input or options are not supplied, the defaults will be used.
         #
         # @param [String, #read, nil] input
-        # @param [Fixnum] options
+        # @param [Integer] options
         #
         # @return [Document]
         def parse(input = nil, options = 0)

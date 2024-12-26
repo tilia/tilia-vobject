@@ -255,10 +255,10 @@ module Tilia
         # space to accomodate elements. The key is added to the score to
         # preserve the original relative order of elements.
         #
-        # @param [Fixnum] key
+        # @param [Integer] key
         # @param [array] array
         #
-        # @return [Fixnum]
+        # @return [Integer]
         sort_score = lambda do |key, array|
           key = array.index(key)
           if array[key].is_a?(Component)
@@ -391,7 +391,7 @@ module Tilia
       #
       # @return [Property]
       def [](name)
-        return super(name) if name.is_a?(Fixnum)
+        return super(name) if name.is_a?(Integer)
 
         if name == 'children'
           fail 'Starting sabre/vobject 4.0 the children property is now protected. You should use the children method instead'
@@ -432,7 +432,7 @@ module Tilia
       #
       # @return [void]
       def []=(name, value)
-        return super(name, value) if name.is_a?(Fixnum)
+        return super(name, value) if name.is_a?(Integer)
         name = name.upcase
 
         remove(name)
@@ -451,7 +451,7 @@ module Tilia
       #
       # @return [void]
       def delete(name)
-        return super(name) if name.is_a?(Fixnum)
+        return super(name) if name.is_a?(Integer)
         remove(name)
       end
 
@@ -515,7 +515,7 @@ module Tilia
       #   2 - A warning.
       #   3 - An error.
       #
-      # @param [Fixnum] options
+      # @param [Integer] options
       #
       # @return [array]
       def validate(options = 0)

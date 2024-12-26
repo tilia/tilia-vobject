@@ -129,7 +129,7 @@ module Tilia
 
         # Returns the current document type.
         #
-        # @return [Fixnum]
+        # @return [Integer]
         def document_type
           ICALENDAR20
         end

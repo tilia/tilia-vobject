@@ -21,7 +21,7 @@ module Tilia
         # Optionally, it's possible to parse the input stream here.
         #
         # @param input
-        # @param [Fixnum] options Any parser options (OPTION constants).
+        # @param [Integer] options Any parser options (OPTION constants).
         #
         # @return [void]
         def initialize(input = nil, options = 0)
@@ -37,7 +37,7 @@ module Tilia
         # If either input or options are not supplied, the defaults will be used.
         #
         # @param input
-        # @param [Fixnum] options
+        # @param [Integer] options
         #
         # @return [Document]
         def parse(input = nil, options = 0)

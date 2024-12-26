@@ -27,7 +27,7 @@ module Tilia
         # The splitter should receive an readable file stream as it's input.
         #
         # @param [resource] input
-        # @param [Fixnum] options Parser options, see the OPTIONS constants.
+        # @param [Integer] options Parser options, see the OPTIONS constants.
         def initialize(input, options = 0)
           @vtimezones = {}
           @objects = {}

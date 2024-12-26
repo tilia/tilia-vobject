@@ -18,7 +18,7 @@ module Tilia
       # If input and output version are identical, a clone is returned.
       #
       # @param [Component::VCard] input
-      # @param [Fixnum] target_version
+      # @param [Integer] target_version
       def convert(input, target_version)
         input_version = input.document_type
         return input.dup if input_version == target_version
@@ -51,7 +51,7 @@ module Tilia
       # @param [Component::VCard] input
       # @param [Component::VCard] output
       # @param [Property] property
-      # @param [Fixnum] target_version
+      # @param [Integer] target_version
       #
       # @return [void]
       def convert_property(input, output, property, target_version)

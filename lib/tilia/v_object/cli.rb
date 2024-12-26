@@ -60,7 +60,7 @@ module Tilia
 
       # Main function.
       #
-      # @return [Fixnum]
+      # @return [Integer]
       def main(argv)
         # @codeCoverageIgnoreStart
         # We cannot easily test this, so we'll skip it. Pretty basic anyway.
@@ -213,7 +213,7 @@ HELP
       #
       # @param [Component] v_obj
       #
-      # @return [Fixnum]
+      # @return [Integer]
       def validate(v_obj)
         return_code = 0
 
@@ -251,7 +251,7 @@ HELP
       #
       # @param [Component] v_obj
       #
-      # @return [Fixnum]
+      # @return [Integer]
       def repair(v_obj)
         return_code = 0
 
@@ -291,7 +291,7 @@ HELP
       #
       # @param [Component] v_obj
       #
-      # @return [Fixnum]
+      # @return [Integer]
       def convert(v_obj)
         json = false
         convert_version = nil
@@ -339,7 +339,7 @@ HELP
       #
       # @param [Component] v_obj
       #
-      # @return [Fixnum]
+      # @return [Integer]
       def color(v_obj)
         @stdout.write(serialize_component(v_obj))
         0 # otherwise bytes written will be returned
@@ -387,10 +387,10 @@ HELP
         # space to accomodate elements. The key is added to the score to
         # preserve the original relative order of elements.
         #
-        # @param [Fixnum] key
+        # @param [Integer] key
         # @param [array] array
         #
-        # @return [Fixnum]
+        # @return [Integer]
         sort_score = lambda do |key, array|
           key = array.index(key)
           if array[key].is_a?(Component)
